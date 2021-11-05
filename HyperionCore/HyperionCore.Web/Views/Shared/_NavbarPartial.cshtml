@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using HyperionCore.Web.Areas.Identity.Models.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                var user = await UserManager.GetUserAsync(User);
+                var role = (await UserManager.GetRolesAsync(user)).FirstOrDefault();
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span>
+                            <img class="img-circle" src="https://www.gravatar.com/avatar/@user.GravitarHash()?d=identicon" />
+                        </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">@user.FullName</strong>
+                                </span>
+                                <span class="text-muted text-xs block">@role <b class="caret"></b></span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li>
+                                <a onclick="document.getElementById('logoutForm').submit()">Logout</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Manage" asp-action="Index">My Account</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        <i class="fa fa-bell"></i>
+                    </div>
+                </li>
+                <li is-active-route asp-controller="Admin">
+                    <a asp-controller="Admin" asp-action="Index"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span></a>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li is-active-route asp-controller="Users">
+                        <a asp-controller="Users" asp-action="Index"><i class="fa fa-users"></i><span class="nav-label">Manage Users</span></a>
+                    </li>
+                    <li is-active-route asp-controller="Configuration">
+                        <a asp-controller="Configuration" asp-action="Index"><i class="fa fa-cog"></i><span class="nav-label">Configuration</span></a>
+                    </li>
+                }
+            }
+            else
+            {
+                // not signed in
+            }
+        </ul>
+    </div>
+</nav>

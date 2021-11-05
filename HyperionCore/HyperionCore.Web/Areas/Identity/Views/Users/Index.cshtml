@@ -1,0 +1,61 @@
+﻿@model List<Hyperion.Web.Models.AdminViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h2>Manage Users</h2>
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+    </div>
+    <div class="ibox-content">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model[0].FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model[0].LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model[0].Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model[0].Role)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Role)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
