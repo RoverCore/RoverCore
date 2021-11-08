@@ -6,6 +6,7 @@ using Hyperion.Web.Services;
 using HyperionCore.Web.Areas.Admin.Controllers;
 using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
 using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,7 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
     [Authorize]
     [Area("Identity")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;

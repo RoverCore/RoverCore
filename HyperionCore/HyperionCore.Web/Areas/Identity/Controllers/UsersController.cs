@@ -4,6 +4,7 @@ using Hyperion.Web.Data;
 using Hyperion.Web.Services;
 using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
 using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     [Area("Identity")]
     [Authorize(Roles = "Admin")]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;

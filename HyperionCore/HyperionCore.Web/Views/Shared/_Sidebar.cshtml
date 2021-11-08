@@ -1,0 +1,81 @@
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <a href="#" class="sidebar-brand">
+            Hyperion<span>Core</span>
+        </a>
+        <div class="sidebar-toggler not-active">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <!-- Feather Icons - https://feathericons.com/ -->
+    <div class="sidebar-body">
+        <ul class="nav">
+            <li class="nav-item nav-category">Main</li>
+            <li class="nav-item">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                    <i class="link-icon" data-feather="box"></i>
+                    <span class="link-title">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item nav-category">web apps</li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
+                    <i class="link-icon" data-feather="mail"></i>
+                    <span class="link-title">Messages</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="emails">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="pages/email/inbox.html" class="nav-link">Inbox</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/email/read.html" class="nav-link">Read</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/email/compose.html" class="nav-link">Compose</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="pages/apps/chat.html" class="nav-link">
+                    <i class="link-icon" data-feather="bell"></i>
+                    <span class="link-title">Notifications</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/apps/calendar.html" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Calendar</span>
+                </a>
+            </li>
+            <li class="nav-item nav-category">Admin</li>
+            <li class="nav-item">
+                <a asp-area="Identity" asp-controller="Users" asp-action="Index" class="nav-link">
+                    <i class="link-icon" data-feather="users"></i>
+                    <span class="link-title">Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#system" role="button" aria-expanded="false" aria-controls="system">
+                    <i class="link-icon" data-feather="settings"></i>
+                    <span class="link-title">System</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="system">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="Configuration" asp-action="Index" class="nav-link">Configuration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/ui-components/alerts.html" class="nav-link">Alerts</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Hyperion.Web.Data;
 using HyperionCore.Web.Areas.Admin.Models.ConfigurationViewModels;
+using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace HyperionCore.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class ConfigurationController : Controller
+    public class ConfigurationController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly Hyperion.Web.Services.Configuration Configuration;

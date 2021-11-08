@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using AspNetCoreHero.ToastNotification;
 using HyperionCore.Web.Areas.Identity.Models.Identity;
 
 namespace Hyperion.Web
@@ -62,6 +63,7 @@ namespace Hyperion.Web
             services.AddTransient<Services.Cache>();
 
             services.AddTransient<Services.Configuration>();
+            services.AddRouting(options => options.LowercaseUrls = true);
 
 #if DEBUG
             if (Env.IsDevelopment())
@@ -104,6 +106,9 @@ namespace Hyperion.Web
             });
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBreadCrumbService, BreadCrumbService>();
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

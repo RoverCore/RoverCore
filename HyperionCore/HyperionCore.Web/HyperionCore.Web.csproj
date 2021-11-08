@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_Sidebar.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
@@ -39,6 +44,10 @@
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Models\AdminViewModels\" />
     <Folder Include="Models\ConfigurationViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_Sidebar.cshtml" />
   </ItemGroup>
 
 </Project>
