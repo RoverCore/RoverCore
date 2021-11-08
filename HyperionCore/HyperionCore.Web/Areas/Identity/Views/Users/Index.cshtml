@@ -4,58 +4,99 @@
     ViewData["Title"] = "Admin";
 }
 
-<div class="ibox">
-    <div class="ibox-title">
+<div class="card shadow">
+    <div class="card-header">
         <h2>Manage Users</h2>
         <p>
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
+            <a asp-action="Create" class="btn btn-primary mt-2">Create New</a>
         </p>
     </div>
-    <div class="ibox-content">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
+    <div class="card-body table-responsive" id="index_container">
+
+        <table class="table table-bordered" id="index">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].Role)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model[0].FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model[0].LastName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model[0].Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model[0].Role)
-                        </th>
-                        <th></th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="edit"></i> Edit</a> 
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="book-open"></i> Details</a> 
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="trash-2"></i> Delete</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Role)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
+
     </div>
 </div>
+
+@section Styles {
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
+
+}
+
+@section Scripts {
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+            var table = $('#index').DataTable(
+                {
+                    pageLength: 25,
+                    responsive: true,
+                    order: [[1, "asc"]],
+                    "language": {
+                        "emptyTable": "No users have been created."
+                    }
+                }
+            );
+
+            table.columns.adjust().draw();
+
+            //$("#index_container").slideDown();
+
+        });
+    </script>
+
+}

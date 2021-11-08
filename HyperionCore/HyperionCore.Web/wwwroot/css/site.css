@@ -1,1 +1,13 @@
-﻿
+﻿.btn-default {
+    border: solid 1px #555;
+}
+
+.btn-crud {
+    font-size: 1em;
+    padding: 0.3rem 0.5rem;
+}
+
+    .btn-crud svg {
+        width: 1.4em;
+        margin-right: 5px;
+    }
