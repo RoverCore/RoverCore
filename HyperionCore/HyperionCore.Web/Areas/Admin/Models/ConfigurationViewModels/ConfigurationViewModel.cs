@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Hyperion.Web.Models.ConfigurationViewModels
+namespace HyperionCore.Web.Areas.Admin.Models.ConfigurationViewModels
 {
     public class ConfigurationViewModel
     {

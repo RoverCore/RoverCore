@@ -15,8 +15,8 @@ using Microsoft.Extensions.Logging;
 namespace HyperionCore.Web.Areas.Identity.Controllers
 {
     [Authorize]
+    [Area("Identity")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

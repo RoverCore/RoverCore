@@ -1,19 +1,20 @@
-﻿using Hyperion.Web.Models.HomeViewModels;
+﻿using System.Threading.Tasks;
+using Hyperion.Web.Models.HomeViewModels;
+using HyperionCore.Web.Areas.Identity.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
 
-namespace Hyperion.Web.Controllers
+namespace HyperionCore.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class AdminController : Controller
+    public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(UserManager<ApplicationUser> userManager)
+        public DashboardController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

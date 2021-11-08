@@ -8,7 +8,7 @@ namespace Hyperion.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("Index", "Dashboard", new { Area = "Admin"});
             }
 
             return View();

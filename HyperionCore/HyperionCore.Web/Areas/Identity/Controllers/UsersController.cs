@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Hyperion.Web.Data;
-using Hyperion.Web.Models.AdminViewModels;
 using Hyperion.Web.Services;
+using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
 using HyperionCore.Web.Areas.Identity.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HyperionCore.Web.Areas.Identity.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
+    [Area("Identity")]
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {

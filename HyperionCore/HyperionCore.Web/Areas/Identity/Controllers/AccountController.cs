@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Hyperion.Web.Controllers;
 using Hyperion.Web.Services;
+using HyperionCore.Web.Areas.Admin.Controllers;
 using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
 using HyperionCore.Web.Areas.Identity.Models.Identity;
 using Microsoft.AspNetCore.Authentication;
@@ -14,8 +15,8 @@ using Microsoft.Extensions.Logging;
 namespace HyperionCore.Web.Areas.Identity.Controllers
 {
     [Authorize]
+    [Area("Identity")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -40,9 +41,10 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            LoginViewModel vm = new LoginViewModel();
 
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(vm);
         }
 
         [HttpPost]
@@ -241,7 +243,7 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(AdminController.Index), "Home");
+            return RedirectToAction(nameof(DashboardController.Index), "Home");
         }
 
         [HttpPost]
@@ -329,7 +331,7 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(AdminController.Index), "Home");
+                return RedirectToAction(nameof(DashboardController.Index), "Home");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -448,7 +450,7 @@ namespace HyperionCore.Web.Areas.Identity.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(AdminController.Index), "Home");
+                return RedirectToAction(nameof(DashboardController.Index), "Home");
             }
         }
 

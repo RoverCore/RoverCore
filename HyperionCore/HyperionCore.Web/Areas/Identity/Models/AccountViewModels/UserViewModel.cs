@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Hyperion.Web.Models.AdminViewModels
+namespace HyperionCore.Web.Areas.Identity.Models.AccountViewModels
 {
     public class UserViewModel
     {

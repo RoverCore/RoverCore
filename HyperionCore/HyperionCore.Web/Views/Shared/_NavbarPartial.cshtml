@@ -29,7 +29,7 @@
                                 <a onclick="document.getElementById('logoutForm').submit()">Logout</a>
                             </li>
                             <li>
-                                <a asp-controller="Manage" asp-action="Index">My Account</a>
+                                <a asp-area="Identity" asp-controller="Manage" asp-action="Index">My Account</a>
                             </li>
                         </ul>
                     </div>
@@ -38,15 +38,15 @@
                     </div>
                 </li>
                 <li is-active-route asp-controller="Admin">
-                    <a asp-controller="Admin" asp-action="Index"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span></a>
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span></a>
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
                     <li is-active-route asp-controller="Users">
-                        <a asp-controller="Users" asp-action="Index"><i class="fa fa-users"></i><span class="nav-label">Manage Users</span></a>
+                        <a asp-area="Identity" asp-controller="Users" asp-action="Index"><i class="fa fa-users"></i><span class="nav-label">Manage Users</span></a>
                     </li>
                     <li is-active-route asp-controller="Configuration">
-                        <a asp-controller="Configuration" asp-action="Index"><i class="fa fa-cog"></i><span class="nav-label">Configuration</span></a>
+                        <a asp-area="Admin" asp-controller="Configuration" asp-action="Index"><i class="fa fa-cog"></i><span class="nav-label">Configuration</span></a>
                     </li>
                 }
             }
