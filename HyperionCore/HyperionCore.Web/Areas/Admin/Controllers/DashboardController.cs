@@ -21,7 +21,9 @@ namespace HyperionCore.Web.Areas.Admin.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
+        { 
+            _breadCrumbService.Add("Home");
+
             var viewModel = new HomeViewModel
             {
                 User = await _userManager.GetUserAsync(User)
