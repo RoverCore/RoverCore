@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace HyperionCore.Web.Views.Shared.Components.Breadcrumbs
+namespace HyperionCore.Web.Views.Shared.Components.Breadcrumbs;
+
+public class BreadcrumbsViewComponent : ViewComponent
 {
-    public class BreadcrumbsViewComponent : ViewComponent
+    public IViewComponentResult Invoke()
     {
-        public IViewComponentResult Invoke()
-        {
-            return View();
-        }
+        return View();
     }
 }

@@ -1,42 +1,41 @@
-﻿using Hyperion.Web.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Hyperion.Web.Services;
 using HyperionCore.Domain.Entities.Identity;
+using HyperionCore.Infrastructure.DbContexts;
 
-namespace Hyperion.Web.Configuration
+namespace Hyperion.Web.Configuration;
+
+public class ApplicationRoleSeed : ISeeder
 {
-    public class ApplicationRoleSeed : ISeeder
+    public void CreateRoles(RoleManager<ApplicationRole> _roleManager)
     {
-        public void CreateRoles(RoleManager<ApplicationRole> _roleManager)
+        var roles = new List<string>
         {
-            var roles = new List<string>
-            {
-                "Admin",
-                "User"
-            };
+            "Admin",
+            "User"
+        };
 
-            foreach (var roleName in roles)
+        foreach (var roleName in roles)
+        {
+            if (!_roleManager.RoleExistsAsync(roleName).Result)
             {
-                if (!_roleManager.RoleExistsAsync(roleName).Result)
-                {
-                    var role = new ApplicationRole { Name = roleName };
+                var role = new ApplicationRole { Name = roleName };
 
-                    _roleManager.CreateAsync(role).Wait();
-                }
+                _roleManager.CreateAsync(role).Wait();
             }
         }
+    }
 
-        public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+    public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
-            CreateRoles(roleManager);
+        CreateRoles(roleManager);
 
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

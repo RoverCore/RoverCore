@@ -3,89 +3,88 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Threading.Tasks;
 
-namespace Hyperion.Web.Services
+namespace Hyperion.Web.Services;
+
+public class Cache
 {
-    public class Cache
+    private readonly IMemoryCache _cache;
+
+    public Cache(IMemoryCache cache)
     {
-        private readonly IMemoryCache _cache;
+        _cache = cache;
+    }
 
-        public Cache(IMemoryCache cache)
+    public async Task<T> GetAsync<T>(string key, Func<Task<T>> dataFetchFunction, TimeSpan lifeSpan)
+    {
+        T oRet;
+
+        var cachedData = _cache.Get<CacheItem<T>>(key);
+        if (cachedData == null || cachedData.IsExpired())
         {
-            _cache = cache;
-        }
-
-        public async Task<T> GetAsync<T>(string key, Func<Task<T>> dataFetchFunction, TimeSpan lifeSpan)
-        {
-            T oRet;
-
-            var cachedData = _cache.Get<CacheItem<T>>(key);
-            if (cachedData == null || cachedData.IsExpired())
+            var sourceResponse = await dataFetchFunction();
+            if (sourceResponse != null)
             {
-                var sourceResponse = await dataFetchFunction();
-                if (sourceResponse != null)
+                // store in in-memory cache
+                cachedData = new CacheItem<T>
                 {
-                    // store in in-memory cache
-                    cachedData = new CacheItem<T>
-                    {
-                        Created = DateTime.Now,
-                        LifeSpan = lifeSpan,
-                        Data = sourceResponse
-                    };
-                    _cache.Set(key, cachedData);
+                    Created = DateTime.Now,
+                    LifeSpan = lifeSpan,
+                    Data = sourceResponse
+                };
+                _cache.Set(key, cachedData);
 
-                    oRet = sourceResponse;
-                }
-                else
-                {
-                    // an error occurred while trying to retrieve from the source
-                    // return the default for the generic type
-                    oRet = default(T);
-                }
+                oRet = sourceResponse;
             }
             else
             {
-                // all good, use cached data
-                oRet = cachedData.Data;
+                // an error occurred while trying to retrieve from the source
+                // return the default for the generic type
+                oRet = default(T);
             }
-
-            return oRet;
+        }
+        else
+        {
+            // all good, use cached data
+            oRet = cachedData.Data;
         }
 
-        public T Get<T>(string key, Func<T> dataFetchFunction, TimeSpan lifeSpan)
+        return oRet;
+    }
+
+    public T Get<T>(string key, Func<T> dataFetchFunction, TimeSpan lifeSpan)
+    {
+        T oRet;
+
+        var cachedData = _cache.Get<CacheItem<T>>(key);
+        if (cachedData == null || cachedData.IsExpired())
         {
-            T oRet;
-
-            var cachedData = _cache.Get<CacheItem<T>>(key);
-            if (cachedData == null || cachedData.IsExpired())
+            var sourceResponse = dataFetchFunction();
+            if (sourceResponse != null)
             {
-                var sourceResponse = dataFetchFunction();
-                if (sourceResponse != null)
+                // store in in-memory cache
+                cachedData = new CacheItem<T>
                 {
-                    // store in in-memory cache
-                    cachedData = new CacheItem<T>
-                    {
-                        Created = DateTime.Now,
-                        LifeSpan = lifeSpan,
-                        Data = sourceResponse
-                    };
-                    _cache.Set(key, cachedData);
+                    Created = DateTime.Now,
+                    LifeSpan = lifeSpan,
+                    Data = sourceResponse
+                };
+                _cache.Set(key, cachedData);
 
-                    oRet = sourceResponse;
-                }
-                else
-                {
-                    // an error occurred while trying to retrieve from the source
-                    // return the default for the generic type
-                    oRet = default(T);
-                }
+                oRet = sourceResponse;
             }
             else
             {
-                // all good, use cached data
-                oRet = cachedData.Data;
+                // an error occurred while trying to retrieve from the source
+                // return the default for the generic type
+                oRet = default(T);
             }
-
-            return oRet;
         }
+        else
+        {
+            // all good, use cached data
+            oRet = cachedData.Data;
+        }
+
+        return oRet;
     }
 }

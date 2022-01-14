@@ -1,7 +1,6 @@
-﻿namespace HyperionCore.Web.Areas.Identity.Models.ManageViewModels
+﻿namespace HyperionCore.Web.Areas.Identity.Models.ManageViewModels;
+
+public class ShowRecoveryCodesViewModel
 {
-    public class ShowRecoveryCodesViewModel
-    {
-        public string[] RecoveryCodes { get; set; }
-    }
+    public string[] RecoveryCodes { get; set; }
 }

@@ -6,32 +6,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HyperionCore.Web.Areas.Admin.Controllers
+namespace HyperionCore.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Authorize]
+[ApiExplorerSettings(IgnoreApi = true)]
+public class DashboardController : BaseController
 {
-    [Area("Admin")]
-    [Authorize]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class DashboardController : BaseController
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public DashboardController(UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        _userManager = userManager;
+    }
 
-        public DashboardController(UserManager<ApplicationUser> userManager)
+    public async Task<IActionResult> Index()
+    { 
+        _breadCrumbService.Add("Home");
+
+        var viewModel = new HomeViewModel
         {
-            _userManager = userManager;
-        }
+            User = await _userManager.GetUserAsync(User)
+        };
 
-        public async Task<IActionResult> Index()
-        { 
-            _breadCrumbService.Add("Home");
+        _notify.Success($"Welcome back {viewModel.User.FirstName}!");
 
-            var viewModel = new HomeViewModel
-            {
-                User = await _userManager.GetUserAsync(User)
-            };
-
-            _notify.Success($"Welcome back {viewModel.User.FirstName}!");
-
-            return View(viewModel);
-        }
+        return View(viewModel);
     }
 }

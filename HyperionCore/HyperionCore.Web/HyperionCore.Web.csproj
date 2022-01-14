@@ -43,7 +43,6 @@
     <Folder Include="Areas\Admin\Models\DashboardViewModels\" />
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Models\AdminViewModels\" />
     <Folder Include="Models\ConfigurationViewModels\" />
   </ItemGroup>
@@ -54,6 +53,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HyperionCore.Domain\HyperionCore.Domain.csproj" />
+    <ProjectReference Include="..\HyperionCore.Infrastructure\HyperionCore.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

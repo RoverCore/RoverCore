@@ -1,57 +1,57 @@
 ﻿using System.Threading.Tasks;
-using Hyperion.Web.Data;
+using HyperionCore.Infrastructure.DbContexts;
+using HyperionCore.Infrastructure.Services;
 using HyperionCore.Web.Areas.Admin.Models.ConfigurationViewModels;
 using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HyperionCore.Web.Areas.Admin.Controllers
+namespace HyperionCore.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Authorize(Roles = "Admin")]
+public class ConfigurationController : BaseController
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    public class ConfigurationController : BaseController
+    private readonly ApplicationDbContext _context;
+    private readonly Configuration Configuration;
+
+    public ConfigurationController(ApplicationDbContext context, Configuration configuration)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly Hyperion.Web.Services.Configuration Configuration;
+        _context = context;
+        Configuration = configuration;
+    }
 
-        public ConfigurationController(ApplicationDbContext context, Hyperion.Web.Services.Configuration configuration)
+    public IActionResult Index()
+    {
+        var viewModel = new ConfigurationViewModel
         {
-            _context = context;
-            Configuration = configuration;
-        }
+            RSSFeedUrl = Configuration.Get("RSSFeedUrl"),
+            PrivacyPolicyUrl = Configuration.Get("PrivacyPolicyUrl"),
+            AzureHubListenConnectionString = Configuration.Get("AzureHubListenConnectionString"),
+            AzureHubFullConnectionString = Configuration.Get("AzureHubFullConnectionString"),
+            AzureHubName = Configuration.Get("AzureHubName")
+        };
 
-        public IActionResult Index()
+        return View(viewModel);
+    }
+
+    // POST: Configuration/Edit
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(ConfigurationViewModel viewModel)
+    {
+        if (ModelState.IsValid)
         {
-            var viewModel = new ConfigurationViewModel
-            {
-                RSSFeedUrl = Configuration.Get("RSSFeedUrl"),
-                PrivacyPolicyUrl = Configuration.Get("PrivacyPolicyUrl"),
-                AzureHubListenConnectionString = Configuration.Get("AzureHubListenConnectionString"),
-                AzureHubFullConnectionString = Configuration.Get("AzureHubFullConnectionString"),
-                AzureHubName = Configuration.Get("AzureHubName")
-            };
+            Configuration.Set("RSSFeedUrl", viewModel.RSSFeedUrl);
+            Configuration.Set("PrivacyPolicyUrl", viewModel.PrivacyPolicyUrl);
+            Configuration.Set("AzureHubListenConnectionString", viewModel.AzureHubListenConnectionString);
+            Configuration.Set("AzureHubFullConnectionString", viewModel.AzureHubFullConnectionString);
+            Configuration.Set("AzureHubName", viewModel.AzureHubName);
 
-            return View(viewModel);
+            await Configuration.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
-
-        // POST: Configuration/Edit
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ConfigurationViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                Configuration.Set("RSSFeedUrl", viewModel.RSSFeedUrl);
-                Configuration.Set("PrivacyPolicyUrl", viewModel.PrivacyPolicyUrl);
-                Configuration.Set("AzureHubListenConnectionString", viewModel.AzureHubListenConnectionString);
-                Configuration.Set("AzureHubFullConnectionString", viewModel.AzureHubFullConnectionString);
-                Configuration.Set("AzureHubName", viewModel.AzureHubName);
-
-                await Configuration.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View("Index", viewModel);
-        }
+        return View("Index", viewModel);
     }
 }

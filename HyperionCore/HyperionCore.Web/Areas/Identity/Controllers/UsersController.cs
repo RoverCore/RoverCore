@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Hyperion.Web.Data;
 using Hyperion.Web.Services;
 using HyperionCore.Domain.Entities.Identity;
+using HyperionCore.Infrastructure.DbContexts;
+using HyperionCore.Infrastructure.Services;
 using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
 using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -11,206 +12,205 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace HyperionCore.Web.Areas.Identity.Controllers
+namespace HyperionCore.Web.Areas.Identity.Controllers;
+
+[ApiExplorerSettings(IgnoreApi = true)]
+[Area("Identity")]
+[Authorize(Roles = "Admin")]
+public class UsersController : BaseController
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [Area("Identity")]
-    [Authorize(Roles = "Admin")]
-    public class UsersController : BaseController
+    private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly IEmailSender _emailSender;
+
+    public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IEmailSender _emailSender;
+        _context = context;
+        _userManager = userManager;
+        _roleManager = roleManager;
+        _emailSender = emailSender;
+    }
 
-        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
+    public async Task<IActionResult> Index()
+    {
+        var users = await _context.Users.OrderBy(x => x.LastName).ToListAsync();
+
+        var viewModel = users.Select(x => new UserViewModel
         {
-            _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _emailSender = emailSender;
+            Id = x.Id,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Role = _userManager.GetRolesAsync(x).Result.FirstOrDefault()
+        }).ToList();
+
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
+    {
+        if (string.IsNullOrEmpty(viewModel.Password))
+        {
+            ModelState.AddModelError("Password", "Password is required when creating a user");
         }
 
-        public async Task<IActionResult> Index()
+        if (ModelState.IsValid)
         {
-            var users = await _context.Users.OrderBy(x => x.LastName).ToListAsync();
-
-            var viewModel = users.Select(x => new UserViewModel
+            var user = new ApplicationUser
             {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Role = _userManager.GetRolesAsync(x).Result.FirstOrDefault()
-            }).ToList();
+                UserName = viewModel.Email,
+                Email = viewModel.Email,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName
+            };
 
-            return View(viewModel);
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
+
+            // create user
+            await _userManager.CreateAsync(user);
+
+            // assign new role
+            await _userManager.AddToRoleAsync(user, viewModel.Role);
+
+            // send confirmation email
+            var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.EmailConfirmationLink(user.Id, confirmationCode, Request.Scheme);
+            await _emailSender.SendEmailConfirmationAsync(viewModel.Email, confirmationLink);
+
+            return RedirectToAction(nameof(Index));
+        }
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        var role = await _userManager.GetRolesAsync(user);
+
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+
+        var viewModel = new UserViewModel
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = role.FirstOrDefault()
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
+    {
+        if (id != viewModel.Id)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> Create()
+        if (ModelState.IsValid)
         {
-            ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
-        {
-            if (string.IsNullOrEmpty(viewModel.Password))
+            try
             {
-                ModelState.AddModelError("Password", "Password is required when creating a user");
-            }
+                var user = await _context.Users.FindAsync(id);
 
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
+                user.Email = viewModel.Email;
+                user.FirstName = viewModel.FirstName;
+                user.LastName = viewModel.LastName;
+
+                if (!string.IsNullOrEmpty(viewModel.Password))
                 {
-                    UserName = viewModel.Email,
-                    Email = viewModel.Email,
-                    FirstName = viewModel.FirstName,
-                    LastName = viewModel.LastName
-                };
+                    // change the password
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
+                }
 
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
+                // upadate user
+                _context.Update(user);
+                await _context.SaveChangesAsync();
 
-                // create user
-                await _userManager.CreateAsync(user);
+                // reset user roles
+                var roles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, roles);
 
                 // assign new role
                 await _userManager.AddToRoleAsync(user, viewModel.Role);
-
-                // send confirmation email
-                var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.EmailConfirmationLink(user.Id, confirmationCode, Request.Scheme);
-                await _emailSender.SendEmailConfirmationAsync(viewModel.Email, confirmationLink);
-
-                return RedirectToAction(nameof(Index));
             }
-            ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            var role = await _userManager.GetRolesAsync(user);
-
-            ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
-
-            var viewModel = new UserViewModel
+            catch (DbUpdateConcurrencyException)
             {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Role = role.FirstOrDefault()
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
-        {
-            if (id != viewModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (!UserExists(viewModel.Id))
                 {
-                    var user = await _context.Users.FindAsync(id);
-
-                    user.Email = viewModel.Email;
-                    user.FirstName = viewModel.FirstName;
-                    user.LastName = viewModel.LastName;
-
-                    if (!string.IsNullOrEmpty(viewModel.Password))
-                    {
-                        // change the password
-                        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
-                    }
-
-                    // upadate user
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-
-                    // reset user roles
-                    var roles = await _userManager.GetRolesAsync(user);
-                    await _userManager.RemoveFromRolesAsync(user, roles);
-
-                    // assign new role
-                    await _userManager.AddToRoleAsync(user, viewModel.Role);
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!UserExists(viewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-
-            ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
-
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            var role = await _userManager.GetRolesAsync(user);
-
-            var viewModel = new UserViewModel
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Role = role.FirstOrDefault()
-            };
-
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            var role = await _userManager.GetRolesAsync(user);
-
-            var viewModel = new UserViewModel
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Role = role.FirstOrDefault()
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            await _userManager.DeleteAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        var role = await _userManager.GetRolesAsync(user);
+
+        var viewModel = new UserViewModel
         {
-            return _context.Users.Any(x => x.Id == id);
-        }
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = role.FirstOrDefault()
+        };
+
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        var role = await _userManager.GetRolesAsync(user);
+
+        var viewModel = new UserViewModel
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = role.FirstOrDefault()
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        await _userManager.DeleteAsync(user);
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool UserExists(int id)
+    {
+        return _context.Users.Any(x => x.Id == id);
     }
 }
