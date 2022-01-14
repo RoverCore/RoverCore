@@ -1,4 +1,4 @@
-﻿using HyperionCore.Web.Areas.Identity.Models.Identity;
+﻿using HyperionCore.Domain.Entities.Identity;
 
 namespace Hyperion.Web.Models.HomeViewModels
 {

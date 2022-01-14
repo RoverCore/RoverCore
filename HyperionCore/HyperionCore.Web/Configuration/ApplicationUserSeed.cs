@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Hyperion.Web.Services;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Domain.Entities.Identity;
 
 namespace Hyperion.Web.Configuration
 {

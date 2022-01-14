@@ -17,7 +17,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using AspNetCoreHero.ToastNotification;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Domain.Entities.Identity;
 
 namespace Hyperion.Web
 {

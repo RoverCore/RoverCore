@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Hyperion.Web.Data;
 using Hyperion.Web.Services;
+using HyperionCore.Domain.Entities.Identity;
 using HyperionCore.Web.Areas.Identity.Models.AccountViewModels;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
 using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

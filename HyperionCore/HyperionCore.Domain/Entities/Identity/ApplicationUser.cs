@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 
-namespace HyperionCore.Web.Areas.Identity.Models.Identity
+namespace HyperionCore.Domain.Entities.Identity
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser<int>
@@ -11,10 +11,9 @@ namespace HyperionCore.Web.Areas.Identity.Models.Identity
         [Required]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = String.Empty;
 
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        [Display(Name = "Last Name")] public string LastName { get; set; } = String.Empty;
 
         public virtual string FullName => FirstName.Trim() + " " + LastName?.Trim();
 

@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Hyperion.Web.Services;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Domain.Entities.Identity;
 using HyperionCore.Web.Areas.Identity.Models.ManageViewModels;
 using HyperionCore.Web.Controllers;
 using Microsoft.AspNetCore.Authentication;

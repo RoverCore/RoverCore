@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace HyperionCore.Web.Areas.Identity.Models.Identity
+namespace HyperionCore.Domain.Entities.Identity
 {
     public class ApplicationRole : IdentityRole<int>
     {

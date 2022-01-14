@@ -1,5 +1,5 @@
 ﻿using Hyperion.Web.Models;
-using HyperionCore.Web.Areas.Identity.Models.Identity;
+using HyperionCore.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
