@@ -54,7 +54,10 @@ public class AccountController : BaseController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
+        returnUrl ??= "/admin/dashboard";
+
         ViewData["ReturnUrl"] = returnUrl;
+
         if (ModelState.IsValid)
         {
             // This doesn't count login failures towards account lockout
@@ -245,7 +248,7 @@ public class AccountController : BaseController
     {
         await _signInManager.SignOutAsync();
         _logger.LogInformation("User logged out.");
-        return RedirectToAction(nameof(DashboardController.Index), "Home");
+        return RedirectToAction("Index", "Home", new { Area = "" });
     }
 
     [HttpPost]
