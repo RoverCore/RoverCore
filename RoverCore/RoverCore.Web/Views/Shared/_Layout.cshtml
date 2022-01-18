@@ -1,0 +1,64 @@
+﻿@using RoverCore.Web.Views.Shared.Components.Breadcrumbs
+<!DOCTYPE html>
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @@version 1.0.0-beta5
+* @@link https://tabler.io
+* Copyright 2018-2021 The Tabler Authors
+* Copyright 2018-2021 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>@ViewData["Title"]</title>
+    <!-- CSS files -->
+    <link href="~/theme/tabler/css/tabler.min.css" rel="stylesheet"/>
+    <link href="~/theme/tabler/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="~/theme/tabler/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="~/theme/tabler/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="~/theme/tabler/css/demo.min.css" rel="stylesheet"/>
+	
+    <link rel="stylesheet" href="~/theme/tabler/css/site.css">
+
+    @RenderSection("Styles", required: false)
+	
+  </head>
+  <body >
+    <div class="page">
+	
+        @await Html.PartialAsync("_Sidebar")
+        @await Html.PartialAsync("_Navbar")
+      
+        <div class="page-wrapper">
+
+            <div class="page-body">
+              <div class="container-fluid">
+
+                    @(await Component.InvokeAsync<BreadcrumbsViewComponent>())
+                    
+                    @RenderBody()
+
+              </div>
+            </div>
+		    
+		    @await Html.PartialAsync("_Footer")
+
+      </div>
+    </div>
+  <!-- Libs JS -->
+  <script src="/vendor/core/core.js"></script>
+
+  <!-- Tabler Core -->
+    <script src="~/theme/tabler/js/tabler.min.js"></script>
+    <script src="~/theme/tabler/js/demo.min.js"></script>
+
+	@await Component.InvokeAsync("Notyf") 
+	@RenderSection("Scripts", required: false)
+	
+  </body>
+</html>
+

@@ -1,0 +1,45 @@
+﻿@using Rover.Web.Services
+@using RoverCore.Infrastructure.Services
+@inject IBreadCrumbService breadCrumbService
+
+@{
+    var home = breadCrumbService.BreadCrumbs.First();
+    var rest = breadCrumbService.BreadCrumbs.Skip(1).ToList();
+    var current = rest?.LastOrDefault();
+
+    if (rest.Count > 0)
+    {
+        rest = rest.Take(rest.Count() - 1).ToList();
+    }
+}
+
+<nav area-label="breadcrumb">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="@home.Url">
+            Dashboard
+        </a>
+    </li>
+    @foreach (var crumb in rest)
+    {
+        @if (!String.IsNullOrEmpty(crumb.Url))
+        {
+            <li class="breadcrumb-item">
+                <a href="@crumb.Url">
+                    <span>@crumb.Title</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="breadcrumb-item"><span>@crumb.Title</span></li>
+        }
+
+
+    }
+    @if (current is not null)
+    {
+        <li class="breadcrumb-item active" aria-current="page"><span>@current.Title</span></li>
+    }
+</ol>
+</nav>

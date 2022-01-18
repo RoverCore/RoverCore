@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Identity
+@using RoverCore.Domain.Entities.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                <a asp-area="Identity" asp-controller="Manage" asp-action="Index" title="Manage">Hello, @user.FullName!</a>
+            </li>
+            <li>
+                <a onclick="document.getElementById('logoutForm').submit()" class="btn btn-link">
+                    <i class="fa fa-sign-out"></i> Log out
+                </a>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-top-links navbar-right">
+        <li><a asp-area="Identity" asp-controller="Account" asp-action="Login">Log in</a></li>
+    </ul>
+}
