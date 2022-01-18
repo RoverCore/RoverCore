@@ -32,14 +32,8 @@ public class Startup
     public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
         Configuration = configuration;
+        ConnString = Configuration.GetConnectionString("AppContext");
         Env = env;
-
-        if (Env.IsDevelopment())
-            ConnString = Configuration.GetConnectionString("AppDevelopmentContext");
-        else if (Env.IsStaging())
-            ConnString = Configuration.GetConnectionString("AppStagingContext");
-        else if (Env.IsProduction())
-            ConnString = Configuration.GetConnectionString("AppProductionContext");
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -87,12 +81,12 @@ public class Startup
 
         // configure strongly typed settings object
         // configure strongly typed settings objects
-        var appSettingsSection = Configuration.GetSection("AppSettings");
-        services.Configure<AppSettings>(appSettingsSection);
+        var appSettingsSection = Configuration.GetSection("JWTSettings");
+        services.Configure<JWTSettings>(appSettingsSection);
 
         // configure jwt authentication
-        var appSettings = appSettingsSection.Get<AppSettings>();
-        var key = Encoding.ASCII.GetBytes(appSettings.JWTTokenSecret);
+        var appSettings = appSettingsSection.Get<JWTSettings>();
+        var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
         services.AddAuthentication()
             .AddJwtBearer(x =>
             {

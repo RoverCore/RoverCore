@@ -20,9 +20,9 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly ApplicationDbContext _context;
-    private readonly AppSettings _appSettings;
+    private readonly JWTSettings _appSettings;
 
-    public UserService(IOptions<AppSettings> appSettings, ApplicationDbContext context)
+    public UserService(IOptions<JWTSettings> appSettings, ApplicationDbContext context)
     {
         _appSettings = appSettings.Value;
         _context = context;
@@ -57,7 +57,7 @@ public class UserService : IUserService
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.JWTTokenSecret);
+        var key = Encoding.ASCII.GetBytes(_appSettings.TokenSecret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", user.MemberId.ToString()) }),
