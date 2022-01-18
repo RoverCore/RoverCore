@@ -1,20 +1,15 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Rover.Web.Helpers;
-using Rover.Web.Models;
-using Rover.Web.Models.AuthenticationModels;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.DbContexts;
+using RoverCore.Infrastructure.Extensions;
+using RoverCore.Infrastructure.Models.AuthenticationModels;
 
-namespace Rover.Web.Services;
+namespace RoverCore.Infrastructure.Services;
 
 public interface IUserService
 {
@@ -42,11 +37,11 @@ public class UserService : IUserService
             return null;
 
         // Check password
-        if (member.Password != PasswordHasher.Hash(model.Password, member.PasswordSalt).HashedPassword)
+        if (member.Password != model.Password.Hash(member.PasswordSalt).HashedPassword)
             return null;
 
         // authentication successful so generate jwt token
-        var token = generateJwtToken(member);
+        var token = GenerateJwtToken(member);
 
         return new AuthenticateResponse(member, token);
     }
@@ -58,7 +53,7 @@ public class UserService : IUserService
 
     // helper methods
 
-    private string generateJwtToken(Member user)
+    private string GenerateJwtToken(Member user)
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();

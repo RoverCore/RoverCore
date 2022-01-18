@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace Rover.Web.Helpers;
+namespace RoverCore.Infrastructure.Extensions;
 
 public class PasswordHash
 {
@@ -13,9 +9,9 @@ public class PasswordHash
     public string HashedPassword { get; set; }
 }
 
-public class PasswordHasher
+public static class PasswordHasher
 {
-    public static PasswordHash Hash(string password)
+    public static PasswordHash Hash(this string password)
     {
         byte[] salt = new byte[128 / 8];
         using (var rng = RandomNumberGenerator.Create())
@@ -26,14 +22,14 @@ public class PasswordHasher
         return Hash(password, salt);
     }
 
-    public static PasswordHash Hash(string password, string salt)
+    public static PasswordHash Hash(this string password, string salt)
     {
         byte[] _salt = Convert.FromBase64String(salt);
 
         return Hash(password, _salt);
     }
 
-    public static PasswordHash Hash(string password, byte[] salt)
+    public static PasswordHash Hash(this string password, byte[] salt)
     {
         // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

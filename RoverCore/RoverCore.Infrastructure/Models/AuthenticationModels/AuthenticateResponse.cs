@@ -1,7 +1,6 @@
-﻿using Rover.Web.Models;
-using RoverCore.Domain.Entities;
+﻿using RoverCore.Domain.Entities;
 
-namespace Rover.Web.Models.AuthenticationModels;
+namespace RoverCore.Infrastructure.Models.AuthenticationModels;
 
 public class AuthenticateResponse
 {

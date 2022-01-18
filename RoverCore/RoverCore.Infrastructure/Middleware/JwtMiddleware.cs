@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rover.Web.Services;
+using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Services;
 
-namespace Rover.Web.Helpers;
+namespace RoverCore.Infrastructure.Middleware;
 
 public class JwtMiddleware
 {

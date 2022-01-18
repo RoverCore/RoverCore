@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\ConfigurationViewModels\**" />
+    <Content Remove="Models\ConfigurationViewModels\**" />
+    <EmbeddedResource Remove="Models\ConfigurationViewModels\**" />
+    <None Remove="Models\ConfigurationViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Shared\_Sidebar.cshtml" />
   </ItemGroup>
 
@@ -44,7 +51,6 @@
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
     <Folder Include="Models\AdminViewModels\" />
-    <Folder Include="Models\ConfigurationViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

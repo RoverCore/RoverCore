@@ -18,6 +18,7 @@ using System.Text;
 using AspNetCoreHero.ToastNotification;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.DbContexts;
+using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web;

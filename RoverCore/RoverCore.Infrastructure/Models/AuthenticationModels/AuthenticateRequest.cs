@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Rover.Web.Models.AuthenticationModels;
+namespace RoverCore.Infrastructure.Models.AuthenticationModels;
 
 public class AuthenticateRequest
 {

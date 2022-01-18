@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="MailKit" Version="3.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
@@ -22,10 +23,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Models\" />
 	</ItemGroup>
 
 </Project>
