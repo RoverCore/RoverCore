@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RoverCore.Domain\RoverCoreRover.Domain.csproj" />
+	  <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
