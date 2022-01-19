@@ -15,9 +15,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.DbContexts;
 using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web.Controllers.Api.v1;

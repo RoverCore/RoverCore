@@ -5,6 +5,7 @@ using RoverCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RoverCore.Web.Extensions;
 
 namespace RoverCore.Web.Areas.Admin.Controllers;
 
@@ -21,15 +22,16 @@ public class DashboardController : BaseController
     }
 
     public async Task<IActionResult> Index()
-    { 
-        _breadCrumbService.Add("Home");
+    {
+        _breadCrumbService.StartAt("Dashboard", Url.Action("Index", "Dashboard", new { Area = "Admin"}) ?? "/admin/dashboard" )
+            .Then("Home");
 
         var viewModel = new HomeViewModel
         {
             User = await _userManager.GetUserAsync(User)
         };
 
-        _notify.Success($"Welcome back {viewModel.User.FirstName}!");
+        _toast.Success($"Welcome back {viewModel.User.FirstName}!");
 
         return View(viewModel);
     }

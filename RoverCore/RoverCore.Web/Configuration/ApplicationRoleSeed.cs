@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.DbContexts;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 
 namespace Rover.Web.Configuration;
 

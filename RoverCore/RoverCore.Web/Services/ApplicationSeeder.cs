@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using RoverCore.Infrastructure.DbContexts;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 
 namespace Rover.Web.Services;
 

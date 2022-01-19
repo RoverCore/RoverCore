@@ -13,15 +13,24 @@ public class BreadCrumbService : IBreadCrumbService
         BreadCrumbs = new List<BreadCrumb>();
         _httpContextAccessor = httpContextAccessor;
 
-        Add("Home", "/admin/dashboard");
+        StartAt("Home", null);
     }
 
-    public void Add (string title, string url = null)
+    public IBreadCrumbService StartAt(string title, string url = null)
+    {
+        BreadCrumbs.Clear();
+
+        return Then(title, url);
+    }
+
+    public IBreadCrumbService Then (string title, string url = null)
     {
         BreadCrumbs.Add(new BreadCrumb
         {
             Title = title,
             Url = url
         });
+
+        return this;
     }
 }

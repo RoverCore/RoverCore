@@ -24,8 +24,10 @@
         @RenderSection("Styles", required: false)
 
     </head>
-    <body>
-        <!-- Responsive navbar-->
+<body class="theme-light">
+
+<div class="page">
+    <!-- Responsive navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
             <a class="navbar-brand" href="#!">RoverCore</a>
@@ -40,24 +42,26 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="page-wrapper">
-    @RenderBody()
+        @RenderBody()
     </div>
 
     <!-- Footer-->
     <footer class="py-5 bg-dark">
-        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; Your Website @DateTime.Now.Year</p></div>
+        <div class="container px-5">
+            <p class="m-0 text-center text-white">Copyright &copy; Your Company @DateTime.Now.Year</p></div>
     </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="~/theme/front/js/scripts.js"></script>
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</div>
 
-    @RenderSection("Scripts", required: false)
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="~/theme/front/js/site.js"></script>
 
-    </body>
+@RenderSection("Scripts", required: false)
+
+</body>
 </html>
 
 

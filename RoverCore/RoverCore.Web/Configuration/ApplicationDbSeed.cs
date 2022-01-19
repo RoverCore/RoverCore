@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.DbContexts;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 
 namespace Rover.Web.Configuration;
 

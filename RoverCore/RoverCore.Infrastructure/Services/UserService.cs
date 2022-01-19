@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.DbContexts;
 using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 
 namespace RoverCore.Infrastructure.Services;
 

@@ -1,7 +1,4 @@
-using Rover.Web.Configuration;
-using Rover.Web.Helpers;
 using Rover.Web.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +12,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using AspNetCoreHero.ToastNotification;
+using NToastNotify;
 using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.DbContexts;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web;
@@ -26,14 +23,10 @@ namespace Rover.Web;
 public class Startup
 {
     public IConfiguration Configuration { get; }
-    public IWebHostEnvironment Env { get; set; }
-    public string ConnString { get; set; }
 
-    public Startup(IConfiguration configuration, IWebHostEnvironment env)
+    public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        ConnString = Configuration.GetConnectionString("AppContext");
-        Env = env;
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,7 +37,7 @@ public class Startup
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(ConnString, x => x.MigrationsAssembly("RoverCore.Infrastructure"));
+            options.UseSqlServer(Configuration.GetConnectionString("AppContext"), x => x.MigrationsAssembly("RoverCore.Infrastructure"));
         });
 
         services.AddIdentity<ApplicationUser, ApplicationRole>()
@@ -62,12 +55,12 @@ public class Startup
         services.AddRouting(options => options.LowercaseUrls = true);
 
 #if DEBUG
-        if (Env.IsDevelopment())
-        {
-            services.AddRazorPages().AddRazorRuntimeCompilation();
-        }
+        services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif 
-        services.AddMvc();
+        services.AddMvc().AddNToastNotifyNoty(new NotyOptions()
+        {
+            ProgressBar = true
+        }); ;
 
         services.AddSwaggerGen(c =>
         {
@@ -103,8 +96,6 @@ public class Startup
         // configure DI for application services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
-        services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
-
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -133,6 +124,7 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseNToastNotify();
 
         app.UseEndpoints(endpoints =>
         {

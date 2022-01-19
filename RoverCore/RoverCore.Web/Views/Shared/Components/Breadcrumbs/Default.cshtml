@@ -16,9 +16,16 @@
 <nav area-label="breadcrumb">
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-        <a href="@home.Url">
-            Dashboard
-        </a>
+        @if (home.Url is null)
+        {
+            @home.Title
+        }
+        else
+        {
+            <a href="@home.Url">
+                @home.Title
+            </a>
+        }
     </li>
     @foreach (var crumb in rest)
     {

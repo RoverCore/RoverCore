@@ -4,6 +4,7 @@ public interface IBreadCrumbService
 {
     List<BreadCrumb> BreadCrumbs { get; set; }
 
-    void Add(string title, string url = null);
+    IBreadCrumbService StartAt(string title, string url = null);
+    IBreadCrumbService Then(string title, string url = null);
 
 }

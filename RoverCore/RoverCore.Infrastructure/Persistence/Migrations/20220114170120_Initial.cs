@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace RoverCore.Infrastructure.Migrations
+namespace RoverCore.Infrastructure.Persistence.Migrations
 {
     public partial class Initial : Migration
     {

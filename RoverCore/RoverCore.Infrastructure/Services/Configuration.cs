@@ -1,7 +1,7 @@
 ﻿using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.DbContexts;
 using RoverCore.Infrastructure.Extensions;
 using Microsoft.Extensions.Caching.Memory;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 
 namespace RoverCore.Infrastructure.Services;
 

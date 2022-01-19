@@ -1,9 +1,9 @@
-﻿using RoverCore.Domain.Entities;
-using RoverCore.Domain.Entities.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.Domain.Entities;
+using RoverCore.Domain.Entities.Identity;
 
-namespace RoverCore.Infrastructure.DbContexts;
+namespace RoverCore.Infrastructure.Persistence.DbContexts;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
