@@ -2,16 +2,17 @@
 using RoverCore.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using NToastNotify;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace RoverCore.Web.Controllers;
 
 public class BaseController : Controller
 {
     private IBreadCrumbService? _breadCrumbInstance;
-    private IToastNotification? _toastInstance;
+    private INotyfService _toastInstance;
 
-    protected IToastNotification _toast => _toastInstance ??= HttpContext.RequestServices.GetService<IToastNotification>();
+    protected INotyfService _toast => _toastInstance ??= HttpContext.RequestServices.GetService<INotyfService>();
+
 
     protected IBreadCrumbService _breadCrumbService =>
         _breadCrumbInstance ??= HttpContext.RequestServices.GetService<IBreadCrumbService>();

@@ -12,7 +12,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using NToastNotify;
+using AspNetCoreHero.ToastNotification;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
@@ -56,11 +56,8 @@ public class Startup
 
 #if DEBUG
         services.AddRazorPages().AddRazorRuntimeCompilation();
-#endif 
-        services.AddMvc().AddNToastNotifyNoty(new NotyOptions()
-        {
-            ProgressBar = true
-        }); ;
+#endif
+        services.AddMvc();
 
         services.AddSwaggerGen(c =>
         {
@@ -96,6 +93,8 @@ public class Startup
         // configure DI for application services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
+        services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,7 +123,6 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseNToastNotify();
 
         app.UseEndpoints(endpoints =>
         {
