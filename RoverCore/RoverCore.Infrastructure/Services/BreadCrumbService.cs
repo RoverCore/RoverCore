@@ -13,22 +13,15 @@ public class BreadCrumbService : IBreadCrumbService
         BreadCrumbs = new List<BreadCrumb>();
         _httpContextAccessor = httpContextAccessor;
 
-        StartAt("Home", null);
+        Add("Home", null);
     }
 
-    public IBreadCrumbService StartAt(string title, string url = null)
-    {
-        BreadCrumbs.Clear();
-
-        return Then(title, url);
-    }
-
-    public IBreadCrumbService Then (string title, string url = null)
+    public IBreadCrumbService Add (string title, string url)
     {
         BreadCrumbs.Add(new BreadCrumb
         {
             Title = title,
-            Url = url
+            Url = String.IsNullOrEmpty(url) ? null : url
         });
 
         return this;
