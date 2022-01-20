@@ -14,6 +14,6 @@ public class BaseController : Controller
     protected INotyfService _toast => _toastInstance ??= HttpContext.RequestServices.GetService<INotyfService>();
 
 
-    protected IBreadCrumbService _breadCrumbService =>
+    protected IBreadCrumbService _breadcrumbs =>
         _breadCrumbInstance ??= HttpContext.RequestServices.GetService<IBreadCrumbService>();
 }

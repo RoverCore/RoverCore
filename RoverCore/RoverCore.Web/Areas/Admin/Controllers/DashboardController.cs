@@ -23,7 +23,7 @@ public class DashboardController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        _breadCrumbService.StartAt("Dashboard", Url.Action("Index", "Dashboard", new { Area = "Admin"}) ?? "/admin/dashboard" )
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Dashboard", new { Area = "Admin"})
             .Then("Home");
 
         var viewModel = new HomeViewModel
