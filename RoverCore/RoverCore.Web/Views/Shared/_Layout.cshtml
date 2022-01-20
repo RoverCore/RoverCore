@@ -1,4 +1,4 @@
-﻿@using RoverCore.Web.Views.Shared.Components.Breadcrumbs
+﻿@using RoverCore.BreadCrumbs.Views.Shared.Components.BreadCrumbs
 <!DOCTYPE html>
 <!doctype html>
 <!--
@@ -39,7 +39,7 @@
             <div class="page-body">
               <div class="container-fluid">
 
-                    @(await Component.InvokeAsync<BreadcrumbsViewComponent>())
+                    @(await Component.InvokeAsync<BreadCrumbsViewComponent>())
                     
                     @RenderBody()
 
