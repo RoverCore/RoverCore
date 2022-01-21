@@ -34,7 +34,7 @@ public class UsersController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.OrderBy(x => x.LastName).ToListAsync();
+        var users = await _context.Users.Include(x => x.Roles).OrderBy(x => x.LastName).ToListAsync();
 
         var viewModel = users.Select(x => new UserViewModel
         {

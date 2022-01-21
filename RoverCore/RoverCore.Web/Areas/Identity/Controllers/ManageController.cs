@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoverCore.BreadCrumbs.Services;
 
 namespace RoverCore.Web.Areas.Identity.Controllers;
 
@@ -45,6 +46,9 @@ public class ManageController : BaseController
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Dashboard", new { Area = "Admin" })
+            .Then("Manage Account");
+
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {

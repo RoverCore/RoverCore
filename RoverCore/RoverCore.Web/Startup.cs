@@ -16,6 +16,7 @@ using RoverCore.BreadCrumbs;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Models.SettingsModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
 using RoverCore.ToastNotification;
@@ -61,6 +62,11 @@ public class Startup
 #endif
         services.AddMvc();
 
+        // Add functionality to inject IOptions<T>
+        services.AddOptions();
+
+
+
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoverCore.Web API", Version = "v1" });
@@ -71,11 +77,14 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
+        // Add strongly-typed Settings object to services
+        services.Configure<Settings>(Configuration.GetSection("Settings"));
+
         // configure strongly typed settings object
         // configure strongly typed settings objects
         var appSettingsSection = Configuration.GetSection("JWTSettings");
         services.Configure<JWTSettings>(appSettingsSection);
-
+        
         // configure jwt authentication
         var appSettings = appSettingsSection.Get<JWTSettings>();
         var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
@@ -130,7 +139,7 @@ public class Startup
         {
             endpoints.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
             );
 
             endpoints.MapControllerRoute(

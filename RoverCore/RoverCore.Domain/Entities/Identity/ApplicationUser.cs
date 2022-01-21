@@ -13,7 +13,9 @@ public class ApplicationUser : IdentityUser<int>
     [Display(Name = "First Name")]
     public string FirstName { get; set; } = String.Empty;
 
-    [Display(Name = "Last Name")] public string LastName { get; set; } = String.Empty;
+    [Display(Name = "Last Name")] 
+    public string LastName { get; set; } = String.Empty;
+    public List<ApplicationRole> Roles { get; set; }
 
     public virtual string FullName => FirstName.Trim() + " " + LastName?.Trim();
 

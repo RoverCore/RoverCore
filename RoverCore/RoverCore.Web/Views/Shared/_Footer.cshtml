@@ -1,17 +1,20 @@
-        <footer class="footer footer-transparent d-print-none">
+@inject Microsoft.Extensions.Options.IOptions<RoverCore.Infrastructure.Models.SettingsModels.Settings> Settings
+        
+
+<footer class="footer footer-transparent d-print-none">
           <div class="container-xl">
             <div class="row text-center align-items-center flex-row-reverse">
               <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item"><a href="https://eahs.github.io/RoverCoreDocs/docs/" class="link-secondary">Documentation</a></li>
-                  <li class="list-inline-item"><a href="https://github.com/eahs/RoverCore/blob/main/LICENSE.md" class="link-secondary">License</a></li>
-                  <li class="list-inline-item"><a href="https://github.com/eahs/rovercore" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
+                  <li class="list-inline-item"><a href="https://rover.github.io/RoverCoreDocs/docs/" class="link-secondary">Documentation</a></li>
+                  <li class="list-inline-item"><a href="https://github.com/rovercore/RoverCore/blob/main/LICENSE.md" class="link-secondary">License</a></li>
+                  <li class="list-inline-item"><a href="https://github.com/rovercore/rovercore" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
                 </ul>
               </div>
               <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                 <ul class="list-inline list-inline-dots mb-0">
                   <li class="list-inline-item">
-                      Copyright &copy; Your Company @DateTime.Now.Year
+                      Copyright &copy; @Settings.Value.Company @DateTime.Now.Year
                   </li>
                 </ul>
               </div>
