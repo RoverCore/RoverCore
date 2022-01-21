@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -29,10 +30,16 @@ namespace RoverCore.Settings.Services
 
             try
             {
+                var roles = GetRoles(_httpContextAccessor.HttpContext.User).ToList();
+
                 Settings = _configuration.GetSection("Settings").Get<Models.Settings>();
                 Settings.NavMenu.NavMenuItems ??= new List<NavMenuItem>();
 
                 ResolveUrls();
+
+                Settings.NavMenu.NavMenuItems = Settings.NavMenu.NavMenuItems
+                    .Where(x => x.Roles is null || x.Roles.Count == 0 || x.Roles.Any(role => roles.Contains(role)))
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -42,6 +49,9 @@ namespace RoverCore.Settings.Services
             }
         }
 
+        /// <summary>
+        /// Converts the routing parts specified in the configuration into actual urls
+        /// </summary>
         private void ResolveUrls()
         {
             var items = Settings?.NavMenu?.NavMenuItems;
@@ -55,15 +65,28 @@ namespace RoverCore.Settings.Services
 
                     if (!String.IsNullOrEmpty(item.Controller))
                     {
-                        var url = _link.GetPathByAction("Index", "Dashboard"); //, new { Area = "Admin" }, "", FragmentString.Empty, null);
                         item.Url = _link.GetPathByAction(_httpContextAccessor.HttpContext, item.Action ?? "Index", item.Controller, item.Values);
                     }
                     else if (!String.IsNullOrEmpty(item.Page))
                     {
-                        item.Url = _link.GetPathByPage(item.Page, item.Handler, item.Values);
+                        item.Url = _link.GetPathByPage(_httpContextAccessor.HttpContext, item.Page, item.Handler, item.Values);
                     }
                 }
             }
+        }
+
+        public IEnumerable<string> GetRoles(ClaimsPrincipal principal)
+        {
+            if (principal == null)
+                return Enumerable.Empty<string>();
+
+            return principal.Identities.SelectMany(i =>
+            {
+                return i.Claims
+                    .Where(c => c.Type == i.RoleClaimType)
+                    .Select(c => c.Value)
+                    .ToList();
+            });
         }
     }
 }
