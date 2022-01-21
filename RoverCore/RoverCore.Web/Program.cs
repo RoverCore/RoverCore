@@ -48,6 +48,7 @@ public class Program
 
         return WebHost.CreateDefaultBuilder(args)
             .UseConfiguration(configuration)
+            .UseSerilog()
             .UseStartup<Startup>()
             .Build();
     }

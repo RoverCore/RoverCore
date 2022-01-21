@@ -12,6 +12,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using RoverCore.BreadCrumbs;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Domain.Entities.Identity;
@@ -19,6 +21,7 @@ using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Models.SettingsModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
+using RoverCore.Settings.Services;
 using RoverCore.ToastNotification;
 
 namespace Rover.Web;
@@ -104,7 +107,9 @@ public class Startup
         // configure DI for application services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
+        services.AddScoped<SettingsService>();
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
     }
 

@@ -41,12 +41,12 @@
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
     <Folder Include="Models\AdminViewModels\" />
-    <Folder Include="Views\Shared\Components\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
     <ProjectReference Include="..\RoverCore.Infrastructure\RoverCore.Infrastructure.csproj" />
+    <ProjectReference Include="..\RoverCore.Settings\RoverCore.Settings.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,8 @@
+﻿@model RoverCore.Settings.Models.Settings
+
+<ul>
+@foreach (var navitem in Model.NavMenu.NavMenuItems)
+{
+    <li>@navitem.Text</li>
+}
+</ul>
