@@ -1,31 +1,29 @@
 ﻿using System.Threading.Tasks;
-using Rover.Web.Models.HomeViewModels;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RoverCore.BreadCrumbs;
 using RoverCore.BreadCrumbs.Services;
-using RoverCore.Infrastructure.Services;
+using RoverCore.Domain.Entities.Identity;
+using RoverCore.Web.Areas.Dashboard.Models.HomeViewModels;
+using RoverCore.Web.Controllers;
 
-namespace RoverCore.Web.Areas.Admin.Controllers;
+namespace RoverCore.Web.Areas.Dashboard.Controllers;
 
-[Area("Admin")]
+[Area("Dashboard")]
 [Authorize]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class DashboardController : BaseController
+public class HomeController : BaseController
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public DashboardController(UserManager<ApplicationUser> userManager)
+    public HomeController(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
 
     public async Task<IActionResult> Index()
     {
-        _breadcrumbs.StartAtAction("Dashboard", "Index", "Dashboard", new { Area = "Admin"})
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard"})
             .Then("Home");
 
         var viewModel = new HomeViewModel

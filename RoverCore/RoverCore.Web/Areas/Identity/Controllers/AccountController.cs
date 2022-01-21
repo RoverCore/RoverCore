@@ -54,7 +54,7 @@ public class AccountController : BaseController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
-        returnUrl ??= "/admin/dashboard";
+        returnUrl ??= "/dashboard/home";
 
         ViewData["ReturnUrl"] = returnUrl;
 
@@ -336,7 +336,7 @@ public class AccountController : BaseController
     {
         if (userId == null || code == null)
         {
-            return RedirectToAction(nameof(DashboardController.Index), "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
@@ -455,7 +455,7 @@ public class AccountController : BaseController
         }
         else
         {
-            return RedirectToAction(nameof(DashboardController.Index), "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 

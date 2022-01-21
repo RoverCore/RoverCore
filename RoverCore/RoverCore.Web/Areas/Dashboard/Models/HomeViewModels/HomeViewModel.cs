@@ -1,6 +1,6 @@
 ﻿using RoverCore.Domain.Entities.Identity;
 
-namespace Rover.Web.Models.HomeViewModels;
+namespace RoverCore.Web.Areas.Dashboard.Models.HomeViewModels;
 
 public class HomeViewModel
 {

@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RoverCore.Web.Controllers;
 
 namespace Rover.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     public IActionResult Index()
     {
-        if (User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Index", "Dashboard", new { Area = "Admin"});
-        }
-
         return View();
     }
 }

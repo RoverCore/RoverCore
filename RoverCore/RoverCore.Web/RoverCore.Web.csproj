@@ -11,6 +11,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Models\DashboardViewModels\**" />
+    <Compile Remove="Areas\Identity\Data\**" />
+    <Compile Remove="Models\AdminViewModels\**" />
+    <Content Remove="Areas\Admin\Models\DashboardViewModels\**" />
+    <Content Remove="Areas\Identity\Data\**" />
+    <Content Remove="Models\AdminViewModels\**" />
+    <EmbeddedResource Remove="Areas\Admin\Models\DashboardViewModels\**" />
+    <EmbeddedResource Remove="Areas\Identity\Data\**" />
+    <EmbeddedResource Remove="Models\AdminViewModels\**" />
+    <None Remove="Areas\Admin\Models\DashboardViewModels\**" />
+    <None Remove="Areas\Identity\Data\**" />
+    <None Remove="Models\AdminViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
@@ -37,10 +52,9 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\DashboardViewModels\" />
-    <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="Areas\Dashboard\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
-    <Folder Include="Models\AdminViewModels\" />
+    <Folder Include="Models\HomeViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
