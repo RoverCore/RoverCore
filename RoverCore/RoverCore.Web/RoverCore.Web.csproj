@@ -11,17 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\ConfigurationViewModels\**" />
-    <Content Remove="Models\ConfigurationViewModels\**" />
-    <EmbeddedResource Remove="Models\ConfigurationViewModels\**" />
-    <None Remove="Models\ConfigurationViewModels\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Views\Shared\_Sidebar.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
@@ -34,9 +23,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />	
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" PrivateAssets="All" />	
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="107.0.3" />
+    <PackageReference Include="RestSharp" Version="107.1.1" />
     <PackageReference Include="RoverCore.BreadCrumbs" Version="1.0.0.1" />
-    <PackageReference Include="RoverCore.ToastNotification" Version="1.1.0" />
+    <PackageReference Include="RoverCore.ToastNotification" Version="1.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -53,10 +42,6 @@
     <Folder Include="Areas\Identity\Models\Identity\" />
     <Folder Include="Models\AdminViewModels\" />
     <Folder Include="Views\Shared\Components\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Shared\_Sidebar.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
