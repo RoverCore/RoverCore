@@ -108,8 +108,8 @@ public class Startup
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
         services.AddScoped<SettingsService>();
+        services.AddHttpContextAccessor();
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
     }
 

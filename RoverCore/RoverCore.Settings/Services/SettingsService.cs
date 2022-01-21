@@ -55,8 +55,8 @@ namespace RoverCore.Settings.Services
 
                     if (!String.IsNullOrEmpty(item.Controller))
                     {
-                        var url = _link.GetPathByAction("Index", "Dashboard", new { Area = "Admin" }, "", FragmentString.Empty, null);
-                        item.Url = _link.GetPathByAction(item.Action ?? "Index", item.Controller, item.Values);
+                        var url = _link.GetPathByAction("Index", "Dashboard"); //, new { Area = "Admin" }, "", FragmentString.Empty, null);
+                        item.Url = _link.GetPathByAction(_httpContextAccessor.HttpContext, item.Action ?? "Index", item.Controller, item.Values);
                     }
                     else if (!String.IsNullOrEmpty(item.Page))
                     {
