@@ -30,14 +30,7 @@ namespace RoverCore.Settings.Services
             try
             {
                 Settings = _configuration.GetSection("Settings").Get<Models.Settings>();
-
-                if (Settings.NavMenu.NavMenuItems == null)
-                {
-                    Settings.NavMenu = new NavMenu
-                    {
-                        NavMenuItems = new List<NavMenuItem>()
-                    };
-                }
+                Settings.NavMenu.NavMenuItems ??= new List<NavMenuItem>();
 
                 ResolveUrls();
             }
