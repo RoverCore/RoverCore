@@ -1,6 +1,12 @@
 ﻿/*
     Place site-specific custom styles here
 */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+    --tblr-font-sans-serif: "Poppins",-apple-system,BlinkMacSystemFont,San Francisco,Segoe UI,Roboto,Helvetica Neue,sans-serif;
+}
+
 .breadcrumb {
     margin-bottom: 1rem;
 }
@@ -11,6 +17,7 @@ aside .dropdown .dropdown-menu {
     -ms-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: max-height 0.5s, opacity 0.2s;
+    transition-timing-function: ease-out;
     max-height: 0;
     display: block;
     overflow: hidden;
