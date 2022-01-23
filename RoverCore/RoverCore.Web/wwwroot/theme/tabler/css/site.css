@@ -24,7 +24,7 @@
         transform: translateY(0%);
 }
 
-/*
+
 .dropdown-toggle:after {
     content: "";
     display: inline-block;
@@ -35,10 +35,10 @@
     border-left: 1px solid;
     margin-right: 0.1em;
     margin-left: 0.4em;
-    transform: rotate(315deg);
+    transform: rotate(-135deg);
     transition: all 0.3s;
 }
 .dropdown-toggle.show:after {
-    transform: rotate(135deg);
+    transform: rotate(-45deg);
 }
-*/
+    
