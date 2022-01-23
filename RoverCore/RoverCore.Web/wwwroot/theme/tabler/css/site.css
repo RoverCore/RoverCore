@@ -5,24 +5,23 @@
     margin-bottom: 1rem;
 }
 
-.dropdown .dropdown-menu {
+aside .dropdown .dropdown-menu {
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
     -ms-transition: all 0.5s;
     -o-transition: all 0.5s;
-    transition: all 0.5s;
+    transition: max-height 0.5s, opacity 0.2s;
     max-height: 0;
     display: block;
     overflow: hidden;
     opacity: 1;
-    transform: translateY(0rem);
 }
 
-    .dropdown .dropdown-menu.show { 
+aside .dropdown .dropdown-menu.show {
         max-height: 1200px;
         opacity: 1;
-        transform: translateY(0%);
-}
+        display: block;
+    }
 
 
 .dropdown-toggle:after {
