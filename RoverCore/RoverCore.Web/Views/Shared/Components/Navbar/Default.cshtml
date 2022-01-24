@@ -1,5 +1,36 @@
-﻿@model RoverCore.Web.Models.ApplicationSettings
+﻿@using RoverCore.Settings.Models
+@model RoverCore.Web.Models.ApplicationSettings
 
+@functions
+{
+    void renderChildren(List<NavMenuItem>? items)
+    {
+        if (items is null) return; // Nothing to render
+
+        foreach (var dropdownItem in items)
+        {
+            if (dropdownItem.Type.ToLower() == "link")
+            {
+                    <a class="dropdown-item" href="@dropdownItem.Url">
+                        @dropdownItem.Text
+                    </a>
+            }
+            else if (dropdownItem.Type.ToLower() == "dropdown")
+            {
+                <div class="dropend">
+                    <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false" >
+                        @dropdownItem.Text
+                    </a>
+                    <div class="dropdown-menu">
+                        @{
+                            renderChildren(dropdownItem.Children);
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+}
 <div>
 
     <ul class="navbar-nav pt-lg-3">
@@ -29,13 +60,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
-                            @foreach (var dropdownItem in navitem.Children)
-                            {
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="@dropdownItem.Url">
-                                        @dropdownItem.Text
-                                    </a>
-                                </div>
+                            @{
+                                renderChildren(navitem.Children);
                             }
                         </div>
                     </div>
