@@ -20,6 +20,8 @@
         <div class="navbar-nav flex-row d-lg-none">
             @await Html.PartialAsync("_NavbarPartial")
 
+            @* Here we import the navigation bar view component that is custom *@
+            
         </div>
             <div class="collapse navbar-collapse" id="navbar-menu">
                 @(await Component.InvokeAsync<NavbarViewComponent>())

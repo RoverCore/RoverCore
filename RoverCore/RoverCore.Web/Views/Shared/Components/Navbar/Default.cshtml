@@ -1,8 +1,23 @@
 ﻿@model RoverCore.Web.Models.ApplicationSettings
 
-<ul>
-@foreach (var navitem in Model.NavMenu.NavMenuItems)
-{
-    <li>@navitem.Text</li>
-}
-</ul>
+<div>
+    
+
+    @foreach (var navitem in Model.NavMenu.NavMenuItems)
+    {
+        if (navitem.Type.ToLower() == "link")
+        {
+            <ul class="navbar-nav pt-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="@navitem.Url">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                            <i class="ti @navitem.Icon"></i>
+                        </span>
+                        <span class="nav-link-title">@navitem.Text</span>
+                    </a>
+                </li>
+            </ul>
+        }
+    }
+</div>
