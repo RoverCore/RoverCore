@@ -23,7 +23,7 @@ public class ApplicationRoleSeed : ISeeder
         {
             if (!_roleManager.RoleExistsAsync(roleName).Result)
             {
-                var role = new ApplicationRole { Name = roleName };
+                var role = new ApplicationRole { Id = Guid.NewGuid().ToString(), Name = roleName };
 
                 _roleManager.CreateAsync(role).Wait();
             }

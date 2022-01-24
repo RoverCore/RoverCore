@@ -4,7 +4,7 @@ namespace RoverCore.Web.Areas.Identity.Models.AccountViewModels;
 
 public class UserViewModel
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required]
     [DataType(DataType.EmailAddress)]

@@ -34,7 +34,7 @@ public class UsersController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.Include(x => x.Roles).OrderBy(x => x.LastName).ToListAsync();
+        var users = await _context.Users.Include(x => x.UserRoles).OrderBy(x => x.LastName).ToListAsync();
 
         var viewModel = users.Select(x => new UserViewModel
         {
@@ -113,7 +113,7 @@ public class UsersController : BaseController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
+    public async Task<IActionResult> Edit(string id, [Bind("Id,Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
     {
         if (id != viewModel.Id)
         {
@@ -209,7 +209,7 @@ public class UsersController : BaseController
         return RedirectToAction(nameof(Index));
     }
 
-    private bool UserExists(int id)
+    private bool UserExists(string id)
     {
         return _context.Users.Any(x => x.Id == id);
     }

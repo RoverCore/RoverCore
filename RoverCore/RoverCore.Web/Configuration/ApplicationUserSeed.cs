@@ -20,6 +20,7 @@ public class ApplicationUserSeed : ISeeder
 
         var adminUser = new ApplicationUser
         {
+            Id = Guid.NewGuid().ToString(),
             UserName = "admin",
             FirstName = "Admin"
         };

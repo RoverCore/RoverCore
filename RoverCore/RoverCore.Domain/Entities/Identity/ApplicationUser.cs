@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace RoverCore.Domain.Entities.Identity;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
-public class ApplicationUser : IdentityUser<int>
+public class ApplicationUser : IdentityUser<string>
 {
     [Required]
     [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
@@ -15,7 +15,13 @@ public class ApplicationUser : IdentityUser<int>
 
     [Display(Name = "Last Name")] 
     public string LastName { get; set; } = String.Empty;
-    public List<ApplicationRole> Roles { get; set; }
+
+    // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-6.0
+    public virtual ICollection<ApplicationUserClaim> Claims { get; set; }
+    public virtual ICollection<ApplicationUserLogin> Logins { get; set; }
+    public virtual ICollection<ApplicationUserToken> Tokens { get; set; }
+    public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+
 
     public virtual string FullName => FirstName.Trim() + " " + LastName?.Trim();
 

@@ -103,7 +103,7 @@ public class Startup
         // configure DI for application services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
-        services.AddScoped<SettingsService<LocalSettings>>();
+        services.AddScoped<SettingsService<ApplicationSettings>>();
         services.AddHttpContextAccessor();
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 

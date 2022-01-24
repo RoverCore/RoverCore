@@ -9,9 +9,9 @@ namespace RoverCore.Web.Views.Shared.Components.Navbar
 {
     public class NavbarViewComponent : ViewComponent
     {
-        private LocalSettings _settings { get; set; }
+        private ApplicationSettings _settings { get; set; }
 
-        public NavbarViewComponent(SettingsService<LocalSettings> _settingsService)
+        public NavbarViewComponent(SettingsService<ApplicationSettings> _settingsService)
         {
             _settings = _settingsService.Settings;
         }
