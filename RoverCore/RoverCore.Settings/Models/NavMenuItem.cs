@@ -25,7 +25,7 @@ namespace RoverCore.Settings.Models
         public string? Action { get; set; }
 
         [JsonPropertyName("Values")]
-        public Dictionary<string, object> Values { get; set; }
+        public Dictionary<string, object>? Values { get; set; }
 
         [JsonPropertyName("Roles")]
         public List<string>? Roles { get; set; }

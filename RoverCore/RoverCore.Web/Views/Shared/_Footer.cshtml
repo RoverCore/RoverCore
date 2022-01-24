@@ -1,5 +1,5 @@
-@inject Microsoft.Extensions.Options.IOptions<RoverCore.Infrastructure.Models.SettingsModels.Settings> Settings
-        
+@using RoverCore.Web.Models
+@inject RoverCore.Settings.Services.SettingsService<ApplicationSettings> Site
 
 <footer class="footer footer-transparent d-print-none">
           <div class="container-xl">
@@ -14,7 +14,7 @@
               <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                 <ul class="list-inline list-inline-dots mb-0">
                   <li class="list-inline-item">
-                      Copyright &copy; @Settings.Value.Company @DateTime.Now.Year
+                      Copyright &copy; @Site.Settings.Company @DateTime.Now.Year
                   </li>
                 </ul>
               </div>

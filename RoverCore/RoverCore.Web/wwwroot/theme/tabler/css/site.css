@@ -48,3 +48,8 @@ aside .dropdown .dropdown-menu.show {
     transform: rotate(-45deg);
 }
     
+.nav-link .ti {
+    font-size: 1.35em;
+    width: 1.5em;
+    padding-right: 0.50em;
+}

@@ -58,6 +58,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\theme\tabler\iconfont\fonts\tabler-icons.svg" />
+    <None Include="wwwroot\theme\tabler\iconfont\fonts\tabler-icons.woff2" />
+    <None Include="wwwroot\theme\tabler\iconfont\tabler-icons.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
     <ProjectReference Include="..\RoverCore.Infrastructure\RoverCore.Infrastructure.csproj" />
     <ProjectReference Include="..\RoverCore.Settings\RoverCore.Settings.csproj" />

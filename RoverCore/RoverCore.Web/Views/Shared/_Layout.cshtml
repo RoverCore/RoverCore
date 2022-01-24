@@ -1,8 +1,7 @@
-﻿@inject IOptions<Settings> _settings
-
+﻿@inject RoverCore.Settings.Services.SettingsService<ApplicationSettings> Site
 @using RoverCore.BreadCrumbs.Views.Shared.Components.BreadCrumbs
-@using Microsoft.Extensions.Options
-@using RoverCore.Infrastructure.Models.SettingsModels
+@using RoverCore.Web.Models
+
 <!DOCTYPE html>
 <!doctype html>
 <!--
@@ -26,6 +25,7 @@
     <link href="~/theme/tabler/css/tabler-payments.min.css" rel="stylesheet"/>
     <link href="~/theme/tabler/css/tabler-vendors.min.css" rel="stylesheet"/>
     <link href="~/theme/tabler/css/demo.min.css" rel="stylesheet"/>
+    <link href="~/theme/tabler/iconfont/tabler-icons.min.css" rel="stylesheet"/>
     <link href="~/theme/tabler/css/site.css" rel="stylesheet">
 
     @RenderSection("Styles", required: false)
@@ -59,7 +59,7 @@
   <!-- Tabler Core -->
     <script src="~/theme/tabler/js/tabler.min.js"></script>
     <script src="~/theme/tabler/js/demo.min.js"></script>
-  <script src="~/theme/tabler/js/site.js"></script>
+    <script src="~/theme/tabler/js/site.js"></script>
 
 	@await Component.InvokeAsync("Notyf") 
 	@RenderSection("Scripts", required: false)

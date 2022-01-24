@@ -2,5 +2,5 @@
 
 public class JWTSettings
 {
-    public string TokenSecret { get; set; }
+    public string TokenSecret { get; set; } = String.Empty;
 }

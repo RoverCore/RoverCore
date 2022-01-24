@@ -12,16 +12,26 @@ using RoverCore.Settings.Models;
 
 namespace RoverCore.Settings.Services
 {
-    public class SettingsService
+    public class SettingsService : SettingsService<Models.Settings>
+    {
+        public SettingsService(IConfiguration configuration, 
+            ILogger<SettingsService<Models.Settings>> logger, 
+            LinkGenerator link,
+            IHttpContextAccessor httpContextAccessor) : base(configuration, logger, link, httpContextAccessor)
+        {
+        }
+    }
+
+    public class SettingsService<T> where T : Models.Settings, new()
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
         private readonly LinkGenerator _link;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public Models.Settings Settings { get; set; }
+        public T Settings { get; set; }
 
-        public SettingsService(IConfiguration configuration, ILogger<SettingsService> logger, LinkGenerator link, IHttpContextAccessor httpContextAccessor)
+        public SettingsService(IConfiguration configuration, ILogger<SettingsService<T>> logger, LinkGenerator link, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _logger = logger;
@@ -30,13 +40,16 @@ namespace RoverCore.Settings.Services
 
             try
             {
-                var roles = GetRoles(_httpContextAccessor.HttpContext.User).ToList();
+                var roles = GetRoles(_httpContextAccessor.HttpContext?.User).ToList();
 
-                Settings = _configuration.GetSection("Settings").Get<Models.Settings>();
+                Settings = _configuration.GetSection("Settings").Get<T>();
                 Settings.NavMenu.NavMenuItems ??= new List<NavMenuItem>();
 
+                // Convert any links constructed from routing dictionary values in the configuration
+                // to their path counterparts
                 ResolveUrls();
 
+                // Filter out any links the current user can't access
                 Settings.NavMenu.NavMenuItems = Settings.NavMenu.NavMenuItems
                     .Where(x => x.Roles is null || x.Roles.Count == 0 || x.Roles.Any(role => roles.Contains(role)))
                     .ToList();
@@ -55,6 +68,12 @@ namespace RoverCore.Settings.Services
         private void ResolveUrls()
         {
             var items = Settings?.NavMenu?.NavMenuItems;
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (httpContext is null)
+            {
+                throw new Exception("HTTP Context is null when attempting to resolve urls");
+            }
 
             if (items?.Count > 0)
             {
@@ -63,19 +82,25 @@ namespace RoverCore.Settings.Services
                     // If the url is already set then we will use that as the link
                     if (!String.IsNullOrEmpty(item.Url)) continue;
 
+                    // Check to see if this is an MVC link or a Page
                     if (!String.IsNullOrEmpty(item.Controller))
                     {
-                        item.Url = _link.GetPathByAction(_httpContextAccessor.HttpContext, item.Action ?? "Index", item.Controller, item.Values);
+                        item.Url = _link.GetPathByAction(httpContext, item.Action ?? "Index", item.Controller, item.Values);
                     }
-                    else if (!String.IsNullOrEmpty(item.Page))
+                    else if (!String.IsNullOrEmpty(item.Page)) 
                     {
-                        item.Url = _link.GetPathByPage(_httpContextAccessor.HttpContext, item.Page, item.Handler, item.Values);
+                        item.Url = _link.GetPathByPage(httpContext, item.Page, item.Handler, item.Values);
                     }
                 }
             }
         }
 
-        public IEnumerable<string> GetRoles(ClaimsPrincipal principal)
+        /// <summary>
+        /// Returns a list of roles a ClaimsPrincipal has
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetRoles(ClaimsPrincipal? principal)
         {
             if (principal == null)
                 return Enumerable.Empty<string>();

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
@@ -34,7 +35,7 @@ public class UsersController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        var users = await _context.Users.Include(x => x.Roles).OrderBy(x => x.LastName).ToListAsync();
+        var users = await _context.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).OrderBy(x => x.LastName).ToListAsync();
 
         var viewModel = users.Select(x => new UserViewModel
         {
@@ -42,7 +43,7 @@ public class UsersController : BaseController
             Email = x.Email,
             FirstName = x.FirstName,
             LastName = x.LastName,
-            Role = _userManager.GetRolesAsync(x).Result.FirstOrDefault()
+            Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
         }).ToList();
 
         return View(viewModel);
@@ -56,7 +57,7 @@ public class UsersController : BaseController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
+    public async Task<IActionResult> Create([Bind("Email,FirstName,LastName,Roles,Password,ConfirmPassword")] UserViewModel viewModel)
     {
         if (string.IsNullOrEmpty(viewModel.Password))
         {
@@ -67,6 +68,7 @@ public class UsersController : BaseController
         {
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = viewModel.Email,
                 Email = viewModel.Email,
                 FirstName = viewModel.FirstName,
@@ -77,9 +79,9 @@ public class UsersController : BaseController
 
             // create user
             await _userManager.CreateAsync(user);
-
-            // assign new role
-            await _userManager.AddToRoleAsync(user, viewModel.Role);
+            
+            // assign new roles
+            await _userManager.AddToRolesAsync(user, viewModel.Roles);
 
             // send confirmation email
             var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -92,10 +94,10 @@ public class UsersController : BaseController
         return View(viewModel);
     }
 
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(string id)
     {
         var user = await _context.Users.FindAsync(id);
-        var role = await _userManager.GetRolesAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
 
         ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
 
@@ -105,7 +107,7 @@ public class UsersController : BaseController
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = role.FirstOrDefault()
+            Roles = roles.ToList()
         };
 
         return View(viewModel);
@@ -113,7 +115,7 @@ public class UsersController : BaseController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Email,FirstName,LastName,Role,Password,ConfirmPassword")] UserViewModel viewModel)
+    public async Task<IActionResult> Edit(string id, [Bind("Id,Email,FirstName,LastName,Roles,Password,ConfirmPassword")] UserViewModel viewModel)
     {
         if (id != viewModel.Id)
         {
@@ -136,7 +138,7 @@ public class UsersController : BaseController
                     user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
                 }
 
-                // upadate user
+                // update user
                 _context.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -145,7 +147,7 @@ public class UsersController : BaseController
                 await _userManager.RemoveFromRolesAsync(user, roles);
 
                 // assign new role
-                await _userManager.AddToRoleAsync(user, viewModel.Role);
+                await _userManager.AddToRolesAsync(user, viewModel.Roles);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -166,10 +168,10 @@ public class UsersController : BaseController
         return View(viewModel);
     }
 
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(string id)
     {
         var user = await _context.Users.FindAsync(id);
-        var role = await _userManager.GetRolesAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
 
         var viewModel = new UserViewModel
         {
@@ -177,16 +179,16 @@ public class UsersController : BaseController
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = role.FirstOrDefault()
+            Roles = roles.ToList()
         };
 
         return View(viewModel);
     }
 
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(string id)
     {
         var user = await _context.Users.FindAsync(id);
-        var role = await _userManager.GetRolesAsync(user);
+        var roles = await _userManager.GetRolesAsync(user);
 
         var viewModel = new UserViewModel
         {
@@ -194,7 +196,7 @@ public class UsersController : BaseController
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = role.FirstOrDefault()
+            Roles = roles.ToList()
         };
 
         return View(viewModel);
@@ -202,14 +204,14 @@ public class UsersController : BaseController
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(string id)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         await _userManager.DeleteAsync(user);
         return RedirectToAction(nameof(Index));
     }
 
-    private bool UserExists(int id)
+    private bool UserExists(string id)
     {
         return _context.Users.Any(x => x.Id == id);
     }
