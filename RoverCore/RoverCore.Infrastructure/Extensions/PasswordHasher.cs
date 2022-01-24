@@ -5,8 +5,8 @@ namespace RoverCore.Infrastructure.Extensions;
 
 public class PasswordHash
 {
-    public string Salt { get; set; }
-    public string HashedPassword { get; set; }
+    public string Salt { get; set; } = String.Empty;
+    public string HashedPassword { get; set; } = String.Empty;
 }
 
 public static class PasswordHasher
@@ -31,11 +31,11 @@ public static class PasswordHasher
 
     public static PasswordHash Hash(this string password, byte[] salt)
     {
-        // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
+        // derive a 256-bit subkey (use HMACSHA256 with 10,000 iterations)
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,
             salt: salt,
-            prf: KeyDerivationPrf.HMACSHA1,
+            prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
 

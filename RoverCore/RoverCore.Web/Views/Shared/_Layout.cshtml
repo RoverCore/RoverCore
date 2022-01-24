@@ -1,8 +1,6 @@
-﻿@inject IOptions<Settings> _settings
-
+﻿@inject RoverCore.Settings.Services.SettingsService Site
 @using RoverCore.BreadCrumbs.Views.Shared.Components.BreadCrumbs
-@using Microsoft.Extensions.Options
-@using RoverCore.Infrastructure.Models.SettingsModels
+
 <!DOCTYPE html>
 <!doctype html>
 <!--
@@ -60,7 +58,7 @@
   <!-- Tabler Core -->
     <script src="~/theme/tabler/js/tabler.min.js"></script>
     <script src="~/theme/tabler/js/demo.min.js"></script>
-  <script src="~/theme/tabler/js/site.js"></script>
+    <script src="~/theme/tabler/js/site.js"></script>
 
 	@await Component.InvokeAsync("Notyf") 
 	@RenderSection("Scripts", required: false)

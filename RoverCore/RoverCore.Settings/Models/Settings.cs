@@ -10,10 +10,10 @@ namespace RoverCore.Settings.Models
 {
     public class Settings
     {
-        [JsonPropertyName("SiteName")]
-        public string SiteName { get; set; }
+        [JsonPropertyName("SiteName")] 
+        public string SiteName { get; set; } = String.Empty;
         [JsonPropertyName("Company")]
-        public string Company { get; set; }
+        public string Company { get; set; } = String.Empty;
         [JsonPropertyName("NavMenu")]
         public NavMenu NavMenu { get; set; }
     }

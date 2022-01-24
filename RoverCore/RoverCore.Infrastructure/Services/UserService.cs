@@ -13,8 +13,8 @@ namespace RoverCore.Infrastructure.Services;
 
 public interface IUserService
 {
-    Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
-    Task<Member> GetById(int id);
+    Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model);
+    Task<Member?> GetById(int id);
 }
 
 public class UserService : IUserService
@@ -28,7 +28,7 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
+    public async Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model)
     {
         var member = await _context.Member.FirstOrDefaultAsync(x => x.Email == model.Email);
                         
@@ -46,7 +46,7 @@ public class UserService : IUserService
         return new AuthenticateResponse(member, token);
     }
 
-    public async Task<Member> GetById(int id)
+    public async Task<Member?> GetById(int id)
     {
         return await _context.Member.FirstOrDefaultAsync(x => x.MemberId == id);
     }

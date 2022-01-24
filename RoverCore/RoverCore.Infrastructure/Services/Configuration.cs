@@ -25,7 +25,7 @@ public class Configuration
             config = InitializeConfigCache();
         }
 
-        return config.FirstOrDefault(x => x.Key == key)?.Value;
+        return config.FirstOrDefault(x => x.Key == key)?.Value ?? "";
     }
 
     public void Set(string key, string value)
