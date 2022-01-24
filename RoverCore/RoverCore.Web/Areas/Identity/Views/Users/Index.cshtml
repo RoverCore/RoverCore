@@ -26,7 +26,7 @@
                         @Html.DisplayNameFor(model => model[0].Email)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model[0].Role)
+                        @Html.DisplayNameFor(model => model[0].Roles)
                     </th>
                     <th></th>
                 </tr>
@@ -45,7 +45,7 @@
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Role)
+                            @Html.DisplayFor(modelItem => item.Roles)
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="edit"></i> Edit</a> 

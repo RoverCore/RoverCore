@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Web.Areas.Identity.Models.AccountViewModels;
 
@@ -18,7 +19,7 @@ public class UserViewModel
     public string LastName { get; set; }
 
     [Required]
-    public string Role { get; set; }
+    public List<string> Roles { get; set; }
         
     [DataType(DataType.Password)]
     public string Password { get; set; }
