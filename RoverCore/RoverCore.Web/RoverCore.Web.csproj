@@ -67,7 +67,6 @@
     <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
     <ProjectReference Include="..\RoverCore.Infrastructure\RoverCore.Infrastructure.csproj" />
     <ProjectReference Include="..\RoverCore.Navigation\RoverCore.Navigation.csproj" />
-    <ProjectReference Include="..\RoverCore.Settings\RoverCore.Navigation.csproj" />
   </ItemGroup>
 
 </Project>

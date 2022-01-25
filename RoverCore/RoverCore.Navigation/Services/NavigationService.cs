@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RoverCore.Settings.Models;
+using RoverCore.Navigation.Models;
 
-namespace RoverCore.Settings.Services
+namespace RoverCore.Navigation.Services
 {
     public class NavigationService
     {
@@ -30,7 +25,10 @@ namespace RoverCore.Settings.Services
 
             try
             {
-                NavigationConfiguration = _configuration.GetSection("Navigation").Get<NavigationConfiguration>();
+                NavigationConfiguration = new NavigationConfiguration
+                {
+                    Menus = _configuration.GetSection("Navigation").Get<List<NavMenu>>()
+                };
             }
             catch (Exception ex)
             {
@@ -40,18 +38,18 @@ namespace RoverCore.Settings.Services
             }
         }
 
-        public NavMenu Menu(string? id = null)
+        public NavMenu Menu(string? menuId = null)
         {
             var roles = GetRoles(_httpContextAccessor.HttpContext?.User).ToList();
             NavMenu? nav;
 
-            if (id is null)
+            if (menuId is null)
             {
                 nav = NavigationConfiguration.Menus.FirstOrDefault();
             }
             else
             {
-                nav = NavigationConfiguration.Menus.FirstOrDefault(x => x.MenuId == id) ??
+                nav = NavigationConfiguration.Menus.FirstOrDefault(x => x.MenuId == menuId) ??
                       NavigationConfiguration.Menus.FirstOrDefault();
             }
 

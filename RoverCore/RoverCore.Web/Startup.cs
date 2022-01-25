@@ -20,8 +20,7 @@ using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
-using RoverCore.Settings.Models;
-using RoverCore.Settings.Services;
+using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using RoverCore.Web.Models;
 
