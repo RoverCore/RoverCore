@@ -3,7 +3,8 @@
 namespace RoverCore.Web.Models
 {
     /// <summary>
-    /// Additional extra local configuration settings for this web service
+    /// Additional extra strongly-typed application settings for this web service
+    /// The purpose of this file is mainly to provide configuration settings for
     /// </summary>
     public class ApplicationSettings 
     {
