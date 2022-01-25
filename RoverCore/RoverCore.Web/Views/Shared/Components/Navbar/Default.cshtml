@@ -1,8 +1,86 @@
-﻿@model RoverCore.Web.Models.ApplicationSettings
+﻿@using RoverCore.Settings.Models
+@model RoverCore.Web.Models.ApplicationSettings
 
-<ul>
-@foreach (var navitem in Model.NavMenu.NavMenuItems)
-{
-    <li>@navitem.Text</li>
+@{
+    var nav_uniqid = 1;
 }
-</ul>
+
+@functions
+{
+    void renderChildren(List<NavMenuItem>? items)
+    {
+        if (items is null) return; // Nothing to render
+
+        <ul class="nav-block list-unstyled">
+            @foreach (var dropdownItem in items)
+            {
+                if (dropdownItem.Type.ToLower() == "link")
+                {
+                    <li class="nav-item">
+                        <a class="dropdown-item" href="@dropdownItem.Url">
+                            @dropdownItem.Text
+                        </a>
+                    </li>
+                }
+                else if (dropdownItem.Type.ToLower() == "dropdown")
+                {
+                    var navid = Guid.NewGuid().ToString();
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-item dropdown-toggle collapsed" href="#navbar-base" data-bs-toggle="collapse" data-bs-target="#nav_@navid" data-bs-auto-close="false" role="button" aria-expanded="false">
+                            <span class="nav-link-title">@dropdownItem.Text</span>
+                        </a>
+                        <div class="dropdown-nested collapse" id="nav_@navid">
+                            <div class="dropdown-menu-columns">
+                                <div class="dropdown-menu-column">
+                                    @{
+                                        renderChildren(dropdownItem.Children);
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    }
+}
+<div>
+
+    <ul class="navbar-nav pt-lg-3">
+        @foreach (var navitem in Model.NavMenu.NavMenuItems)
+        {
+            if (navitem.Type.ToLower() == "link")
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="@navitem.Url">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="icon @navitem.Icon"></i>
+                        </span>
+                        <span class="nav-link-title">@navitem.Text</span>
+                    </a>
+                </li>
+            }
+            else if (navitem.Type.ToLower() == "dropdown")
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle collapsed" href="#navbar-base" data-bs-toggle="collapse" data-bs-target="#nav_@nav_uniqid" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="icon @navitem.Icon"></i>
+                        </span>
+                        <span class="nav-link-title">@navitem.Text</span>
+                    </a>
+                    <div class="collapse" id="nav_@nav_uniqid">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                            @{
+                                renderChildren(navitem.Children);
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+            nav_uniqid++;
+        }
+    </ul>
+</div>
