@@ -12,26 +12,16 @@ using RoverCore.Settings.Models;
 
 namespace RoverCore.Settings.Services
 {
-    public class SettingsService : SettingsService<Models.Settings>
-    {
-        public SettingsService(IConfiguration configuration, 
-            ILogger<SettingsService<Models.Settings>> logger, 
-            LinkGenerator link,
-            IHttpContextAccessor httpContextAccessor) : base(configuration, logger, link, httpContextAccessor)
-        {
-        }
-    }
-
-    public class SettingsService<T> where T : Models.Settings, new()
+    public class NavigationService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
         private readonly LinkGenerator _link;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public T Settings { get; set; }
+        private NavigationConfiguration NavigationConfiguration { get; set; }
 
-        public SettingsService(IConfiguration configuration, ILogger<SettingsService<T>> logger, LinkGenerator link, IHttpContextAccessor httpContextAccessor)
+        public NavigationService(IConfiguration configuration, ILogger<NavigationService> logger, LinkGenerator link, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _logger = logger;
@@ -40,34 +30,50 @@ namespace RoverCore.Settings.Services
 
             try
             {
-                var roles = GetRoles(_httpContextAccessor.HttpContext?.User).ToList();
-
-                Settings = _configuration.GetSection("Settings").Get<T>();
-                Settings.NavMenu.NavMenuItems ??= new List<NavMenuItem>();
-
-                // Convert any links constructed from routing dictionary values in the configuration
-                // to their path counterparts
-                ResolveUrls();
-
-                // Filter out any links the current user can't access
-                Settings.NavMenu.NavMenuItems = Settings.NavMenu.NavMenuItems
-                    .Where(x => x.Roles is null || x.Roles.Count == 0 || x.Roles.Any(role => roles.Contains(role)))
-                    .ToList();
+                NavigationConfiguration = _configuration.GetSection("Navigation").Get<NavigationConfiguration>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unable to parse Settings from AppSettings.json");
+                _logger.LogError(ex, "Unable to parse Navigation settings from AppSettings.json");
 
                 throw new Exception();
             }
         }
 
+        public NavMenu Menu(string? id = null)
+        {
+            var roles = GetRoles(_httpContextAccessor.HttpContext?.User).ToList();
+            NavMenu? nav;
+
+            if (id is null)
+            {
+                nav = NavigationConfiguration.Menus.FirstOrDefault();
+            }
+            else
+            {
+                nav = NavigationConfiguration.Menus.FirstOrDefault(x => x.MenuId == id) ??
+                      NavigationConfiguration.Menus.FirstOrDefault();
+            }
+
+            nav ??= new NavMenu
+            {
+                NavMenuItems = new List<NavMenuItem>()
+            };
+
+            ResolveUrls(nav.NavMenuItems);
+
+            nav.NavMenuItems = nav.NavMenuItems
+                .Where(x => x.Roles is null || x.Roles.Count == 0 || x.Roles.Any(role => roles.Contains(role)))
+                .ToList();
+
+            return nav;
+        }
+
         /// <summary>
         /// Converts the routing parts specified in the configuration into actual urls
         /// </summary>
-        private void ResolveUrls()
+        private void ResolveUrls(List<NavMenuItem> items)
         {
-            var items = Settings?.NavMenu?.NavMenuItems;
             var httpContext = _httpContextAccessor.HttpContext;
 
             if (httpContext is null)

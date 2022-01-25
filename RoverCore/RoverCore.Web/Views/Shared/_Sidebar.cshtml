@@ -1,6 +1,6 @@
 ﻿@using RoverCore.Web.Views.Shared.Components.Navbar
 @using RoverCore.Web.Models
-@inject RoverCore.Settings.Services.SettingsService<ApplicationSettings> Site
+@inject RoverCore.Web.Models.ApplicationSettings Settings
 
 <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
         <div class="container-fluid">
@@ -10,8 +10,8 @@
             <h1 class="navbar-brand navbar-brand-autodark">
                 <a href=".">
                     <div class="d-inline-flex flex-row align-items-center">
-                        <img src="/theme/tabler/img/paw_white.svg" width="110" height="32" alt="@Site.Settings.SiteName" class="navbar-brand-image">
-                        <p class="mt-0 mb-0 p-1">@Site.Settings.SiteName</p>
+                        <img src="/theme/tabler/img/paw_white.svg" width="110" height="32" alt="@Settings.SiteName" class="navbar-brand-image">
+                        <p class="mt-0 mb-0 p-1">@Settings.SiteName</p>
                     </div>
 
                     
