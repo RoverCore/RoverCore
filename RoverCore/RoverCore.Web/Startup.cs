@@ -20,7 +20,7 @@ using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
-using RoverCore.Settings.Services;
+using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using RoverCore.Web.Models;
 
@@ -80,6 +80,9 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
+        var settings = Configuration.GetSection("Settings").Get<ApplicationSettings>();
+        services.AddSingleton(settings);
+
         // configure strongly typed settings objects
         var appSettingsSection = Configuration.GetSection("JWTSettings");
         services.Configure<JWTSettings>(appSettingsSection);
@@ -103,7 +106,7 @@ public class Startup
         // configure DI for application services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
-        services.AddScoped<SettingsService<ApplicationSettings>>();
+        services.AddScoped<NavigationService>();
         services.AddHttpContextAccessor();
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 

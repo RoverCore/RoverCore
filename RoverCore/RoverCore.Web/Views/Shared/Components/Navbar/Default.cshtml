@@ -1,5 +1,6 @@
-﻿@using RoverCore.Settings.Models
-@model RoverCore.Web.Models.ApplicationSettings
+﻿@using RoverCore.Navigation.Models
+
+@model RoverCore.Navigation.Models.NavMenu
 
 @{
     var nav_uniqid = 1;
@@ -47,7 +48,7 @@
 <div>
 
     <ul class="navbar-nav pt-lg-3">
-        @foreach (var navitem in Model.NavMenu.NavMenuItems)
+        @foreach (var navitem in Model.NavMenuItems)
         {
             if (navitem.Type.ToLower() == "link")
             {

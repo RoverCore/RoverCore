@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Domain", "RoverCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Infrastructure", "RoverCore.Infrastructure\RoverCore.Infrastructure.csproj", "{15EC5FFA-753D-4E23-AE73-1823F0D0F0E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoverCore.Settings", "RoverCore.Settings\RoverCore.Settings.csproj", "{8442F3AA-486D-4E43-B620-04FD1734ADD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Navigation", "RoverCore.Navigation\RoverCore.Navigation.csproj", "{8442F3AA-486D-4E43-B620-04FD1734ADD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
