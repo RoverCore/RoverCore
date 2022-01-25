@@ -10,7 +10,7 @@
 .breadcrumb {
     margin-bottom: 1rem;
 }
-
+/*
 aside .dropdown .dropdown-menu {
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
@@ -29,7 +29,7 @@ aside .dropdown .dropdown-menu.show {
         opacity: 1;
         display: block;
     }
-
+*/
 
 .dropdown-toggle:after {
     content: "";
@@ -41,15 +41,25 @@ aside .dropdown .dropdown-menu.show {
     border-left: 1px solid;
     margin-right: 0.1em;
     margin-left: 0.4em;
-    transform: rotate(-135deg);
+    transform: rotate(-45deg);
     transition: all 0.3s;
 }
-.dropdown-toggle.show:after {
-    transform: rotate(-45deg);
+.dropdown-toggle.collapsed:after {
+    transform: rotate(-135deg);
 }
     
 .nav-link .ti {
     font-size: 1.35em;
     width: 1.5em;
     padding-right: 0.50em;
+}
+
+.dropdown-item {
+    width: auto;
+    padding-left: 3.25rem;
+    color: inherit;
+}
+
+.dropdown-nested {
+    padding-left: 0.75em;
 }
