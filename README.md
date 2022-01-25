@@ -2,7 +2,7 @@
 Advanced Data Structures boilerplate project
 
 ## Project Setup
-- Open the Solution in Visual Studio 2020
+- Open the Solution in Visual Studio 2022
 - Initialize the SQL Server Express LocalDB
   - In Visual Studio, go to `View > Other Windows > Package Manager Console`
   - In the console that appears at the bottom, type the command `Update-Database` and wait for the migration to finish.
