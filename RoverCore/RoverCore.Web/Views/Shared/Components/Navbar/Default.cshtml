@@ -12,35 +12,35 @@
         if (items is null) return; // Nothing to render
 
         <ul class="nav-block list-unstyled">
-        @foreach (var dropdownItem in items)
-        {
-            if (dropdownItem.Type.ToLower() == "link")
+            @foreach (var dropdownItem in items)
             {
-                <li class="nav-item">
-                    <a class="dropdown-item" href="@dropdownItem.Url">
-                        @dropdownItem.Text
-                    </a>
-                </li>
-            }
-            else if (dropdownItem.Type.ToLower() == "dropdown")
-            {
-                var navid = Guid.NewGuid().ToString();
-                <li class="nav-item dropdown">
-                    <a class="dropdown-item dropdown-toggle collapsed" href="#navbar-base" data-bs-toggle="collapse" data-bs-target="#nav_@navid" data-bs-auto-close="false" role="button" aria-expanded="false">
-                        <span class="nav-link-title">@dropdownItem.Text</span>
-                    </a>
-                    <div class="dropdown-nested collapse" id="nav_@navid">
-                        <div class="dropdown-menu-columns">
-                            <div class="dropdown-menu-column">
-                                @{
-                renderChildren(dropdownItem.Children);
-                                }
+                if (dropdownItem.Type.ToLower() == "link")
+                {
+                    <li class="nav-item">
+                        <a class="dropdown-item" href="@dropdownItem.Url">
+                            @dropdownItem.Text
+                        </a>
+                    </li>
+                }
+                else if (dropdownItem.Type.ToLower() == "dropdown")
+                {
+                    var navid = Guid.NewGuid().ToString();
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-item dropdown-toggle collapsed" href="#navbar-base" data-bs-toggle="collapse" data-bs-target="#nav_@navid" data-bs-auto-close="false" role="button" aria-expanded="false">
+                            <span class="nav-link-title">@dropdownItem.Text</span>
+                        </a>
+                        <div class="dropdown-nested collapse" id="nav_@navid">
+                            <div class="dropdown-menu-columns">
+                                <div class="dropdown-menu-column">
+                                    @{
+                                        renderChildren(dropdownItem.Children);
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                }
             }
-        }
         </ul>
     }
 }
@@ -54,8 +54,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="@navitem.Url">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                            <i class="ti @navitem.Icon"></i>
+                            <i class="icon @navitem.Icon"></i>
                         </span>
                         <span class="nav-link-title">@navitem.Text</span>
                     </a>
@@ -66,8 +65,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle collapsed" href="#navbar-base" data-bs-toggle="collapse" data-bs-target="#nav_@nav_uniqid" data-bs-auto-close="false" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                            <i class="ti ti-package"></i>
+                            <i class="icon @navitem.Icon"></i>
                         </span>
                         <span class="nav-link-title">@navitem.Text</span>
                     </a>
