@@ -14,15 +14,19 @@
     <Compile Remove="Areas\Admin\Models\DashboardViewModels\**" />
     <Compile Remove="Areas\Identity\Data\**" />
     <Compile Remove="Models\AdminViewModels\**" />
+    <Compile Remove="Models\HomeViewModels\**" />
     <Content Remove="Areas\Admin\Models\DashboardViewModels\**" />
     <Content Remove="Areas\Identity\Data\**" />
     <Content Remove="Models\AdminViewModels\**" />
+    <Content Remove="Models\HomeViewModels\**" />
     <EmbeddedResource Remove="Areas\Admin\Models\DashboardViewModels\**" />
     <EmbeddedResource Remove="Areas\Identity\Data\**" />
     <EmbeddedResource Remove="Models\AdminViewModels\**" />
+    <EmbeddedResource Remove="Models\HomeViewModels\**" />
     <None Remove="Areas\Admin\Models\DashboardViewModels\**" />
     <None Remove="Areas\Identity\Data\**" />
     <None Remove="Models\AdminViewModels\**" />
+    <None Remove="Models\HomeViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +58,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Dashboard\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
-    <Folder Include="Models\HomeViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

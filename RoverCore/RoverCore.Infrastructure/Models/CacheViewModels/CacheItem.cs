@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Rover.Web.Models.CacheViewModels;
+﻿namespace RoverCore.Infrastructure.Models.CacheViewModels;
 
 public class CacheItem<T>
 {

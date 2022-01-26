@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web.Controllers;
 
@@ -16,9 +17,9 @@ namespace Rover.Web.Controllers;
 public class ApiController : Controller
 {
     private readonly RoverCore.Infrastructure.Services.Configuration Configuration;
-    private readonly Services.Cache _cache;
+    private readonly CacheService _cache;
 
-    public ApiController(RoverCore.Infrastructure.Services.Configuration configuration, Services.Cache cache)
+    public ApiController(RoverCore.Infrastructure.Services.Configuration configuration, CacheService cache)
     {
         Configuration = configuration;
         _cache = cache;

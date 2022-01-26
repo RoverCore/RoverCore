@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RoverCore.Web.Models
+﻿namespace RoverCore.Domain.Entities
 {
     /// <summary>
     /// Additional extra strongly-typed application settings for this web service

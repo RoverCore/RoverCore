@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RoverCore.BreadCrumbs;
 using RoverCore.BreadCrumbs.Services;
+using RoverCore.Domain.Entities;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
@@ -23,7 +24,7 @@ using RoverCore.Infrastructure.Services;
 using RoverCore.Infrastructure.Services.Identity;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
-using RoverCore.Web.Models;
+using RoverCore.Infrastructure.Extensions;
 
 namespace Rover.Web;
 
@@ -39,39 +40,27 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        // Adds cross-origin sharing services
         services.AddCors();
-        services.AddDatabaseDeveloperPageExceptionFilter();
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseSqlServer(Configuration.GetConnectionString("AppContext"), x => x.MigrationsAssembly("RoverCore.Infrastructure"));
-        });
+        services.AddPersistence(Configuration) // Add database access and identity
+                .AddApplicationIdentity()  // Add custom identity user for application
+                .AddHttpContextAccessor()  // Add default HttpContextAccessor service
+                .AddOptions();  // Adds IOptions capabilities
 
-        services.AddIdentity<ApplicationUser, ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
-            .AddDefaultTokenProviders();
-
-        // Add application services.
-        services.AddTransient<IEmailSender, EmailSender>();
-
-        // caching
-        services.AddMemoryCache();
-        services.AddTransient<Services.Cache>();
-
-        services.AddTransient<RoverCore.Infrastructure.Services.Configuration>();
+        // Add routing with lowercase url configuration
         services.AddRouting(options => options.LowercaseUrls = true);
 
 #if DEBUG
-        services.AddRazorPages().AddRazorRuntimeCompilation();
+        // For development only - Display exceptions on page if there is an error
+        services.AddDatabaseDeveloperPageExceptionFilter();
 #endif
-        services.AddMvc();
 
-        // Add functionality to inject IOptions<T>
-        services.AddOptions();
+        // Add Mvc services
+        services.AddMvc()
+                .AddRazorRuntimeCompilation();
 
-
-
+        // Add Swagger documentation
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoverCore.Web API", Version = "v1" });
@@ -82,35 +71,22 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
-        var settings = Configuration.GetSection("Settings").Get<ApplicationSettings>();
-        services.AddSingleton(settings);
+        // RoverCore infrastructure services
+        services.AddAuthenticationScheme(Configuration)
+                .AddSettings(Configuration)
+                .AddCaching(); // Adds CacheService
 
-        // configure strongly typed settings objects
-        var appSettingsSection = Configuration.GetSection("JWTSettings");
-        services.Configure<JWTSettings>(appSettingsSection);
-        
-        // configure jwt authentication
-        var appSettings = appSettingsSection.Get<JWTSettings>();
-        var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
-        services.AddAuthentication()
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-        // configure DI for application services
+        // Add JWT user service
         services.AddScoped<IUserService, UserService>();
+
+        // Configure email service
+        services.AddTransient<IEmailSender, EmailSender>();
+
+        // Add application layer services
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
         services.AddScoped<NavigationService>();
-        services.AddHttpContextAccessor();
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+        services.AddTransient<RoverCore.Infrastructure.Services.Configuration>();
 
     }
 

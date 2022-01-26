@@ -1,15 +1,13 @@
-﻿using Rover.Web.Models.CacheViewModels;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Caching.Memory;
+using RoverCore.Infrastructure.Models.CacheViewModels;
 
-namespace Rover.Web.Services;
+namespace RoverCore.Infrastructure.Services;
 
-public class Cache
+public class CacheService
 {
     private readonly IMemoryCache _cache;
 
-    public Cache(IMemoryCache cache)
+    public CacheService(IMemoryCache cache)
     {
         _cache = cache;
     }
