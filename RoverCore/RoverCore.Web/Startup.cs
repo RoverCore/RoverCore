@@ -20,6 +20,7 @@ using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
+using RoverCore.Infrastructure.Services.Identity;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using RoverCore.Web.Models;
@@ -48,6 +49,7 @@ public class Startup
 
         services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
 
         // Add application services.

@@ -16,7 +16,7 @@ namespace RoverCore.Infrastructure.Extensions
         /// <returns></returns>
         public static string GetUserEmail(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Email);
+            return principal.FindFirstValue(ClaimTypes.Email) ?? String.Empty;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace RoverCore.Infrastructure.Extensions
         /// <returns></returns>
         public static string GetUserId(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            return principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? String.Empty;
         }
 
         /// <summary>
@@ -36,7 +36,18 @@ namespace RoverCore.Infrastructure.Extensions
         /// <returns></returns>
         public static string GetUsername(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Name);
+            return principal.FindFirstValue(ClaimTypes.Name) ?? String.Empty;
+        }
+
+        public static string FirstName(this ClaimsPrincipal principal)
+        {
+            return principal.FindFirstValue(ClaimTypes.GivenName) ?? String.Empty;
+        }
+
+
+        public static string LastName(this ClaimsPrincipal principal)
+        {
+            return principal.FindFirstValue(ClaimTypes.Surname) ?? String.Empty;
         }
 
         /// <summary>
