@@ -35,8 +35,8 @@
   <body >
     <div class="page">
 	
-        @await Html.PartialAsync("_Sidebar")
-        @await Html.PartialAsync("_Navbar")
+        @await Html.PartialAsync("~/Views/Shared/Layouts/Back/_Sidebar.cshtml")
+        @await Html.PartialAsync("~/Views/Shared/Layouts/Back/_Navbar.cshtml")
       
         <div class="page-wrapper">
 
@@ -50,7 +50,7 @@
               </div>
             </div>
 		    
-		    @await Html.PartialAsync("_Footer")
+		    @await Html.PartialAsync("~/Views/Shared/Layouts/Back/_Footer.cshtml")
 
       </div>
     </div>
