@@ -8,7 +8,11 @@ namespace Rover.Web.Helpers;
 
 public static class ControllerUtil
 {
-    // Remove any modelstate errors that don't pertain to the actual fields we are binding to
+    /// <summary>
+    /// Remove any modelstate errors that don't pertain to the actual fields we are binding
+    /// </summary>
+    /// <param name="ModelState"></param>
+    /// <param name="bindingFields"></param>
     public static void Scrub(this ModelStateDictionary ModelState, string bindingFields)
     {
         string[] bindingKeys = bindingFields.Split(",");
