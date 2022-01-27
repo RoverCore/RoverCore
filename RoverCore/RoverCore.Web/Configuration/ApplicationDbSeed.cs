@@ -17,6 +17,13 @@ namespace Rover.Web.Configuration;
 
 public class ApplicationDbSeed : ISeeder
 {
+    private readonly ApplicationDbContext _context;
+
+    public ApplicationDbSeed(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
     public string GetJson(string seedFile)
     {
         var file = System.IO.File.ReadAllText(Path.Combine("Configuration", "SeedData", seedFile));
@@ -31,7 +38,7 @@ public class ApplicationDbSeed : ISeeder
     /// <param name="jsonFile">JSON encoded array of database records</param>
     /// <param name="dbset">Database dbset to insert into</param>
     /// <param name="preserveOrder">Make sure order is maintained when inserting into database</param>
-    public void SeedDatabase<TEntity>(ApplicationDbContext _context, string jsonFile, DbSet<TEntity> dbset, bool preserveOrder = false) where TEntity : class
+    public void SeedDatabase<TEntity>(string jsonFile, DbSet<TEntity> dbset, bool preserveOrder = false) where TEntity : class
     {
         var records = JsonConvert.DeserializeObject<List<TEntity>>(GetJson(jsonFile));
 
@@ -61,12 +68,12 @@ public class ApplicationDbSeed : ISeeder
     /// <param name="jsonFile">JSON encoded array of database records</param>
     /// <param name="dbset">Database dbset to insert into</param>
     /// <param name="matchingProperty">Json files will not have primary id keys, so this is used to check to see if a record already exists in table</param>
-    public void SeedDatabaseOrUpdate<TEntity>(ApplicationDbContext _context, string jsonFile, DbSet<TEntity> dbset, string matchingProperty = null) where TEntity : class
+    public void SeedDatabaseOrUpdate<TEntity>(string jsonFile, DbSet<TEntity> dbset, string matchingProperty = null) where TEntity : class
     {
         var records = dbset.ToList();
         if (records == null || records.Count == 0)
         {
-            SeedDatabase<TEntity>(_context, jsonFile, dbset, true);
+            SeedDatabase<TEntity>(jsonFile, dbset, true);
         }
         else if (matchingProperty != null)
         {
@@ -89,7 +96,7 @@ public class ApplicationDbSeed : ISeeder
 
     }
 
-    public Task SeedAsync(IServiceProvider serviceProvider)
+    public Task SeedAsync()
     {
         // SeedDatabaseOrUpdate<Member>(dbContext, "Members.json", dbContext.Member, "LastName");
 

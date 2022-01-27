@@ -1,6 +1,17 @@
-﻿namespace RoverCore.Infrastructure.Services.Seeder;
+﻿using Serviced;
 
-public interface ISeeder
+namespace RoverCore.Infrastructure.Services.Seeder;
+
+public interface ISeeder : IScoped
 {
-    Task SeedAsync(IServiceProvider serviceProvider);
+    Task SeedAsync();
 }
+
+public interface ISeeder<T> : ISeeder
+{
+}
+/*
+public interface ISeeder<T> : IScoped<T>, ISeeder
+{
+}
+*/

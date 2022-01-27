@@ -44,6 +44,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="107.1.1" />
     <PackageReference Include="RoverCore.BreadCrumbs" Version="1.0.0.1" />
+    <PackageReference Include="RoverCore.Serviced" Version="1.0.5" />
     <PackageReference Include="RoverCore.ToastNotification" Version="1.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
@@ -67,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RoverCoreServiced\src\RoverCore.Serviced\RoverCore.Serviced.csproj" />
     <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
     <ProjectReference Include="..\RoverCore.Infrastructure\RoverCore.Infrastructure.csproj" />
     <ProjectReference Include="..\RoverCore.Navigation\RoverCore.Navigation.csproj" />

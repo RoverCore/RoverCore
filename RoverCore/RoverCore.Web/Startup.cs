@@ -27,6 +27,7 @@ using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Services.Seeder;
+using Serviced;
 
 namespace Rover.Web;
 
@@ -47,7 +48,6 @@ public class Startup
 
         services.AddPersistence(Configuration) // Add database access and identity
                 .AddApplicationIdentity()  // Add custom identity user for application
-                .AddSeeders() // Add database seeders
                 .AddHttpContextAccessor()  // Add default HttpContextAccessor service
                 .AddOptions();  // Adds IOptions capabilities
 
@@ -84,6 +84,11 @@ public class Startup
 
         // Configure email service
         services.AddTransient<IEmailSender, EmailSender>();
+
+        // Auto-register services thanks to Georgi Stoyanov
+        // https://github.com/RoverCore/Serviced
+        services.AddServiced(typeof(Startup).Assembly,
+            typeof(ApplicationSeederService).Assembly);
 
         // Add application layer services
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
@@ -149,14 +154,14 @@ public class Startup
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
         });
-
+        
         using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             //new ApplicationSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
-            var seeder = serviceScope.ServiceProvider.GetRequiredService<RoverCore.Web.Services.TestSeeder>();
-            seeder.SeedAsync(serviceScope.ServiceProvider).GetAwaiter().GetResult();
+            var seeder = serviceScope.ServiceProvider.GetRequiredService<ApplicationSeederService>();
+            seeder.SeedAsync().GetAwaiter().GetResult();
         }
 
     }

@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services.Seeder;
+using Serviced;
 
 namespace RoverCore.Web.Services
 {
@@ -15,7 +16,7 @@ namespace RoverCore.Web.Services
             _context = context;
         }
 
-        public Task SeedAsync(IServiceProvider serviceProvider)
+        public Task SeedAsync()
         {
             throw new NotImplementedException();
         }
