@@ -17,11 +17,29 @@ using Microsoft.Extensions.Configuration;
 using RoverCore.Domain.Entities;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Services.Identity;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace RoverCore.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddSeeders(this IServiceCollection services)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var modules = assembly.Modules.ToList();
+
+            var seeders = from t in assembly.GetTypes()
+                where t.GetInterfaces().Contains(typeof(ISeeder)) 
+                select t;
+
+            foreach (var seeder in seeders)
+            {
+                services.AddScoped(seeder);
+            }
+
+            return services;
+        }
+
         public static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
         {
             var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();

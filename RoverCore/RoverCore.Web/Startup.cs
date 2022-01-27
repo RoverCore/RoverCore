@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ using RoverCore.Infrastructure.Services.Identity;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using RoverCore.Infrastructure.Extensions;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web;
 
@@ -45,6 +47,7 @@ public class Startup
 
         services.AddPersistence(Configuration) // Add database access and identity
                 .AddApplicationIdentity()  // Add custom identity user for application
+                .AddSeeders() // Add database seeders
                 .AddHttpContextAccessor()  // Add default HttpContextAccessor service
                 .AddOptions();  // Adds IOptions capabilities
 
@@ -88,6 +91,17 @@ public class Startup
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
         services.AddTransient<RoverCore.Infrastructure.Services.Configuration>();
 
+        /*
+        var seeders = from t in Assembly.GetExecutingAssembly().GetTypes()
+            where t.GetInterfaces().Contains(typeof(ISeeder)) &&
+                  t.Name != this.GetType().Name
+            select t;
+
+        foreach (var seeder in seeders)
+        {
+            services.AddScoped(seeder);
+        }
+        */
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,11 +152,13 @@ public class Startup
 
         using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
-            var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            new ApplicationSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
-
+            //new ApplicationSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+            var seeder = serviceScope.ServiceProvider.GetRequiredService<RoverCore.Web.Services.TestSeeder>();
+            seeder.SeedAsync(serviceScope.ServiceProvider).GetAwaiter().GetResult();
         }
+
     }
 
     // Applies any new migrations automatically

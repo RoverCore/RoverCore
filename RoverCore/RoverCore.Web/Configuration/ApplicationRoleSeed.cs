@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 
@@ -30,7 +31,7 @@ public class ApplicationRoleSeed : ISeeder
         }
     }
 
-    public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+    public Task SeedAsync(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 

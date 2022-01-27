@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 
@@ -88,9 +89,9 @@ public class ApplicationDbSeed : ISeeder
 
     }
 
-    public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+    public Task SeedAsync(IServiceProvider serviceProvider)
     {
-        SeedDatabaseOrUpdate<Member>(dbContext, "Members.json", dbContext.Member, "LastName");
+        // SeedDatabaseOrUpdate<Member>(dbContext, "Members.json", dbContext.Member, "LastName");
 
         return Task.CompletedTask;
     }
