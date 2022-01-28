@@ -33,11 +33,11 @@ namespace Rover.Web;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
+    public IConfiguration _configuration { get; }
 
     public Startup(IConfiguration configuration)
     {
-        Configuration = configuration;
+        _configuration = configuration;
     }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -46,7 +46,7 @@ public class Startup
         // Adds cross-origin sharing services
         services.AddCors();
 
-        services.AddPersistence(Configuration) // Add database access and identity
+        services.AddPersistence(_configuration) // Add database access and identity
                 .AddApplicationIdentity()  // Add custom identity user for application
                 .AddHttpContextAccessor()  // Add default HttpContextAccessor service
                 .AddOptions();  // Adds IOptions capabilities
@@ -75,8 +75,8 @@ public class Startup
         });
 
         // RoverCore infrastructure services
-        services.AddAuthenticationScheme(Configuration)
-                .AddSettings(Configuration)
+        services.AddAuthenticationScheme(_configuration)
+                .AddSettings(_configuration)
                 .AddCaching(); // Adds CacheService
 
         // Add JWT user service
@@ -85,8 +85,7 @@ public class Startup
         // Configure email service
         services.AddTransient<IEmailSender, EmailSender>();
 
-        // Auto-register services thanks to Georgi Stoyanov
-        // https://github.com/RoverCore/Serviced
+        // Auto-register services (thanks to Georgi Stoyanov)
         services.AddServiced(typeof(Startup).Assembly,
             typeof(ApplicationSeederService).Assembly);
 
@@ -101,8 +100,6 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        UpdateDatabase(app);
-
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -144,33 +141,6 @@ public class Startup
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
         });
         
-        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-        {
-            var seeder = serviceScope.ServiceProvider.GetRequiredService<ApplicationSeederService>();
-
-            seeder.SeedAsync().GetAwaiter().GetResult();
-        }
-
     }
-
-    // Applies any new migrations automatically
-    private static void UpdateDatabase(IApplicationBuilder app)
-    {
-        try
-        {
-            using (var serviceScope = app.ApplicationServices
-                       .GetRequiredService<IServiceScopeFactory>()
-                       .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
-                {
-                    context?.Database.Migrate();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            // Log error
-        }
-    }
+    
 }
