@@ -10,7 +10,7 @@ using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
 using System.Threading.Tasks;
 
-namespace Rover.Web.Controllers.Api.v1;
+namespace RoverCore.Web.Controllers.Api.v1;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]

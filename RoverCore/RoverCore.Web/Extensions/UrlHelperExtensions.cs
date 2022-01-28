@@ -1,6 +1,6 @@
 using RoverCore.Web.Areas.Identity.Controllers;
 
-namespace Microsoft.AspNetCore.Mvc;
+namespace RoverCore.Web.Extensions;
 
 public static class UrlHelperExtensions
 {

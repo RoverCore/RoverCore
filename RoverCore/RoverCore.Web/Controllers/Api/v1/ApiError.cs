@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Rover.Web.Controllers.Api.v1;
+namespace RoverCore.Web.Controllers.Api.v1;
 
 public class ApiError
 {
