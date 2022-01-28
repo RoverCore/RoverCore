@@ -2,10 +2,11 @@
 using RoverCore.Infrastructure.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using Serviced;
 
 namespace RoverCore.Infrastructure.Services;
 
-public class Configuration
+public class Configuration : ITransient
 {
     private readonly ApplicationDbContext _context;
     private readonly IMemoryCache _cache;

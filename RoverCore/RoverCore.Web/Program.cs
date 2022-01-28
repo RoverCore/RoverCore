@@ -5,6 +5,7 @@ using Serilog;
 using Serilog.Events;
 using System;
 using System.IO;
+using RoverCore.Infrastructure.Extensions;
 
 namespace Rover.Web;
 
@@ -29,7 +30,10 @@ public class Program
         try
         {
             Log.Information("Starting web host");
-            BuildWebHost(args).Run();
+            BuildWebHost(args)
+                .RunMigrations()  // Apply any new EF migrations (requires appsetting)
+                .RunSeeders()     // Run any auto-registered seeders (classes that implement ISeeder) (requires appsetting)
+                .Run();           // Start the web host
         }
         catch (Exception ex)
         {
@@ -44,7 +48,9 @@ public class Program
 
     public static IWebHost BuildWebHost(string[] args)
     {
-        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddEnvironmentVariables().Build();
+        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            .AddEnvironmentVariables()
+            .Build();
 
         return WebHost.CreateDefaultBuilder(args)
             .UseConfiguration(configuration)
@@ -52,4 +58,6 @@ public class Program
             .UseStartup<Startup>()
             .Build();
     }
+
 }
+

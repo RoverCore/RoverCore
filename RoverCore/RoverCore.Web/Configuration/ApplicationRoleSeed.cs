@@ -6,12 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 
 public class ApplicationRoleSeed : ISeeder
 {
-    public void CreateRoles(RoleManager<ApplicationRole> _roleManager)
+    private readonly RoleManager<ApplicationRole> _roleManager;
+
+    public ApplicationRoleSeed(RoleManager<ApplicationRole> roleManager)
+    {
+        _roleManager = roleManager;
+    }
+
+    public void CreateRoles()
     {
         var roles = new List<string>
         {
@@ -30,11 +38,9 @@ public class ApplicationRoleSeed : ISeeder
         }
     }
 
-    public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+    public Task SeedAsync()
     {
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-        CreateRoles(roleManager);
+        CreateRoles();
 
         return Task.CompletedTask;
     }

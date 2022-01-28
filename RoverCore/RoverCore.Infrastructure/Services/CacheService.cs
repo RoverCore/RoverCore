@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using RoverCore.Infrastructure.Models.CacheViewModels;
+using Serviced;
 
 namespace RoverCore.Infrastructure.Services;
 
-public class CacheService
+public class CacheService : ITransient
 {
     private readonly IMemoryCache _cache;
 
@@ -12,9 +13,9 @@ public class CacheService
         _cache = cache;
     }
 
-    public async Task<T> GetAsync<T>(string key, Func<Task<T>> dataFetchFunction, TimeSpan lifeSpan)
+    public async Task<T?> GetAsync<T>(string key, Func<Task<T>> dataFetchFunction, TimeSpan lifeSpan)
     {
-        T oRet;
+        T? oRet;
 
         var cachedData = _cache.Get<CacheItem<T>>(key);
         if (cachedData == null || cachedData.IsExpired())
@@ -37,7 +38,7 @@ public class CacheService
             {
                 // an error occurred while trying to retrieve from the source
                 // return the default for the generic type
-                oRet = default(T);
+                oRet = default;
             }
         }
         else
@@ -49,9 +50,9 @@ public class CacheService
         return oRet;
     }
 
-    public T Get<T>(string key, Func<T> dataFetchFunction, TimeSpan lifeSpan)
+    public T? Get<T>(string key, Func<T> dataFetchFunction, TimeSpan lifeSpan)
     {
-        T oRet;
+        T? oRet;
 
         var cachedData = _cache.Get<CacheItem<T>>(key);
         if (cachedData == null || cachedData.IsExpired())

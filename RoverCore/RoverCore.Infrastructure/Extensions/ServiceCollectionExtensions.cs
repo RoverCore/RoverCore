@@ -9,19 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using RoverCore.Domain.Entities;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Services.Identity;
+
 
 namespace RoverCore.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds a singleton service of the typed ApplicationSettings stored in appsettings.json
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
         {
             var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();
@@ -30,6 +32,12 @@ namespace RoverCore.Infrastructure.Extensions
             return services;
         }
 
+        /// <summary>
+        /// Adds all Entity Framework database contexts to the service collection
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,24 +50,25 @@ namespace RoverCore.Infrastructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddApplicationIdentity(this IServiceCollection services)
-        {
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
-                .AddDefaultTokenProviders();
-
-            return services;
-        }
-
+        /// <summary>
+        /// Add any caching services that are needed by the system
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddCaching(this IServiceCollection services)
         {
             // caching
             services.AddMemoryCache();
-            services.AddTransient<CacheService>();
 
             return services;
         }
+
+        /// <summary>
+        /// Add authentication services required for authentication
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IServiceCollection AddAuthenticationScheme(this IServiceCollection services, IConfiguration configuration)
         {
             // configure strongly typed settings objects

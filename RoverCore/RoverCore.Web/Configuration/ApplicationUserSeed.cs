@@ -6,12 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 
 public class ApplicationUserSeed : ISeeder
 {
-    public void CreateAdminUser(UserManager<ApplicationUser> _userManager)
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public ApplicationUserSeed(UserManager<ApplicationUser> userManager)
+    {
+        _userManager = userManager;
+    }
+
+    public void CreateAdminUser()
     {
         if (_userManager.FindByNameAsync("admin").Result != null)
         {
@@ -43,11 +51,9 @@ public class ApplicationUserSeed : ISeeder
         _userManager.AddToRoleAsync(adminUser, "Admin").Wait();
     }
 
-    public Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
+    public Task SeedAsync()
     {
-        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-        CreateAdminUser(userManager);
+        CreateAdminUser();
 
         return Task.CompletedTask;
     }
