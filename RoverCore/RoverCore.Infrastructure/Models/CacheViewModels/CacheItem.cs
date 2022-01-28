@@ -1,8 +1,9 @@
 ﻿namespace RoverCore.Infrastructure.Models.CacheViewModels;
 
+#pragma warning disable CS8618
 public class CacheItem<T>
 {
-    public T Data { get; set; }
+    public T Data { get; set; } 
 
     public DateTime Created { get; set; }
 
@@ -13,3 +14,4 @@ public class CacheItem<T>
         return Created.Add(LifeSpan) < DateTime.Now;
     }
 }
+#pragma warning restore CS8618

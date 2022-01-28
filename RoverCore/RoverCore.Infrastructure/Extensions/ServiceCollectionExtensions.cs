@@ -9,15 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using RoverCore.Domain.Entities;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Services.Identity;
-using RoverCore.Infrastructure.Services.Seeder;
+
 
 namespace RoverCore.Infrastructure.Extensions
 {
