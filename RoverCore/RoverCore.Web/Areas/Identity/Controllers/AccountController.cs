@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Rover.Web.Controllers;
 using Rover.Web.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Services;
@@ -12,6 +11,7 @@ using RoverCore.Web.Controllers;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using RoverCore.Web.Extensions;
 
 namespace RoverCore.Web.Areas.Identity.Controllers;
 

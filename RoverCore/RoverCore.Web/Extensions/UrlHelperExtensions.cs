@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using RoverCore.Web.Areas.Identity.Controllers;
 
 namespace RoverCore.Web.Extensions;
