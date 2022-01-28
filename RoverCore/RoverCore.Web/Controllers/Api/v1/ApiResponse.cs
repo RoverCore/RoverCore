@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 
-namespace Rover.Web.Controllers.Api.v1;
+namespace RoverCore.Web.Controllers.Api.v1;
 
 [DataContract]
 public class ApiResponse

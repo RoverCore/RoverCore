@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using RoverCore.Web.Extensions;
 
 namespace RoverCore.Web.Areas.Identity.Controllers;
 

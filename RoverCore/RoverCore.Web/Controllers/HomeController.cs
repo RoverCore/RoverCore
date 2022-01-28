@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RoverCore.Web.Controllers;
 
-namespace Rover.Web.Controllers;
+namespace RoverCore.Web.Controllers;
 
 public class HomeController : BaseController
 {
@@ -9,4 +8,7 @@ public class HomeController : BaseController
     {
         return View();
     }
+
+    // Template actions
+    public IActionResult About() => View();
 }

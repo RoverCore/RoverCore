@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Infrastructure.Services;
 
-namespace Rover.Web.Controllers;
+namespace RoverCore.Web.Controllers.Api.v1;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
