@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Serviced;
 using Serviced;
 
@@ -21,9 +22,10 @@ public class ApplicationSeederService : ISeeder
 
     public async Task SeedAsync()
     {
-        List<Type> seederTypes = _servicedRegistry.ServiceTypes
-            .Where(t => t.GetInterfaces().Contains(typeof(ISeeder)) && t.Name != this.GetType().Name).ToList();
-
+        List<Type> seederTypes = _servicedRegistry.FilterServiceTypes<ISeeder>()
+            .Where(t => t.Name != this.GetType().Name)
+            .ToList();
+        var test = _serviceProvider.GetServices<ISeeder>().ToList();
         _logger.LogInformation($"ApplicationSeeder beginning execution");
 
         foreach (var stype in seederTypes)

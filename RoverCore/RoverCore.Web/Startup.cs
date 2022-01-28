@@ -96,17 +96,6 @@ public class Startup
         services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
         services.AddTransient<RoverCore.Infrastructure.Services.Configuration>();
 
-        /*
-        var seeders = from t in Assembly.GetExecutingAssembly().GetTypes()
-            where t.GetInterfaces().Contains(typeof(ISeeder)) &&
-                  t.Name != this.GetType().Name
-            select t;
-
-        foreach (var seeder in seeders)
-        {
-            services.AddScoped(seeder);
-        }
-        */
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -157,10 +146,8 @@ public class Startup
         
         using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
-            //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            //new ApplicationSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             var seeder = serviceScope.ServiceProvider.GetRequiredService<ApplicationSeederService>();
+
             seeder.SeedAsync().GetAwaiter().GetResult();
         }
 

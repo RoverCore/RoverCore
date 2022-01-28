@@ -19,11 +19,11 @@
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" PrivateAssets="All" />
+		<PackageReference Include="RoverCore.Serviced" Version="1.0.8" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\RoverCoreServiced\src\RoverCore.Serviced\RoverCore.Serviced.csproj" />
 	  <ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
 	</ItemGroup>
 

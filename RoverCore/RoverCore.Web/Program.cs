@@ -44,7 +44,9 @@ public class Program
 
     public static IWebHost BuildWebHost(string[] args)
     {
-        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddEnvironmentVariables().Build();
+        var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            .AddEnvironmentVariables()
+            .Build();
 
         return WebHost.CreateDefaultBuilder(args)
             .UseConfiguration(configuration)
