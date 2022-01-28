@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using RoverCore.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.IO;
-using RoverCore.Infrastructure.Extensions;
 
 namespace Rover.Web;
 

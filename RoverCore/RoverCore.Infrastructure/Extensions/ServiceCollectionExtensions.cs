@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Domain.Entities;
+using System.Text;
 
 
 namespace RoverCore.Infrastructure.Extensions
@@ -42,7 +36,7 @@ namespace RoverCore.Infrastructure.Extensions
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("AppContext"), 
+                options.UseSqlServer(configuration.GetConnectionString("AppContext"),
                     x => x.MigrationsAssembly("RoverCore.Infrastructure"));
             });
 

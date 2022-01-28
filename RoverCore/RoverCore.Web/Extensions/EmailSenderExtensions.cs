@@ -1,6 +1,6 @@
+using RoverCore.Infrastructure.Services;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web.Services;
 

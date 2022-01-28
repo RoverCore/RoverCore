@@ -1,5 +1,3 @@
-using System;
-
 namespace Rover.Web.Models;
 
 public class ErrorViewModel

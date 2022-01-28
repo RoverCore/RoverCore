@@ -26,12 +26,14 @@ public class ActiveRouteTagHelper : TagHelper
     [HtmlAttributeName("asp-all-route-data", DictionaryAttributePrefix = "asp-route-")]
     public IDictionary<string, string> RouteValues
     {
-        get {
+        get
+        {
             if (this._routeValues == null)
                 this._routeValues = (IDictionary<string, string>)new Dictionary<string, string>((IEqualityComparer<string>)StringComparer.OrdinalIgnoreCase);
             return this._routeValues;
         }
-        set {
+        set
+        {
             this._routeValues = value;
         }
     }

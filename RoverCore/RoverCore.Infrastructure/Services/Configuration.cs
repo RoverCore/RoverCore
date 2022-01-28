@@ -1,6 +1,6 @@
-﻿using RoverCore.Domain.Entities;
+﻿using Microsoft.Extensions.Caching.Memory;
+using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Extensions;
-using Microsoft.Extensions.Caching.Memory;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using Serviced;
 
@@ -10,7 +10,7 @@ public class Configuration : ITransient
 {
     private readonly ApplicationDbContext _context;
     private readonly IMemoryCache _cache;
-        
+
     public Configuration(ApplicationDbContext context, IMemoryCache cache)
     {
         _context = context;
@@ -21,7 +21,7 @@ public class Configuration : ITransient
     {
         var config = _cache.Get<List<ConfigurationItem>>("Configuration");
 
-        if(config == null)
+        if (config == null)
         {
             config = InitializeConfigCache();
         }

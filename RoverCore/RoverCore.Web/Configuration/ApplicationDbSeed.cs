@@ -1,17 +1,11 @@
-﻿using Rover.Web.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
+using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services.Seeder;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Rover.Web.Services;
-using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 

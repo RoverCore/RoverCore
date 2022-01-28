@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 
 namespace RoverCore.Domain.Entities.Identity;
 
@@ -13,7 +13,7 @@ public class ApplicationUser : IdentityUser<string>
     [Display(Name = "First Name")]
     public string FirstName { get; set; } = String.Empty;
 
-    [Display(Name = "Last Name")] 
+    [Display(Name = "Last Name")]
     public string LastName { get; set; } = String.Empty;
 
     // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-6.0

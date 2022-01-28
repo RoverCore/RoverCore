@@ -3,7 +3,7 @@
 #pragma warning disable CS8618
 public class CacheItem<T>
 {
-    public T Data { get; set; } 
+    public T Data { get; set; }
 
     public DateTime Created { get; set; }
 

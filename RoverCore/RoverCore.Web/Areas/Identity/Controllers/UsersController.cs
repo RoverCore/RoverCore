@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Rover.Web.Services;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Services;
-using RoverCore.Web.Areas.Identity.Models.AccountViewModels;
-using RoverCore.Web.Controllers;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Rover.Web.Services;
+using RoverCore.Domain.Entities.Identity;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Infrastructure.Services;
+using RoverCore.Web.Areas.Identity.Models.AccountViewModels;
+using RoverCore.Web.Controllers;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoverCore.Web.Areas.Identity.Controllers;
 
@@ -79,7 +79,7 @@ public class UsersController : BaseController
 
             // create user
             await _userManager.CreateAsync(user);
-            
+
             // assign new roles
             await _userManager.AddToRolesAsync(user, viewModel.Roles);
 

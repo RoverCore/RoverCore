@@ -1,6 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Configuration;
+using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
 
 namespace RoverCore.Infrastructure.Services;
 // This class is used by the application to send email for account confirmation and password reset.

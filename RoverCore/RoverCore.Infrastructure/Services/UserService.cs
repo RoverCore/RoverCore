@@ -1,7 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Domain.Entities;
@@ -9,6 +6,9 @@ using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using Serviced;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace RoverCore.Infrastructure.Services;
 
@@ -32,9 +32,9 @@ public class UserService : IUserService, IScoped<UserService>
     public async Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model)
     {
         var member = await _context.Member.FirstOrDefaultAsync(x => x.Email == model.Email);
-                        
+
         // return null if user not found
-        if (member == null) 
+        if (member == null)
             return null;
 
         // Check password

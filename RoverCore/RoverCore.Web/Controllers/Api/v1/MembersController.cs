@@ -1,24 +1,14 @@
-﻿using Rover.Web.Helpers;
-using Rover.Web.Models;
-using Rover.Web.Models.ApiModels;
-using Rover.Web.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Rover.Web.Helpers;
 using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
+using System.Threading.Tasks;
 
 namespace Rover.Web.Controllers.Api.v1;
 
@@ -33,7 +23,7 @@ public class MembersController : Controller
     public MembersController(ApplicationDbContext context, IUserService userService)
     {
         _context = context;
-        _userService = userService;            
+        _userService = userService;
     }
 
     /// <summary>
@@ -68,7 +58,7 @@ public class MembersController : Controller
 
         // TODO: Strip all data that isn't supposed to be public from this api response
 
-        return new ApiResponse(System.Net.HttpStatusCode.OK, member);  
+        return new ApiResponse(System.Net.HttpStatusCode.OK, member);
     }
 
     private const string CreateMemberBindingFields = "FirstName,LastName,Email,Password";
@@ -81,16 +71,16 @@ public class MembersController : Controller
     /// <param name="member"></param>
     [AllowAnonymous]
     [HttpPost]
-    public async Task<ApiResponse> CreateMember ([Bind (CreateMemberBindingFields)]Member member)
+    public async Task<ApiResponse> CreateMember([Bind(CreateMemberBindingFields)] Member member)
     {
         var safemember = new Member
         {
             Email = member.Email?.Trim() ?? "",
             FirstName = member.FirstName?.Trim() ?? "",
             LastName = member.LastName?.Trim() ?? "",
-            Password = member.Password ?? ""                
+            Password = member.Password ?? ""
         };
-            
+
         TryValidateModel(safemember);
         ModelState.Scrub(CreateMemberBindingFields);  // Remove all errors that aren't related to the binding fields
 
@@ -122,16 +112,16 @@ public class MembersController : Controller
     /// </summary>
     /// <param name="member"></param>   
     [HttpPut]
-    public async Task<ApiResponse> UpdateMember([Bind(UpdateMemberBindingFields)]Member member)
+    public async Task<ApiResponse> UpdateMember([Bind(UpdateMemberBindingFields)] Member member)
     {
-        var httpUser = (Member) HttpContext.Items["User"];
+        var httpUser = (Member)HttpContext.Items["User"];
         var newMember = await _context.Member.FirstOrDefaultAsync(m => m.MemberId == httpUser.MemberId);
-            
+
         if (newMember == null)
         {
             return new ApiResponse(System.Net.HttpStatusCode.NotFound, null, "User not found");
         }
-            
+
         newMember.FirstName = member.FirstName ?? newMember.FirstName;
         newMember.LastName = member.LastName ?? newMember.LastName;
 
@@ -140,7 +130,7 @@ public class MembersController : Controller
 
         // Add custom errors to fields
         //ModelState.AddModelError("Email", "Something else with email is wrong");
-          
+
         if (!ModelState.IsValid)
         {
             // Return all validation errors
@@ -149,9 +139,9 @@ public class MembersController : Controller
 
         _context.Member.Update(newMember);
         await _context.SaveChangesAsync();
-            
+
         return new ApiResponse(System.Net.HttpStatusCode.OK, newMember);
-            
+
     }
 
     // DELETE: api/v1/Members/{id}
@@ -166,6 +156,6 @@ public class MembersController : Controller
 
         return true;
     }
-        
+
 
 }

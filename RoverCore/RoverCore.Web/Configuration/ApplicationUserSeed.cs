@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RoverCore.Domain.Entities.Identity;
+using RoverCore.Infrastructure.Services.Seeder;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Rover.Web.Services;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services.Seeder;
 
 namespace Rover.Web.Configuration;
 

@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Domain.Entities.Identity;
 using RoverCore.Web.Areas.Dashboard.Models.HomeViewModels;
 using RoverCore.Web.Controllers;
+using System.Threading.Tasks;
 
 namespace RoverCore.Web.Areas.Dashboard.Controllers;
 
@@ -23,7 +23,7 @@ public class HomeController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard"})
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .Then("Home");
 
         var viewModel = new HomeViewModel

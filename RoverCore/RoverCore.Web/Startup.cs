@@ -1,33 +1,23 @@
-using Rover.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using RoverCore.BreadCrumbs;
 using RoverCore.BreadCrumbs.Services;
-using RoverCore.Domain.Entities;
 using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services;
 using RoverCore.Infrastructure.Services.Identity;
+using RoverCore.Infrastructure.Services.Seeder;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
-using RoverCore.Infrastructure.Extensions;
-using RoverCore.Infrastructure.Services.Seeder;
 using Serviced;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace Rover.Web;
 
@@ -61,7 +51,7 @@ public class Startup
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
-        
+
         services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration
             .AddCors() // Adds cross-origin sharing services
             .AddHttpContextAccessor();  // Add default HttpContextAccessor service
@@ -94,8 +84,8 @@ public class Startup
         services.AddScoped<NavigationService>();
         services.AddNotyf(config =>
         {
-            config.DurationInSeconds = 10; 
-            config.IsDismissable = true; 
+            config.DurationInSeconds = 10;
+            config.IsDismissable = true;
             config.Position = NotyfPosition.BottomRight;
         });
 
@@ -143,7 +133,7 @@ public class Startup
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
         });
-       
+
     }
-    
+
 }

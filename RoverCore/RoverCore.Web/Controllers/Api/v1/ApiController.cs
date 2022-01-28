@@ -1,12 +1,6 @@
-﻿using Rover.Web.Models.ApiModels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using RoverCore.Infrastructure.Services;
 
 namespace Rover.Web.Controllers;
