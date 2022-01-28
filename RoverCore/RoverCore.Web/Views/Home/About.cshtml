@@ -1,0 +1,88 @@
+﻿@inject RoverCore.Domain.Entities.ApplicationSettings Settings;
+@{
+    ViewData["Title"] = "About";
+    Layout = "~/Views/Shared/Layouts/Front/_Layout.cshtml";
+}
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center my-5">
+                    <h1 class="display-5 fw-bolder text-white mb-2">About RoverCore</h1>
+                    <p class="lead text-white-50 mb-4">RoverCore is an easy to use, MIT-Licensed, Open-Source, ASP.NET Core Boilerplate. It includes many key features that would be included in any ASP.NET project.</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="https://github.com/rovercore/">RoverCore Github</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 d-none d-lg-block">
+                <img class="mt-4" src="/theme/front/img/rover.svg">
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container-lg">
+    <div class="row row-cards">
+        @* Dev 1 *@
+        <div class="col col-md-4">
+            <div class="card-body p-4 text-center">
+                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
+                <h3 class="m-0 mb-1">
+                    <a href="#">Michael Tanczos</a>
+                </h3>
+                <div class="mt-3">
+                    <span class="badge bg-purple-lt">Lead Developer</span>
+                </div>
+                <br/>
+                <div>
+                    <p>
+                        Provide description here...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        @* Dev 2 *@
+        <div class="col col-md-4">
+            <div class="card-body p-4 text-center">
+                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
+                <h3 class="m-0 mb-1">
+                    <a href="#">Vincent Lauro</a>
+                </h3>
+                <div class="mt-3">
+                    <span class="badge bg-green-lt">Developer</span>
+                </div>
+                <br/>
+                <div>
+                    <p>
+                        Provide description here...
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+        @* Dev 3 *@
+        <div class="col col-md-4">
+            <div class="card-body p-4 text-center">
+                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
+                <h3 class="m-0 mb-1">
+                    <a href="#">Karolina Kotlarz</a>
+                </h3>
+                <div class="mt-3">
+                    <span class="badge bg-green-lt">Developer</span>
+                </div>
+                <br/>
+                <div>
+                    <p>
+                        Provide description here...
+                    </p>
+                </div>
+            </div>
+        </div>    
+
+    </div>
+
+</div>
