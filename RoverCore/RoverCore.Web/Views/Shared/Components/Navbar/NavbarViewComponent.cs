@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoverCore.Navigation.Services;
-using RoverCore.Web.Models;
 
-//using RoverCore.Settings.Models;
-//using RoverCore.Settings.Services;
 
 namespace RoverCore.Web.Views.Shared.Components.Navbar
 {
