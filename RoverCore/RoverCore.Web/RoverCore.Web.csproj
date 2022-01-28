@@ -60,6 +60,7 @@
     <Folder Include="Areas\Dashboard\Data\" />
     <Folder Include="Areas\Identity\Models\Identity\" />
     <Folder Include="Services\" />
+    <Folder Include="Views\Shared\Components\" />
   </ItemGroup>
 
   <ItemGroup>

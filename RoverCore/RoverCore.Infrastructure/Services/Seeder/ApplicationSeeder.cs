@@ -26,6 +26,7 @@ public class ApplicationSeederService : ISeeder
             .Where(t => t.Name != this.GetType().Name)
             .ToList();
         var test = _serviceProvider.GetServices<ISeeder>().ToList();
+
         _logger.LogInformation($"ApplicationSeeder beginning execution");
 
         foreach (var stype in seederTypes)
@@ -34,9 +35,13 @@ public class ApplicationSeederService : ISeeder
 
             if (seederService != null)
             {
+                var serviceName = seederService.GetType().Name;
+
+                _logger.LogInformation($"Seeder {serviceName} started at {DateTime.UtcNow}.");
+
                 await ((ISeeder)seederService).SeedAsync();
 
-                _logger.LogInformation($"Seeder {seederService.GetType().Name} done.");
+                _logger.LogInformation($"Seeder {serviceName} completed at {DateTime.UtcNow}.");
             }
 
         }

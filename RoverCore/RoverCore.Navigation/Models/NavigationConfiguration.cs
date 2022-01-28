@@ -1,7 +1,6 @@
-﻿namespace RoverCore.Navigation.Models
+﻿namespace RoverCore.Navigation.Models;
+
+public class NavigationConfiguration
 {
-    public class NavigationConfiguration
-    {
-        public List<NavMenu> Menus { get; set; }
-    }
+    public List<NavMenu> Menus { get; set; }
 }

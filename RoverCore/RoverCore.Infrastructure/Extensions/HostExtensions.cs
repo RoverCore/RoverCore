@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using RoverCore.Infrastructure.Services.Seeder;
 
@@ -19,7 +20,12 @@ namespace RoverCore.Infrastructure.Extensions
             {
                 var seeder = serviceScope.ServiceProvider.GetService<ApplicationSeederService>();
 
-                seeder?.SeedAsync().GetAwaiter().GetResult();
+                var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
+
+                if (settings is { SeedDataOnStartup: true })
+                {
+                    seeder?.SeedAsync().GetAwaiter().GetResult();
+                }
             }
 
             return host;
@@ -30,8 +36,12 @@ namespace RoverCore.Infrastructure.Extensions
             using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
 
-                context?.Database.Migrate();
+                if (settings is { ApplyMigrationsOnStartup: true })
+                {
+                    context?.Database.Migrate();
+                }
             }
 
             return host;

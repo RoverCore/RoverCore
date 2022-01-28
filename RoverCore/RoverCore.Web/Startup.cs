@@ -43,16 +43,28 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        // Adds cross-origin sharing services
-        services.AddCors();
+        // Auto-register services implementing IScoped, ITransient, ISingleton (thanks to Georgi Stoyanov)
+        services.AddServiced(typeof(Startup).Assembly,
+            typeof(ApplicationSeederService).Assembly);
 
-        services.AddPersistence(_configuration) // Add database access and identity
-                .AddApplicationIdentity()  // Add custom identity user for application
-                .AddHttpContextAccessor()  // Add default HttpContextAccessor service
-                .AddOptions();  // Adds IOptions capabilities
+        // Settings and configuration services
+        services.AddSettings(_configuration) // Add ApplicationsSettings service
+            .AddOptions(); // Adds IOptions capabilities        
 
-        // Add routing with lowercase url configuration
-        services.AddRouting(options => options.LowercaseUrls = true);
+        // RoverCore infrastructure services - These extension methods can be adapted to set up additional services
+        services.AddPersistence(_configuration) // Add services that persist data (ef core,etc)
+            .AddAuthenticationScheme(_configuration)  // Adds authentication services
+            .AddCaching();  // Adds caching services
+
+        // Add custom identity user, roles, etc.
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
+            .AddDefaultTokenProviders();
+        
+        services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration
+            .AddCors() // Adds cross-origin sharing services
+            .AddHttpContextAccessor();  // Add default HttpContextAccessor service
 
 #if DEBUG
         // For development only - Display exceptions on page if there is an error
@@ -74,26 +86,18 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
-        // RoverCore infrastructure services
-        services.AddAuthenticationScheme(_configuration)
-                .AddSettings(_configuration)
-                .AddCaching(); // Adds CacheService
-
-        // Add JWT user service
-        services.AddScoped<IUserService, UserService>();
-
         // Configure email service
         services.AddTransient<IEmailSender, EmailSender>();
 
-        // Auto-register services (thanks to Georgi Stoyanov)
-        services.AddServiced(typeof(Startup).Assembly,
-            typeof(ApplicationSeederService).Assembly);
-
-        // Add application layer services
+        // Add third-party application layer services
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
         services.AddScoped<NavigationService>();
-        services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
-        services.AddTransient<RoverCore.Infrastructure.Services.Configuration>();
+        services.AddNotyf(config =>
+        {
+            config.DurationInSeconds = 10; 
+            config.IsDismissable = true; 
+            config.Position = NotyfPosition.BottomRight;
+        });
 
     }
 
@@ -111,7 +115,6 @@ public class Startup
 
         app.UseRouting();
         app.UseStaticFiles();
-
 
         // global cors policy
         app.UseCors(x => x
@@ -140,7 +143,7 @@ public class Startup
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
         });
-        
+       
     }
     
 }

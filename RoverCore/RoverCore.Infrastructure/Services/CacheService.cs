@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using RoverCore.Infrastructure.Models.CacheViewModels;
+using Serviced;
 
 namespace RoverCore.Infrastructure.Services;
 
-public class CacheService
+public class CacheService : ITransient
 {
     private readonly IMemoryCache _cache;
 

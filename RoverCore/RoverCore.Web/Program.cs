@@ -5,10 +5,6 @@ using Serilog;
 using Serilog.Events;
 using System;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services.Seeder;
 using RoverCore.Infrastructure.Extensions;
 
 namespace Rover.Web;
@@ -35,8 +31,8 @@ public class Program
         {
             Log.Information("Starting web host");
             BuildWebHost(args)
-                .RunMigrations()  // Apply any new EF migrations
-                .RunSeeders()     // Run any auto-registered seeders (classes that implement ISeeder)
+                .RunMigrations()  // Apply any new EF migrations (requires appsetting)
+                .RunSeeders()     // Run any auto-registered seeders (classes that implement ISeeder) (requires appsetting)
                 .Run();           // Start the web host
         }
         catch (Exception ex)

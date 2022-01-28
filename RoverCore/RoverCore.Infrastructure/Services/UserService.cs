@@ -8,6 +8,7 @@ using RoverCore.Domain.Entities;
 using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
+using Serviced;
 
 namespace RoverCore.Infrastructure.Services;
 
@@ -17,7 +18,7 @@ public interface IUserService
     Task<Member?> GetById(int id);
 }
 
-public class UserService : IUserService
+public class UserService : IUserService, IScoped<UserService>
 {
     private readonly ApplicationDbContext _context;
     private readonly JWTSettings _appSettings;
