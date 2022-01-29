@@ -11,25 +11,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Areas\Admin\Models\DashboardViewModels\**" />
-		<Compile Remove="Areas\Identity\Data\**" />
-		<Compile Remove="Models\AdminViewModels\**" />
-		<Compile Remove="Models\HomeViewModels\**" />
-		<Content Remove="Areas\Admin\Models\DashboardViewModels\**" />
-		<Content Remove="Areas\Identity\Data\**" />
-		<Content Remove="Models\AdminViewModels\**" />
-		<Content Remove="Models\HomeViewModels\**" />
-		<EmbeddedResource Remove="Areas\Admin\Models\DashboardViewModels\**" />
-		<EmbeddedResource Remove="Areas\Identity\Data\**" />
-		<EmbeddedResource Remove="Models\AdminViewModels\**" />
-		<EmbeddedResource Remove="Models\HomeViewModels\**" />
-		<None Remove="Areas\Admin\Models\DashboardViewModels\**" />
-		<None Remove="Areas\Identity\Data\**" />
-		<None Remove="Models\AdminViewModels\**" />
-		<None Remove="Models\HomeViewModels\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
@@ -60,15 +41,8 @@
 	<ItemGroup>
 		<Folder Include="Areas\Admin\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
-		<Folder Include="Areas\Identity\Models\Identity\" />
 		<Folder Include="Services\" />
 		<Folder Include="Views\Shared\Components\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="wwwroot\theme\tabler\iconfont\fonts\tabler-icons.svg" />
-		<None Include="wwwroot\theme\tabler\iconfont\fonts\tabler-icons.woff2" />
-		<None Include="wwwroot\theme\tabler\iconfont\tabler-icons.scss" />
 	</ItemGroup>
 
 	<ItemGroup>
