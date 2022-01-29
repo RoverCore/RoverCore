@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,11 +18,8 @@ using RoverCore.Infrastructure.Services.Seeder;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using Serviced;
-using System;
-using System.IO;
-using System.Reflection;
 
-namespace Rover.Web;
+namespace RoverCore.Web;
 
 public class Startup
 {

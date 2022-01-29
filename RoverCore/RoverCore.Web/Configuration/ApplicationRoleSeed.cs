@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Services.Seeder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using RoverCore.Domain.Entities.Identity;
+using RoverCore.Infrastructure.Services.Seeder;
 
-namespace Rover.Web.Configuration;
+namespace RoverCore.Web.Configuration;
 
 public class ApplicationRoleSeed : ISeeder
 {

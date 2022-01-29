@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Rover.Web.Helpers;
+namespace RoverCore.Web.Helpers;
 
 public static class ControllerUtil
 {

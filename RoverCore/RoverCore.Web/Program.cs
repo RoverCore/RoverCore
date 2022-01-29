@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using RoverCore.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
-using System;
-using System.IO;
 
-namespace Rover.Web;
+namespace RoverCore.Web;
 
 public class Program
 {

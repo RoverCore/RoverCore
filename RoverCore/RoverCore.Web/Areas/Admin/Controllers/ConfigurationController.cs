@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services;
 using RoverCore.Web.Areas.Admin.Models.ConfigurationViewModels;
 using RoverCore.Web.Controllers;
-using System.Threading.Tasks;
 
 namespace RoverCore.Web.Areas.Admin.Controllers;
 
@@ -13,9 +12,9 @@ namespace RoverCore.Web.Areas.Admin.Controllers;
 public class ConfigurationController : BaseController
 {
     private readonly ApplicationDbContext _context;
-    private readonly Configuration Configuration;
+    private readonly Infrastructure.Services.Configuration Configuration;
 
-    public ConfigurationController(ApplicationDbContext context, Configuration configuration)
+    public ConfigurationController(ApplicationDbContext context, Infrastructure.Services.Configuration configuration)
     {
         _context = context;
         Configuration = configuration;
@@ -52,6 +51,7 @@ public class ConfigurationController : BaseController
 
             return RedirectToAction(nameof(Index));
         }
+
         return View("Index", viewModel);
     }
 }

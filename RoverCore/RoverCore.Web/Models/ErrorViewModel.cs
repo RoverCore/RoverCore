@@ -1,4 +1,4 @@
-namespace Rover.Web.Models;
+namespace RoverCore.Web.Models;
 
 public class ErrorViewModel
 {

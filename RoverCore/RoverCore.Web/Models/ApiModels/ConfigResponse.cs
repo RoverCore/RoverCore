@@ -1,4 +1,4 @@
-﻿namespace Rover.Web.Models.ApiModels;
+﻿namespace RoverCore.Web.Models.ApiModels;
 
 public class ConfigResponse
 {
