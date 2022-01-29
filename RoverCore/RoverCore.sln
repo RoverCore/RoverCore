@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{FFDC4EF6-F883-4456-A7CC-EDCA5850A499}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Web", "RoverCore.Web\RoverCore.Web.csproj", "{93714D29-7C4C-4C4B-AC64-F502EC97F0D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Boilerplate.Web", "RoverCore.Boilerplate.Web\RoverCore.Boilerplate.Web.csproj", "{93714D29-7C4C-4C4B-AC64-F502EC97F0D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Domain", "RoverCore.Domain\RoverCore.Domain.csproj", "{E54374BE-281E-4C7C-8C2C-805DA49E1A0C}"
 EndProject
