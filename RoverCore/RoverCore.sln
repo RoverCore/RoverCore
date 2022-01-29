@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Boilerplate.Web", "RoverCore.Boilerplate.Web\RoverCore.Boilerplate.Web.csproj", "{93714D29-7C4C-4C4B-AC64-F502EC97F0D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Domain", "RoverCore.Domain\RoverCore.Domain.csproj", "{E54374BE-281E-4C7C-8C2C-805DA49E1A0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Boilerplate.Domain", "RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj", "{E54374BE-281E-4C7C-8C2C-805DA49E1A0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Infrastructure", "RoverCore.Infrastructure\RoverCore.Infrastructure.csproj", "{15EC5FFA-753D-4E23-AE73-1823F0D0F0E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoverCore.Boilerplate.Infrastructure", "RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj", "{15EC5FFA-753D-4E23-AE73-1823F0D0F0E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

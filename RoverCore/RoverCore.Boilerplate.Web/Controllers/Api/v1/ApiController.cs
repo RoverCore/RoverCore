@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RoverCore.Infrastructure.Services;
+using RoverCore.Boilerplate.Infrastructure.Services;
 
 namespace RoverCore.Boilerplate.Web.Controllers.Api.v1;
 
@@ -10,10 +10,10 @@ namespace RoverCore.Boilerplate.Web.Controllers.Api.v1;
 [Route("api/v1")]
 public class ApiController : Controller
 {
-    private readonly RoverCore.Infrastructure.Services.Configuration Configuration;
+    private readonly RoverCore.Boilerplate.Infrastructure.Services.Configuration Configuration;
     private readonly CacheService _cache;
 
-    public ApiController(RoverCore.Infrastructure.Services.Configuration configuration, CacheService cache)
+    public ApiController(RoverCore.Boilerplate.Infrastructure.Services.Configuration configuration, CacheService cache)
     {
         Configuration = configuration;
         _cache = cache;

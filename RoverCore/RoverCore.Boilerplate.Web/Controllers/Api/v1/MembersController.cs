@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RoverCore.Domain.Entities;
-using RoverCore.Infrastructure.Extensions;
-using RoverCore.Infrastructure.Models.AuthenticationModels;
-using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services;
+using RoverCore.Boilerplate.Domain.Entities;
+using RoverCore.Boilerplate.Infrastructure.Extensions;
+using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
+using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Web.Helpers;
 

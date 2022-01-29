@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using RoverCore.Infrastructure.Persistence.DbContexts;
-using RoverCore.Infrastructure.Services.Seeder;
+using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
 namespace RoverCore.Boilerplate.Web.Configuration;
 

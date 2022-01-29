@@ -72,8 +72,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\RoverCore.Domain\RoverCore.Domain.csproj" />
-		<ProjectReference Include="..\RoverCore.Infrastructure\RoverCore.Infrastructure.csproj" />
+		<ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
+		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

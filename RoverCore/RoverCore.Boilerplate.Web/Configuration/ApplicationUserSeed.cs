@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using RoverCore.Domain.Entities.Identity;
-using RoverCore.Infrastructure.Services.Seeder;
+using RoverCore.Boilerplate.Domain.Entities.Identity;
+using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
 namespace RoverCore.Boilerplate.Web.Configuration;
 

@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using RoverCore.Infrastructure.Extensions;
+using RoverCore.Boilerplate.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
 

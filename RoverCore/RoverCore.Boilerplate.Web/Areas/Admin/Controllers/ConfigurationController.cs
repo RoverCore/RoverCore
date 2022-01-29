@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RoverCore.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Areas.Admin.Models.ConfigurationViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 

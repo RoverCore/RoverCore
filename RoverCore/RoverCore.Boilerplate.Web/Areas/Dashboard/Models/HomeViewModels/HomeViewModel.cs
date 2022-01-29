@@ -1,4 +1,4 @@
-﻿using RoverCore.Domain.Entities.Identity;
+﻿using RoverCore.Boilerplate.Domain.Entities.Identity;
 
 namespace RoverCore.Boilerplate.Web.Areas.Dashboard.Models.HomeViewModels;
 
