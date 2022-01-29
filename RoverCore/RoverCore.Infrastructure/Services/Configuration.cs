@@ -8,8 +8,8 @@ namespace RoverCore.Infrastructure.Services;
 
 public class Configuration : ITransient
 {
-    private readonly ApplicationDbContext _context;
     private readonly IMemoryCache _cache;
+    private readonly ApplicationDbContext _context;
 
     public Configuration(ApplicationDbContext context, IMemoryCache cache)
     {
@@ -21,10 +21,7 @@ public class Configuration : ITransient
     {
         var config = _cache.Get<List<ConfigurationItem>>("Configuration");
 
-        if (config == null)
-        {
-            config = InitializeConfigCache();
-        }
+        if (config == null) config = InitializeConfigCache();
 
         return config.FirstOrDefault(x => x.Key == key)?.Value ?? "";
     }
@@ -37,10 +34,7 @@ public class Configuration : ITransient
             Value = Get(key)
         };
 
-        if (configItem.Value != null)
-        {
-            _context.Attach(configItem);
-        }
+        if (configItem.Value != null) _context.Attach(configItem);
 
         configItem.Value = value;
 

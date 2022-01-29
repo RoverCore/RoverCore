@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Domain.Entities;
@@ -6,9 +9,6 @@ using RoverCore.Infrastructure.Extensions;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Persistence.DbContexts;
 using Serviced;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace RoverCore.Infrastructure.Services;
 
@@ -20,8 +20,8 @@ public interface IUserService
 
 public class UserService : IUserService, IScoped<UserService>
 {
-    private readonly ApplicationDbContext _context;
     private readonly JWTSettings _appSettings;
+    private readonly ApplicationDbContext _context;
 
     public UserService(IOptions<JWTSettings> appSettings, ApplicationDbContext context)
     {
@@ -63,7 +63,8 @@ public class UserService : IUserService, IScoped<UserService>
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", user.MemberId.ToString()) }),
             Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);

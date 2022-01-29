@@ -75,7 +75,7 @@ public class CacheService : ITransient
             {
                 // an error occurred while trying to retrieve from the source
                 // return the default for the generic type
-                oRet = default(T);
+                oRet = default;
             }
         }
         else

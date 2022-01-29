@@ -10,7 +10,8 @@ public class ApplicationSeederService : ISeeder
     private readonly ServicedRegistryService _servicedRegistry;
     private readonly IServiceProvider _serviceProvider;
 
-    public ApplicationSeederService(IServiceProvider serviceProvider, ILogger<ApplicationSeederService> logger, ServicedRegistryService servicedRegistry)
+    public ApplicationSeederService(IServiceProvider serviceProvider, ILogger<ApplicationSeederService> logger,
+        ServicedRegistryService servicedRegistry)
     {
         _logger = logger;
         _servicedRegistry = servicedRegistry;
@@ -20,11 +21,11 @@ public class ApplicationSeederService : ISeeder
     public async Task SeedAsync()
     {
         List<Type> seederTypes = _servicedRegistry.FilterServiceTypes<ISeeder>()
-            .Where(t => t.Name != this.GetType().Name)
+            .Where(t => t.Name != GetType().Name)
             .ToList();
         var test = _serviceProvider.GetServices<ISeeder>().ToList();
 
-        _logger.LogInformation($"ApplicationSeeder beginning execution");
+        _logger.LogInformation("ApplicationSeeder beginning execution");
 
         foreach (var stype in seederTypes)
         {
@@ -40,10 +41,8 @@ public class ApplicationSeederService : ISeeder
 
                 _logger.LogInformation($"Seeder {serviceName} completed at {DateTime.UtcNow}.");
             }
-
         }
 
-        _logger.LogInformation($"ApplicationSeeder completed");
+        _logger.LogInformation("ApplicationSeeder completed");
     }
-
 }

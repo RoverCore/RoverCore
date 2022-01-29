@@ -6,7 +6,7 @@ namespace RoverCore.Infrastructure.Extensions;
 public static class ContextExtensions
 {
     /// <summary>
-    /// Determines whether to add an entity for ef tracking or update it
+    ///     Determines whether to add an entity for ef tracking or update it
     /// </summary>
     /// <param name="ctx"></param>
     /// <param name="entity"></param>
@@ -30,7 +30,7 @@ public static class ContextExtensions
                 break;
 
             default:
-                throw new System.ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

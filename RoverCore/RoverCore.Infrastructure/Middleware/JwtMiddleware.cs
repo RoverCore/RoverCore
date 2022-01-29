@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Infrastructure.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace RoverCore.Infrastructure.Middleware;
 
 public class JwtMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly JWTSettings _appSettings;
+    private readonly RequestDelegate _next;
 
     public JwtMiddleware(RequestDelegate next, IOptions<JWTSettings> appSettings)
     {
@@ -43,7 +43,7 @@ public class JwtMiddleware
                 ValidateAudience = false,
                 // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
+            }, out var validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);

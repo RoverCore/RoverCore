@@ -6,7 +6,8 @@ using RoverCore.Domain.Entities.Identity;
 namespace RoverCore.Infrastructure.Persistence.DbContexts;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim,
+    ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -65,7 +66,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                 .HasForeignKey(rc => rc.RoleId)
                 .IsRequired();
         });
-
     }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
