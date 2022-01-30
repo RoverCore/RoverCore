@@ -350,3 +350,5 @@ healthchecksdb
 MigrationBackup/
 
 RoverCore/.idea/.idea.RoverCore/.idea/
+
+RoverCore/.idea/
