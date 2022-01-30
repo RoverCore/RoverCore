@@ -131,11 +131,11 @@ public class Startup
 	    app.UseSwagger();
 	    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
 
-	    // Load configuration from database
+	    // Load configuration settings from database
 	    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 	    {
 		    var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
-		    settingsService?.LoadPersistedSettings().GetAwaiter().GetResult();
+		    settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 	    }
     }
 }

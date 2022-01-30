@@ -63,30 +63,32 @@
 					</div>
 				</div>
 				<div class="tab-pane" id="tabs-startup">
-					<div class="col-lg-4 col-md-6 col-sm-12">
-						<div class="row">
-							<div class="col-md-10">
-								<div class="form-group d-flex">
-									<label asp-for="ApplyMigrationsOnStartup" class="form-check form-switch">
-										<input asp-for="ApplyMigrationsOnStartup" class="form-check-input"/>
-										<span class="form-check-label">Apply Migrations</span>
-									</label>
-									<span asp-validation-for="ApplyMigrationsOnStartup" class="text-danger"></span>
-								</div>
+					<div class="row">
+						<div class="row pt-2 pb-3">
+							<div class="col">
+								<p class="m-0 text-muted">Startup configuration.</p>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-md-10">
-								<div class="form-group d-flex">
-									<label asp-for="SeedDataOnStartup" class="form-check form-switch">
-										<input asp-for="SeedDataOnStartup" class="form-check-input"/>
-										<span class="form-check-label">Seed Data</span>
-									</label>
-									<span asp-validation-for="SeedDataOnStartup" class="text-danger"></span>
-								</div>
+						<div class="col-md-10">
+							<div class="form-group d-flex">
+								<label asp-for="ApplyMigrationsOnStartup" class="form-check form-switch">
+									<input asp-for="ApplyMigrationsOnStartup" class="form-check-input"/>
+									<span class="form-check-label">Apply Migrations</span>
+								</label>
+								<span asp-validation-for="ApplyMigrationsOnStartup" class="text-danger"></span>
 							</div>
 						</div>
-
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group d-flex">
+								<label asp-for="SeedDataOnStartup" class="form-check form-switch">
+									<input asp-for="SeedDataOnStartup" class="form-check-input"/>
+									<span class="form-check-label">Seed Data</span>
+								</label>
+								<span asp-validation-for="SeedDataOnStartup" class="text-danger"></span>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group mt-3">
