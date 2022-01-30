@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Areas.Admin.Models.ConfigurationViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
@@ -12,46 +13,38 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 public class ConfigurationController : BaseController
 {
 	private readonly ApplicationDbContext _context;
-	private readonly Infrastructure.Services.Configuration Configuration;
+	private readonly Infrastructure.Services.SettingsService _settingsService;
 
-	public ConfigurationController(ApplicationDbContext context, Infrastructure.Services.Configuration configuration)
+	public ConfigurationController(ApplicationDbContext context, Infrastructure.Services.SettingsService settingsService)
 	{
 		_context = context;
-		Configuration = configuration;
+		_settingsService = settingsService;
 	}
 
 	public IActionResult Index()
 	{
-		var viewModel = new ConfigurationViewModel
-		{
-			RSSFeedUrl = Configuration.Get("RSSFeedUrl"),
-			PrivacyPolicyUrl = Configuration.Get("PrivacyPolicyUrl"),
-			AzureHubListenConnectionString = Configuration.Get("AzureHubListenConnectionString"),
-			AzureHubFullConnectionString = Configuration.Get("AzureHubFullConnectionString"),
-			AzureHubName = Configuration.Get("AzureHubName")
-		};
+		var settings = _settingsService.GetSettings();
 
-		return View(viewModel);
+		return View(settings);
 	}
 
 	// POST: Configuration/Edit
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit(ConfigurationViewModel viewModel)
+	public async Task<IActionResult> Edit([Bind("SiteName,Company")] ApplicationSettings newSettings)
 	{
+		var _settings = _settingsService.GetSettings();
+
 		if (ModelState.IsValid)
 		{
-			Configuration.Set("RSSFeedUrl", viewModel.RSSFeedUrl);
-			Configuration.Set("PrivacyPolicyUrl", viewModel.PrivacyPolicyUrl);
-			Configuration.Set("AzureHubListenConnectionString", viewModel.AzureHubListenConnectionString);
-			Configuration.Set("AzureHubFullConnectionString", viewModel.AzureHubFullConnectionString);
-			Configuration.Set("AzureHubName", viewModel.AzureHubName);
+			_settings.SiteName = newSettings.SiteName;
+			_settings.Company = newSettings.Company;
 
-			await Configuration.SaveChangesAsync();
+			await _settingsService.SaveSettings();
 
 			return RedirectToAction(nameof(Index));
 		}
 
-		return View("Index", viewModel);
+		return View("Index", _settings);
 	}
 }

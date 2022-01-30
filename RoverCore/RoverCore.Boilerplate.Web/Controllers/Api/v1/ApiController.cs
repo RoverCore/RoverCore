@@ -10,12 +10,12 @@ namespace RoverCore.Boilerplate.Web.Controllers.Api.v1;
 [Route("api/v1")]
 public class ApiController : Controller
 {
-    private readonly RoverCore.Boilerplate.Infrastructure.Services.Configuration Configuration;
+    private readonly RoverCore.Boilerplate.Infrastructure.Services.SettingsService _settingsService;
     private readonly CacheService _cache;
 
-    public ApiController(RoverCore.Boilerplate.Infrastructure.Services.Configuration configuration, CacheService cache)
+    public ApiController(RoverCore.Boilerplate.Infrastructure.Services.SettingsService settingsService, CacheService cache)
     {
-        Configuration = configuration;
+        _settingsService = settingsService;
         _cache = cache;
     }
 

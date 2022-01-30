@@ -1,13 +1,19 @@
-﻿namespace RoverCore.Boilerplate.Domain.Entities.Settings
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace RoverCore.Boilerplate.Domain.Entities.Settings
 {
     /// <summary>
     /// Additional extra strongly-typed application settings for this web service
-    /// The purpose of this file is mainly to provide configuration settings for
+    /// The purpose of this file to provide configuration settings for the site.
     /// </summary>
     public class ApplicationSettings : CoreSettings
     {
         // Properties placed here can be added to the Settings section of appsettings.json
-        public string SiteName { get; set; } = String.Empty;
-        public string Company { get; set; } = String.Empty;
+        [DisplayName("Site Name")]
+        [Required(ErrorMessage = "You must supply a name for this site")]
+        public string SiteName { get; set; } = string.Empty;
+
+        public string Company { get; set; } = string.Empty;
     }
 }

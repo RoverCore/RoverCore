@@ -15,4 +15,5 @@
         /// </summary>
         public bool SeedDataOnStartup { get; set; } = true;
     }
+
 }

@@ -94,46 +94,48 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-        }
+	    if (env.IsDevelopment())
+	    {
+		    app.UseDeveloperExceptionPage();
+	    }
+	    else
+	    {
+		    app.UseExceptionHandler("/Home/Error");
+	    }
 
-        app.UseRouting();
-        app.UseStaticFiles();
+	    app.UseRouting();
+	    app.UseStaticFiles();
 
-        // global cors policy
-        app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+	    // global cors policy
+	    app.UseCors(x => x
+		    .AllowAnyOrigin()
+		    .AllowAnyMethod()
+		    .AllowAnyHeader());
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+	    app.UseAuthentication();
+	    app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-            );
+	    app.UseEndpoints(endpoints =>
+	    {
+		    endpoints.MapControllerRoute(
+			    name: "areas",
+			    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+		    );
 
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+		    endpoints.MapControllerRoute(
+			    name: "default",
+			    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-        });
+	    });
 
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-        });
+	    app.UseSwagger();
+	    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
 
+	    // Load configuration from database
+	    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+	    {
+		    var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+		    settingsService?.LoadPersistedSettings().GetAwaiter().GetResult();
+	    }
     }
-
 }

@@ -49,4 +49,11 @@
 		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Areas\Dashboard\_ViewStart.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

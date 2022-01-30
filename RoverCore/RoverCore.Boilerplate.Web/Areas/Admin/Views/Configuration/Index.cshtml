@@ -1,68 +1,50 @@
-﻿@model RoverCore.Boilerplate.Web.Areas.Admin.Models.ConfigurationViewModels.ConfigurationViewModel
+﻿@model RoverCore.Boilerplate.Domain.Entities.Settings.ApplicationSettings
 
 @{
     ViewData["Title"] = "Configuration";
 }
+
+<div class="page-header d-print-none">
+	<div class="row align-items-center">
+		<div class="col">
+			<!-- Page pre-title -->
+			<div class="page-pretitle">
+				Administration
+			</div>
+			<h2 class="page-title">
+				Site Configuration Settings
+			</h2>
+		</div>
+	</div>
+</div>
 
 <div class="card">
     <div class="card-body">
         <div class="card-title">
             Configuration
         </div>
-
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h2>Azure Notification Hubs</h2>
+            <h2>Site Settings</h2>
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
-                        <label asp-for="AzureHubListenConnectionString" class="control-label"></label>
-                        <input asp-for="AzureHubListenConnectionString" class="form-control"/>
-                        <span asp-validation-for="AzureHubListenConnectionString" class="text-danger"></span>
+                        <label asp-for="SiteName" class="control-label"></label>
+                        <input asp-for="SiteName" class="form-control"/>
+                        <span asp-validation-for="SiteName" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
-                        <label asp-for="AzureHubFullConnectionString" class="control-label"></label>
-                        <input asp-for="AzureHubFullConnectionString" class="form-control"/>
-                        <span asp-validation-for="AzureHubFullConnectionString" class="text-danger"></span>
+                        <label asp-for="Company" class="control-label"></label>
+                        <input asp-for="Company" class="form-control"/>
+                        <span asp-validation-for="Company" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="AzureHubName" class="control-label"></label>
-                        <input asp-for="AzureHubName" class="form-control"/>
-                        <span asp-validation-for="AzureHubName" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <hr/>
-            <h2>RSS News Feed</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="RSSFeedUrl" class="control-label"></label>
-                        <input asp-for="RSSFeedUrl" class="form-control"/>
-                        <span asp-validation-for="RSSFeedUrl" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <hr/>
-            <h2>Mobile App Privacy Policy</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="PrivacyPolicyUrl" class="control-label"></label>
-                        <input asp-for="PrivacyPolicyUrl" class="form-control"/>
-                        <span asp-validation-for="PrivacyPolicyUrl" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
+	        <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
