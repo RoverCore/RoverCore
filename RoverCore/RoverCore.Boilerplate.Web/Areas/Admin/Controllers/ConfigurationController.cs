@@ -48,11 +48,9 @@ public class ConfigurationController : BaseController<ConfigurationController>
 			_settings.SiteName = newSettings.SiteName;
 			_settings.Company = newSettings.Company;
 
-			if (!IsReadOnly(_settings, "ApplyMigrationsOnStartup"))
-				_settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
+			_settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
 
-			if (!IsReadOnly(_settings, "SeedDataOnStartup"))
-				_settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
+			_settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
 
 			await _settingsService.SaveSettings();
 
@@ -62,11 +60,4 @@ public class ConfigurationController : BaseController<ConfigurationController>
 		return View("Index", _settings);
 	}
 
-	public bool IsReadOnly(ApplicationSettings settings, string propertyName)
-	{
-		AttributeCollection attributes = TypeDescriptor.GetProperties(settings)[propertyName].Attributes;
-
-		return attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes);
-		
-	}
 }
