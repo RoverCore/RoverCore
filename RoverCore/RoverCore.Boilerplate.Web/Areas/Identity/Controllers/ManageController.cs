@@ -25,18 +25,16 @@ public class ManageController : BaseController<ManageController>
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IEmailSender _emailSender;
-    private readonly ILogger _logger;
     private readonly UrlEncoder _urlEncoder;
 
     private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
     private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
-    public ManageController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ILogger<ManageController> logger, UrlEncoder urlEncoder)
+    public ManageController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, UrlEncoder urlEncoder)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
-        _logger = logger;
         _urlEncoder = urlEncoder;
     }
 

@@ -25,9 +25,9 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="RestSharp" Version="107.1.2" />
 		<PackageReference Include="RoverCore.BreadCrumbs" Version="1.0.3" />
-		<PackageReference Include="RoverCore.Navigation" Version="1.0.1" />
+		<PackageReference Include="RoverCore.Navigation" Version="1.0.3" />
 		<PackageReference Include="RoverCore.Serviced" Version="1.0.9" />
-		<PackageReference Include="RoverCore.ToastNotification" Version="1.2.2" />
+		<PackageReference Include="RoverCore.ToastNotification" Version="1.2.3" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -42,19 +42,11 @@
 		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
 		<Folder Include="Services\" />
-		<Folder Include="Views\Shared\Components\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
 		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="Areas\Dashboard\_ViewStart.cshtml">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
 	</ItemGroup>
 
 </Project>

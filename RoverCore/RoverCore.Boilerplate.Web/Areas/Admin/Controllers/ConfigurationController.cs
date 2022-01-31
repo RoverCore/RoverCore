@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
@@ -16,7 +17,8 @@ public class ConfigurationController : BaseController<ConfigurationController>
 	private readonly ApplicationDbContext _context;
 	private readonly Infrastructure.Services.SettingsService _settingsService;
 
-	public ConfigurationController(ApplicationDbContext context, Infrastructure.Services.SettingsService settingsService)
+	public ConfigurationController(ApplicationDbContext context,
+		Infrastructure.Services.SettingsService settingsService)
 	{
 		_context = context;
 		_settingsService = settingsService;
@@ -36,7 +38,8 @@ public class ConfigurationController : BaseController<ConfigurationController>
 	// POST: Configuration/Edit
 	[HttpPost]
 	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit([Bind("SiteName,Company")] ApplicationSettings newSettings)
+	public async Task<IActionResult> Edit(
+		[Bind("SiteName,Company,ApplyMigrationsOnStartup,SeedDataOnStartup")] ApplicationSettings newSettings)
 	{
 		var _settings = _settingsService.GetSettings();
 
@@ -45,11 +48,25 @@ public class ConfigurationController : BaseController<ConfigurationController>
 			_settings.SiteName = newSettings.SiteName;
 			_settings.Company = newSettings.Company;
 
+			if (!IsReadOnly(_settings, "ApplyMigrationsOnStartup"))
+				_settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
+
+			if (!IsReadOnly(_settings, "SeedDataOnStartup"))
+				_settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
+
 			await _settingsService.SaveSettings();
 
 			return RedirectToAction(nameof(Index));
 		}
 
 		return View("Index", _settings);
+	}
+
+	public bool IsReadOnly(ApplicationSettings settings, string propertyName)
+	{
+		AttributeCollection attributes = TypeDescriptor.GetProperties(settings)[propertyName].Attributes;
+
+		return attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes);
+		
 	}
 }

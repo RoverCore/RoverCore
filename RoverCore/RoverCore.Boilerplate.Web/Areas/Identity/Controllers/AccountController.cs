@@ -22,14 +22,12 @@ public class AccountController : BaseController<AccountController>
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IEmailSender _emailSender;
-    private readonly ILogger _logger;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ILogger<AccountController> logger)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
-        _logger = logger;
     }
 
     [TempData]
