@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,14 +8,14 @@ using RoverCore.Boilerplate.Infrastructure.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
-using System.Threading.Tasks;
+using RoverCore.Boilerplate.Web.Areas.Api.Models;
 using RoverCore.Boilerplate.Web.Helpers;
 
-namespace RoverCore.Boilerplate.Web.Controllers.Api.v1;
+namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Produces("application/json")]
-[Route("api/v1/members")]
+[Area("Api")]
 public class MembersController : Controller
 {
     private readonly ApplicationDbContext _context;

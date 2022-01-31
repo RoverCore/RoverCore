@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 		<Folder Include="Areas\Admin\Data\" />
+		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
 		<Folder Include="Services\" />
 		<Folder Include="Views\Shared\Components\" />
