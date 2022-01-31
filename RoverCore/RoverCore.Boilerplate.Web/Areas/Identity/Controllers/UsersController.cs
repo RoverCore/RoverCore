@@ -18,7 +18,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 [ApiExplorerSettings(IgnoreApi = true)]
 [Area("Identity")]
 [Authorize(Roles = "Admin")]
-public class UsersController : BaseController
+public class UsersController : BaseController<UsersController>
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;

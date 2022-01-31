@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,21 @@ public class Program
                 shared: true)
             .CreateLogger();
 
+        bool overrideMigration = false, overrideSeed = false;
+
+        // Process command-line switches
+        if (args.Contains("--migrate")) overrideMigration = true;
+        if (args.Contains("--seed")) overrideSeed = true;
+
+        if (overrideSeed || overrideMigration)
+        {
+	        Log.Information("Starting seeding/migration process");
+	        BuildWebHost(args)
+		        .RunMigrations(overrideMigration) // Apply any new EF migrations
+		        .RunSeeders(overrideSeed); // Run any auto-registered seeders
+
+	        return;
+        }
 
         try
         {

@@ -11,7 +11,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
 public static class HostExtensions
 {
-    public static IWebHost RunSeeders(this IWebHost host)
+    public static IWebHost RunSeeders(this IWebHost host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
@@ -22,13 +22,13 @@ public static class HostExtensions
 
             var settings = settingsService.GetSettings();
 
-            if (settings is { SeedDataOnStartup: true }) seeder?.SeedAsync().GetAwaiter().GetResult();
+            if (overrideSettings || settings is { SeedDataOnStartup: true }) seeder?.SeedAsync().GetAwaiter().GetResult();
         }
 
         return host;
     }
 
-    public static IWebHost RunMigrations(this IWebHost host)
+    public static IWebHost RunMigrations(this IWebHost host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
@@ -39,7 +39,7 @@ public static class HostExtensions
 
             var settings = settingsService.GetSettings();
 
-            if (settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
+            if (overrideSettings || settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
         }
 
         return host;

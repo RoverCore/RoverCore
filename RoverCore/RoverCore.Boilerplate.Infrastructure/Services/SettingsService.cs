@@ -16,13 +16,15 @@ public class SettingsService : IScoped
 	private const string SettingsKey = "ApplicationSettings";
     private readonly ApplicationDbContext _context;
     private readonly ApplicationSettings _settings;
-    private readonly Logger<SettingsService> _logger;
+    private readonly ILogger _logger;
+    private readonly IMemoryCache _cache;
 
-    public SettingsService(ApplicationDbContext context, ApplicationSettings settings, Logger<SettingsService> logger)
+    public SettingsService(ApplicationDbContext context, ApplicationSettings settings, ILogger<SettingsService> logger, IMemoryCache cache)
     {
         _context = context;
         _settings = settings;
         _logger = logger;
+        _cache = cache;
     }
 
     /// <summary>
@@ -31,8 +33,9 @@ public class SettingsService : IScoped
     /// <returns></returns>
     public async Task LoadPersistedSettings()
     {
-	    var svConfig = await _context.ConfigurationItem
-		    .FirstOrDefaultAsync(x => x.Key == SettingsKey);
+	    var svConfig = _cache.Get<ConfigurationItem>(SettingsKey);
+
+	    svConfig ??= await InitializeCache();
 
 	    if (svConfig != null)
 	    {
@@ -117,4 +120,16 @@ public class SettingsService : IScoped
         await _context.SaveChangesAsync();
     }
 
+    private async Task<ConfigurationItem?> InitializeCache()
+    {
+	    var svConfig = await _context.ConfigurationItem
+		    .FirstOrDefaultAsync(x => x.Key == SettingsKey);
+
+        if (svConfig != null)
+        {
+	        _cache.Set(SettingsKey, svConfig);
+        }
+
+        return svConfig;
+    }
 }

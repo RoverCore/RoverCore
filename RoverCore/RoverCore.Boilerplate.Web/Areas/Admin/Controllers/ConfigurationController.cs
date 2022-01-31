@@ -11,7 +11,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = "Admin")]
-public class ConfigurationController : BaseController
+public class ConfigurationController : BaseController<ConfigurationController>
 {
 	private readonly ApplicationDbContext _context;
 	private readonly Infrastructure.Services.SettingsService _settingsService;
