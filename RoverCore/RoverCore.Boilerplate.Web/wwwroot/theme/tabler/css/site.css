@@ -44,7 +44,18 @@
     padding-left: 0.75em;
 }
 
-/*
-.dropdown-nested.collapse.show {
-    background-color: rgba(98,105,118,.06);
-}*/
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.card.tabs {
+    border-radius: 0px;
+}
+
+.theme-dark .text-muted {
+    color: rgba(255,255,255,.7) !important;
+}
+
+.theme-light .text-muted {
+    color: rgba(30,41,59,.7) !important;
+}

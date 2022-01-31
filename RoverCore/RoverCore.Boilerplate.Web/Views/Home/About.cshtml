@@ -1,88 +1,132 @@
-﻿@inject RoverCore.Boilerplate.Domain.Entities.ApplicationSettings Settings;
+﻿@using RoverCore.Boilerplate.Domain.Entities.Settings
+@inject ApplicationSettings Settings;
 @{
     ViewData["Title"] = "About";
     Layout = "~/Views/Shared/Layouts/Front/_Layout.cshtml";
 }
 
 <!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-5">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <div class="text-center my-5">
-                    <h1 class="display-5 fw-bolder text-white mb-2">About RoverCore</h1>
-                    <p class="lead text-white-50 mb-4">RoverCore is an easy to use, MIT-Licensed, Open-Source, ASP.NET Core Boilerplate. It includes many key features that would be included in any ASP.NET project.</p>
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="https://github.com/rovercore/">RoverCore Github</a>
-                    </div>
+<!-- For demo purpose -->
+<div class="container py-5">
+    <div class="row text-center">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="display-4 fw-bold" >Our Team</h1>
+            <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+        </div>
+    </div>
+</div><!-- End -->
+
+
+<div class="container">
+    <div class="row text-center">
+
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/003f.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Ludmiła Sobczak</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-purple-lt">Founder</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
                 </div>
             </div>
-            <div class="col-lg-3 d-none d-lg-block">
-                <img class="mt-4" src="/theme/front/img/rover.svg">
+        </div>
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/001m.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Timothy B. Brown</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-green-lt">Web Designer</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/000f.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Alois Dohnálek</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-blue-lt">Marketing</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/004f.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Ambretta Palermo</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-red-lt">Sales</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
+                </div>
             </div>
         </div>
     </div>
-</header>
 
-<div class="container-lg">
-    <div class="row row-cards py-5">
-        @* Dev 1 *@
-        <div class="col col-md-4">
-            <div class="card-body p-4 text-center">
-                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
-                <h3 class="m-0 mb-1">
-                    <a href="#">Michael Tanczos</a>
-                </h3>
-                <div class="mt-3">
-                    <span class="badge bg-purple-lt">Lead Developer</span>
-                </div>
-                <br/>
-                <div>
-                    <p>
-                        Provide description here...
-                    </p>
+    <div class="row text-center">
+
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/006f.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Kristian Solbakk</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-red-lt">Customer Service</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
                 </div>
             </div>
         </div>
 
-        @* Dev 2 *@
-        <div class="col col-md-4">
-            <div class="card-body p-4 text-center">
-                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
-                <h3 class="m-0 mb-1">
-                    <a href="#">Vincent Lauro</a>
-                </h3>
-                <div class="mt-3">
-                    <span class="badge bg-green-lt">Developer</span>
-                </div>
-                <br/>
-                <div>
-                    <p>
-                        Provide description here...
-                    </p>
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/008m.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Laurence Rivière</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-green-lt">Software Engineer</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
                 </div>
             </div>
         </div>
-    
-        @* Dev 3 *@
-        <div class="col col-md-4">
-            <div class="card-body p-4 text-center">
-                <span class="avatar avatar-xl mb-3 avatar-rounded"></span>
-                <h3 class="m-0 mb-1">
-                    <a href="#">Karolina Kotlarz</a>
-                </h3>
-                <div class="mt-3">
-                    <span class="badge bg-green-lt">Developer</span>
-                </div>
-                <br/>
-                <div>
-                    <p>
-                        Provide description here...
-                    </p>
+
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/008f.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Lisa Kortig</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-green-lt">UX/UI Designer</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
                 </div>
             </div>
-        </div>    
+        </div>
 
+        <div class="col-xl-3 col-sm-6 mb-5">
+            <div class="card">
+                <div class="card-body p-0">
+                    <br/>
+                    <img src="/theme/tabler/img/avatars/011m.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                    <h1>Jakub Horák</h1>
+                    <h5 class="small text-uppercase text-muted badge bg-purple-lt">Financial Officer</h5>
+                    <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis lorem convallis, sollicitudin lorem eu, suscipit lacus. Ut pharetra mattis.</p>
+                    <br/>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>

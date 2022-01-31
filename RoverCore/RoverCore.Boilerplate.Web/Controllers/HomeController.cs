@@ -2,7 +2,7 @@
 
 namespace RoverCore.Boilerplate.Web.Controllers;
 
-public class HomeController : BaseController
+public class HomeController : BaseController<HomeController>
 {
     public IActionResult Index()
     {

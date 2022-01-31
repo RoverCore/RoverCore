@@ -20,7 +20,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 [Authorize]
 [Area("Identity")]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class ManageController : BaseController
+public class ManageController : BaseController<ManageController>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;

@@ -12,7 +12,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Dashboard.Controllers;
 [Area("Dashboard")]
 [Authorize]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class HomeController : BaseController
+public class HomeController : BaseController<HomeController>
 {
     private readonly UserManager<ApplicationUser> _userManager;
 

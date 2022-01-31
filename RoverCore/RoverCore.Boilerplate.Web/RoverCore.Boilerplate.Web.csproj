@@ -15,8 +15,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.1"
-		                  Condition="'$(Configuration)' == 'Debug'" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.1" Condition="'$(Configuration)' == 'Debug'" />
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1" PrivateAssets="All" />
@@ -40,6 +39,7 @@
 
 	<ItemGroup>
 		<Folder Include="Areas\Admin\Data\" />
+		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
 		<Folder Include="Services\" />
 		<Folder Include="Views\Shared\Components\" />
@@ -48,6 +48,13 @@
 	<ItemGroup>
 		<ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
 		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Areas\Dashboard\_ViewStart.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>

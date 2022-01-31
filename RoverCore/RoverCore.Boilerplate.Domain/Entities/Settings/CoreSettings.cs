@@ -1,21 +1,23 @@
-﻿namespace RoverCore.Boilerplate.Domain.Entities
+﻿using System.ComponentModel;
+
+namespace RoverCore.Boilerplate.Domain.Entities.Settings
 {
     /// <summary>
-    /// Additional extra strongly-typed application settings for this web service
+    /// Core strongly-typed application settings for this web service
     /// The purpose of this file is mainly to provide configuration settings for
     /// </summary>
-    public class ApplicationSettings
+    public class CoreSettings
     {
-        // Properties placed here can be added to the Settings section of appsettings.json
-        public string SiteName { get; set; } = String.Empty;
-        public string Company { get; set; } = String.Empty;
         /// <summary>
         /// Entity Framework migrations can be applied when the application starts up if true
         /// </summary>
+        [DisplayName("Apply Migrations On Startup")]
         public bool ApplyMigrationsOnStartup { get; set; } = true;
         /// <summary>
         /// Any ISeeder seeders in the project will run on startup if true
         /// </summary>
+        [DisplayName("Seed Data On Startup")]
         public bool SeedDataOnStartup { get; set; } = true;
     }
+
 }

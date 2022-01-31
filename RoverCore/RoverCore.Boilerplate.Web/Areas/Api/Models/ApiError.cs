@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RoverCore.Boilerplate.Web.Controllers.Api.v1;
+namespace RoverCore.Boilerplate.Web.Areas.Api.Models;
 
 public class ApiError
 {

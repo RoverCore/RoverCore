@@ -2,35 +2,44 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RoverCore.Boilerplate.Domain.Entities;
+using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
 public static class HostExtensions
 {
-    public static IWebHost RunSeeders(this IWebHost host)
+    public static IWebHost RunSeeders(this IWebHost host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var seeder = serviceScope.ServiceProvider.GetService<ApplicationSeederService>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
 
-            var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
+            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 
-            if (settings is { SeedDataOnStartup: true }) seeder?.SeedAsync().GetAwaiter().GetResult();
+            var settings = settingsService.GetSettings();
+
+            if (overrideSettings || settings is { SeedDataOnStartup: true }) seeder?.SeedAsync().GetAwaiter().GetResult();
         }
 
         return host;
     }
 
-    public static IWebHost RunMigrations(this IWebHost host)
+    public static IWebHost RunMigrations(this IWebHost host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
 
-            if (settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
+            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+
+            var settings = settingsService.GetSettings();
+
+            if (overrideSettings || settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
         }
 
         return host;
