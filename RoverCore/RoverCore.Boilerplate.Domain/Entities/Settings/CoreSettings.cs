@@ -13,13 +13,13 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
         /// Entity Framework migrations can be applied when the application starts up if true
         /// </summary>
         [DisplayName("Apply Migrations On Startup")]
-        [Editable(false)]
+        [Editable(true)]
         public bool ApplyMigrationsOnStartup { get; set; } = true;
         /// <summary>
         /// Any ISeeder seeders in the project will run on startup if true
         /// </summary>
         [DisplayName("Seed Data On Startup")]
-        [Editable(false)] 
+        [Editable(true)] 
         public bool SeedDataOnStartup { get; set; } = true;
     }
 
