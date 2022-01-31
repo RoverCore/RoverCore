@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
@@ -15,11 +16,13 @@ public class SettingsService : IScoped
 	private const string SettingsKey = "ApplicationSettings";
     private readonly ApplicationDbContext _context;
     private readonly ApplicationSettings _settings;
+    private readonly Logger<SettingsService> _logger;
 
-    public SettingsService(ApplicationDbContext context, ApplicationSettings settings)
+    public SettingsService(ApplicationDbContext context, ApplicationSettings settings, Logger<SettingsService> logger)
     {
         _context = context;
         _settings = settings;
+        _logger = logger;
     }
 
     /// <summary>
@@ -33,14 +36,26 @@ public class SettingsService : IScoped
 
 	    if (svConfig != null)
 	    {
-		    var savedSettingsJson = svConfig.Value ?? string.Empty;
-            var savedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(savedSettingsJson);
+		    try
+		    {
+			    var savedSettingsJson = svConfig.Value ?? string.Empty;
+			    var savedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(savedSettingsJson);
 
-		    // Copy saved settings to existing singleton service
-		    CopySettings(savedSettings!, _settings);
+			    // Copy saved settings to existing singleton service
+			    CopySettings(savedSettings!, _settings);
+
+            }
+            catch (Exception ex)
+		    {
+                _logger.LogError(ex, $"Unable to load {SettingsKey} settings from database");
+		    }
         }
     }
 
+    /// <summary>
+    /// Returns the settings service singleton reference
+    /// </summary>
+    /// <returns></returns>
     public ApplicationSettings GetSettings()
     {
 	    return _settings;

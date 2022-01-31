@@ -5,6 +5,7 @@ using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Areas.Admin.Models.ConfigurationViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
+using RoverCore.BreadCrumbs.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 
@@ -23,6 +24,10 @@ public class ConfigurationController : BaseController
 
 	public IActionResult Index()
 	{
+		_breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+			.ThenAction("Configuration", "Index", "Configuration", new { Area = "Admin" })
+			.Then("Manage");
+
 		var settings = _settingsService.GetSettings();
 
 		return View(settings);

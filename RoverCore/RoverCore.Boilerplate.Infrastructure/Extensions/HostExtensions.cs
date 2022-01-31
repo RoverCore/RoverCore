@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
@@ -15,8 +16,11 @@ public static class HostExtensions
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var seeder = serviceScope.ServiceProvider.GetService<ApplicationSeederService>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
 
-            var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
+            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+
+            var settings = settingsService.GetSettings();
 
             if (settings is { SeedDataOnStartup: true }) seeder?.SeedAsync().GetAwaiter().GetResult();
         }
@@ -29,7 +33,11 @@ public static class HostExtensions
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            var settings = serviceScope.ServiceProvider.GetService<ApplicationSettings>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+
+            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+
+            var settings = settingsService.GetSettings();
 
             if (settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
         }
