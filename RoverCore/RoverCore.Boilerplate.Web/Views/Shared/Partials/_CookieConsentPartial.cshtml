@@ -4,22 +4,23 @@
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
     var showBanner = !consentFeature?.CanTrack ?? false;
     var cookieString = consentFeature?.CreateConsentCookie();
+
 }
 
 @if (showBanner)
 {
     <div id="cookieConsentdiv" class="alert text-center cookiealert show">    
         This site uses cookies for authentication.  Please read our <a asp-area="" asp-controller="Home" asp-action="Privacy" target="_blank">privacy policy</a> for more information.    
-        <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+        <button type="button" class="btn btn-primary ml-2 accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
             <span aria-hidden="true">Accept</span>
         </button>
     </div>
     <script>
-        (function () {
-            var button = document.querySelector("#cookieConsent button[data-cookie-string]");
-            button.addEventListener("click", function (event) {
-                document.cookie = button.dataset.cookieString;
-            }, false);
-        })();
+        $(document).ready(function () {    
+            $("#cookieConsentdiv button[data-cookie-string]").bind("click", function () {    
+                document.cookie = $("#cookieConsentdiv button").attr("data-cookie-string");    
+                $("#cookieConsentdiv").hide();    
+            });    
+        });    
     </script>
 }
