@@ -49,7 +49,6 @@ public class ConfigurationController : BaseController<ConfigurationController>
 			_settings.Company = newSettings.Company;
 
 			_settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
-
 			_settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
 
 			await _settingsService.SaveSettings();
