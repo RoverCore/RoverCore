@@ -268,10 +268,7 @@ public class UsersController : BaseController<UsersController>
 
                     break;
 
-                case "LastName":
-                case "FirstName":
-                case "Id":
-                case "Email":
+                default:
 
                     users = sortColumnDirection == "asc" ? 
 	                    users.OrderBy(sortColumn) :
