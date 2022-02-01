@@ -15,46 +15,25 @@
 
         <table class="table table-bordered" id="index">
             <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model[0].FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model[0].LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model[0].Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model[0].Roles)
-                    </th>
-                    <th></th>
-                </tr>
+            <tr>
+	            <th>
+		            @Html.DisplayNameFor(model => model[0].Id)
+	            </th>
+	            <th>
+		            @Html.DisplayNameFor(model => model[0].FirstName)
+	            </th>
+	            <th>
+		            @Html.DisplayNameFor(model => model[0].LastName)
+	            </th>
+	            <th>
+		            @Html.DisplayNameFor(model => model[0].Email)
+	            </th>
+	            <th>
+		            Roles
+	            </th>
+	            <th></th>
+            </tr>
             </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Roles)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="edit"></i> Edit</a> 
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="book-open"></i> Details</a> 
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default btn-crud"><i data-feather="trash-2"></i> Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
         </table>
 
     </div>
@@ -80,17 +59,53 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
+                var table = $('#index').DataTable(
+                    {
+                        "processing": true,
+                        "serverSide": true,
+                        "filter": true,
+                        "ajax": {
+                            "url": "/identity/users/getUsers",
+                            "type": "POST",
+                            "datatype": "json"
+                        },
+                        "columnDefs": [
+                                {
+                                    "defaultContent": "-", "targets": "_all"
+                                },
+                                {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }],
+                        "columns": [
+                        { "data": "id", "name": "Id", "autoWidth": true },
+                        { "data": "firstName", "name": "First Name", "autoWidth": true },
+                        { "data": "lastName", "name": "Last Name", "autoWidth": true },
+                        { "data": "email", "name": "Email", "autoWidth": true },
+                        { "data": "roles", "name": "Roles", "autoWidth": true },
+                        {
+                            "render": function(data, type, row) {
+                                var controls = "<a href='/Users/Edit/" +
+                                    row.id +
+                                    "' class='btn btn-white btn-bitbucket'><i class='fa fa-wrench'></i> Edit</a> " +
+                                    "<a href='/Users/Delete/" +
+                                    row.id +
+                                    "' class='btn btn-white btn-bitbucket'><i class='fa fa-trash'></i> Delete</a>";
 
-            var table = $('#index').DataTable(
-                {
-                    pageLength: 25,
+                                return controls;
+                            }
+                        }
+                    ],
+                    pageLength: 10,
                     responsive: true,
-                    order: [[1, "asc"]],
+                    order: [[2, "asc"]],
                     "language": {
                         "emptyTable": "No users have been created."
                     }
-                }
-            );
+            }
+        );
+
 
             table.columns.adjust().draw();
 

@@ -9,9 +9,12 @@ using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
+using RoverCore.Boilerplate.Infrastructure.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -214,5 +217,90 @@ public class UsersController : BaseController<UsersController>
     private bool UserExists(string id)
     {
         return _context.Users.Any(x => x.Id == id);
+    }
+
+    private IQueryable<UserViewModel> GetUsersAsync()
+    {
+	    return _context.Users
+		    .Include(x => x.UserRoles)
+		    .ThenInclude(x => x.Role)
+		    .Select(
+		    x => new UserViewModel()
+		    {
+			    Id = x.Id,
+			    Email = x.Email,
+			    FirstName = x.FirstName,
+			    LastName = x.LastName,
+			    Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
+		    }).AsQueryable();
+        
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetUsers(DtRequest request)
+    {
+        try
+        {
+            var sortColumn = request.Columns[request.Order[0].Column].Name;
+            var sortColumnDirection = request.Order[0].Dir;
+            var searchValue = request.Search.Value;
+
+            int recordsTotal = 0;
+            var users = GetUsersAsync();
+
+            sortColumn = string.IsNullOrEmpty(sortColumn) ? "LastName" : sortColumn.Replace(" ", "");
+            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                users = users.Where(m => m.FirstName.Contains(searchValue)
+                                            || m.LastName.Contains(searchValue)
+                                            || m.Email.Contains(searchValue)
+                                            || m.Roles.Contains(searchValue));
+            }
+
+            switch (sortColumn)
+            {
+                case "Roles":
+
+                    users = sortColumnDirection == "asc" ? users.OrderBy(x => string.Join(", ", x.Roles)) :
+                        users.OrderByDescending(x => string.Join(", ", x.Roles));
+
+                    break;
+
+                case "LastName":
+                case "FirstName":
+                case "Id":
+                case "Email":
+
+                    users = sortColumnDirection == "asc" ? 
+	                    users.OrderBy(sortColumn) :
+                        users.OrderByDescending(sortColumn);
+
+                    break;
+
+            }
+
+            var usersList = await users.ToListAsync();
+
+            recordsTotal = usersList.Count();
+            var data = usersList.Skip(request.Start).Take(request.Length)
+	            .Select(x => new
+	            {
+	                Id = x.Id,
+	                FirstName = x.FirstName,
+	                LastName = x.LastName,
+	                Roles = String.Join(", ", x.Roles),
+	                Email = x.Email,
+	                Options = ""
+	            }).ToList();
+
+            var jsonData = new { draw = request.Draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
+            return Ok(jsonData);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 }
