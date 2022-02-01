@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +57,15 @@ public class Startup
             .AddCors() // Adds cross-origin sharing services
             .AddHttpContextAccessor();  // Add default HttpContextAccessor service
 
+        services.Configure<CookiePolicyOptions>(options =>
+        {
+            // This lambda determines whether user consent for non-essential 
+            // cookies is needed for a given request.
+            options.CheckConsentNeeded = context => true;
+            // requires using Microsoft.AspNetCore.Http;
+            options.MinimumSameSitePolicy = SameSiteMode.None;
+        });
+
 #if DEBUG
         // For development only - Display exceptions on page if there is an error
         services.AddDatabaseDeveloperPageExceptionFilter();
@@ -100,11 +110,15 @@ public class Startup
 	    }
 	    else
 	    {
-		    app.UseExceptionHandler("/Home/Error");
-	    }
+		    app.UseExceptionHandler("/error/500");
+            app.UseHsts();
+        }
+        app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-	    app.UseRouting();
-	    app.UseStaticFiles();
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+        app.UseCookiePolicy();
+        app.UseRouting();
 
 	    // global cors policy
 	    app.UseCors(x => x
@@ -116,7 +130,9 @@ public class Startup
 	    app.UseAuthorization();
 
 	    app.UseEndpoints(endpoints =>
-	    {
+        {
+            endpoints.MapRazorPages();
+
 		    endpoints.MapControllerRoute(
 			    name: "areas",
 			    pattern: "{area:exists}/{controller}/{action=Index}/{id?}"

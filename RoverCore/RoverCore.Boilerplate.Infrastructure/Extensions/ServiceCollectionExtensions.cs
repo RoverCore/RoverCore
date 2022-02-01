@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,7 +74,8 @@ public static class ServiceCollectionExtensions
         // configure jwt authentication
         var appSettings = appSettingsSection.Get<JWTSettings>();
         var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
-        services.AddAuthentication()
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie()
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
