@@ -25,10 +25,11 @@ public class ConfigurationController : BaseController<ConfigurationController>
 	}
 
 	public IActionResult Index()
-	{
-		_breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-			.ThenAction("Configuration", "Index", "Configuration", new { Area = "Admin" })
-			.Then("Manage");
+    {
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+            .Then("Admin")
+            .ThenAction("Site Configuration", "Index", "Configuration", new { Area = "Admin" });
+
 
 		var settings = _settingsService.GetSettings();
 

@@ -1,4 +1,4 @@
-﻿@model List<UserViewModel>
+﻿@model UserViewModel
 
 @{
     ViewData["Title"] = "Admin";
@@ -17,16 +17,16 @@
             <thead>
             <tr>
 	            <th>
-		            @Html.DisplayNameFor(model => model[0].Id)
+		            @Html.DisplayNameFor(model => model.Id)
 	            </th>
 	            <th>
-		            @Html.DisplayNameFor(model => model[0].FirstName)
+		            @Html.DisplayNameFor(model => model.FirstName)
 	            </th>
 	            <th>
-		            @Html.DisplayNameFor(model => model[0].LastName)
+		            @Html.DisplayNameFor(model => model.LastName)
 	            </th>
 	            <th>
-		            @Html.DisplayNameFor(model => model[0].Email)
+		            @Html.DisplayNameFor(model => model.Email)
 	            </th>
 	            <th>
 		            Roles
@@ -65,7 +65,7 @@
                         "serverSide": true,
                         "filter": true,
                         "ajax": {
-                            "url": "/identity/users/getUsers",
+                            "url": "/identity/users/getusers",
                             "type": "POST",
                             "datatype": "json"
                         },

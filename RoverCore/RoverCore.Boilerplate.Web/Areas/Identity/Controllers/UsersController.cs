@@ -36,20 +36,9 @@ public class UsersController : BaseController<UsersController>
         _emailSender = emailSender;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var users = await _context.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).OrderBy(x => x.LastName).ToListAsync();
-
-        var viewModel = users.Select(x => new UserViewModel
-        {
-            Id = x.Id,
-            Email = x.Email,
-            FirstName = x.FirstName,
-            LastName = x.LastName,
-            Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
-        }).ToList();
-
-        return View(viewModel);
+        return View(new UserViewModel());
     }
 
     public async Task<IActionResult> Create()
