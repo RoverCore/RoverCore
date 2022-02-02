@@ -1,0 +1,183 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@@model @GetEnumerableTypeExpression(Model.ViewDataTypeName)
+
+@{
+    var container = @Model.ViewName + "_container";
+
+    if (Model.IsPartialView)
+    {
+    }
+    else if (Model.IsLayoutPageSelected)
+    {
+@:@@{
+    @:ViewData["Title"] = "@Model.ViewName";
+        if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+        {
+    @:Layout = "@Model.LayoutPageFile";
+        }
+@:}
+@:
+    }
+    else
+    {
+@:@@{
+    @:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@Model.ViewName</title>
+@:</head>
+@:<body>
+        //    PushIndent("    ");
+    }
+@:<div class="card shadow">	
+    @:<div class="card-header">	
+        @:<h2>Manage @(Model.ViewDataTypeShortName)</h2>	
+        @:<p>	
+            @:<a asp-action="Create" class="btn btn-primary">Create</a>	
+        @:</p>	
+    @:</div>	
+    @:<div class="card-body table-responsive" id="@container" style="display: none">	
+        @:<table class="table" id="@Model.ViewName">
+        @:<thead>
+            @:<tr>
+            Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
+            Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
+
+            foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
+            {
+                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+                    && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+                {
+                <th>
+                    @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                </th>
+                }
+                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+                {
+                <th>
+                    @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                </th>
+                }
+            }
+                @:<th>Actions</th>
+            @:</tr>
+        @:</thead>
+        @:<tbody>
+    @:@@foreach (var item in Model) {
+            @:<tr>
+            foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
+            {
+                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+                    && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+                {
+                <td>
+                    @@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
+                </td>
+                }
+                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+                {
+                <td>
+                    @@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+                </td>
+                }
+            }
+            string pkName = GetPrimaryKeyName();
+            if (pkName != null)
+            {
+                @:<td>
+                        @:<div class="dropdown">
+                            @:<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @:Action
+                            @:</button>
+                            @:<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                @:<a asp-action="Edit" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-wrench" style="width:16px"></i> Edit</a>
+                                @:<a asp-action="Details" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-info" style="width:16px"></i> Details</a>
+                                @:<a asp-action="Delete" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-trash" style="width:16px"></i> Delete</a>
+                            @:</div>
+                        @:</div>
+                @:</td>
+            }
+            else
+            {
+                <td>
+                    @@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            }
+            @:</tr>
+    @:}
+        @:</tbody>
+
+    @:</table>
+@:    </div>	
+@:</div>
+
+    if(!Model.IsPartialView && !Model.IsLayoutPageSelected)
+    {
+        //ClearIndent();
+@:</body>
+@:</html>
+    }
+
+	@:@@section Styles {	
+    @:<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.css" />	
+    @:<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">	
+@:}	
+@:@@section Scripts {	
+    @:<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>	
+    @:<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>	
+    @:<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.js"></script>	
+    @:<script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>	
+    @:<script type="text/javascript">	
+        @:$(document).ready(function () {	
+            @:$('[data-toggle="tooltip"]').tooltip();	
+            @:var table = $('#@Model.ViewName').DataTable(	
+                @:{	
+                    @:pageLength: 25,	
+                    @:responsive: true,	
+                    @:order: [[1, "asc"]],	
+                    @:"language": {	
+                        @:"emptyTable": "No items have been created."	
+                    @:}	
+                @:}	
+            @:);	
+            @:table.columns.adjust().draw();	
+            @:$("#@container").slideDown();	
+        @:});	
+    @:</script>	
+}
+
+}
+@functions
+{
+    string GetPrimaryKeyName()
+    {
+        return (Model.ModelMetadata.PrimaryKeys != null && Model.ModelMetadata.PrimaryKeys.Length == 1)
+        ? Model.ModelMetadata.PrimaryKeys[0].PropertyName
+        : null;
+    }
+
+    string GetValueExpression(IPropertyMetadata property)
+    {
+        return property.PropertyName;
+    }
+
+    string GetValueExpression(INavigationMetadata navigation)
+    {
+        return navigation.AssociationPropertyName;
+    }
+
+    string GetEnumerableTypeExpression(string typeName)
+    {
+        return "IEnumerable<" + typeName + ">";
+    }
+}
