@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RoverCore.Boilerplate.Web.Controllers;
@@ -13,4 +13,5 @@ public class HomeController : BaseController<HomeController>
 
     // Template actions
     public IActionResult About() => View();
+    public IActionResult TOS() => View();
 }
