@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.BreadCrumbs.Services;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
@@ -281,7 +283,7 @@ namespace @Model.ControllerNamespace
             _context.@(entitySetName).Remove(@Model.ModelVariable);
             await _context.SaveChangesAsync();
             
-            _toast.Success("Item deleted successfully");
+            _toast.Success("@Model.ModelTypeName deleted successfully");
 
             return RedirectToAction(nameof(Index));
         }
@@ -291,18 +293,16 @@ namespace @Model.ControllerNamespace
             return _context.@(entitySetName).Any(e => e.@primaryKeyName == id);
         }
 
-        private IQueryable<@Model.ContextTypeName> Get@(entitySetName)Queryable()
+        private IQueryable<@(Model.ModelTypeName)> Get@(entitySetName)Queryable()
         {
 @{
     if (!String.IsNullOrEmpty(includeExpressions))
     {
-            @:var @entitySetVar = _context.@entitySetName@includeExpressions.AsQueryable();
-            @:return @(entitySetVar);
+            @:return _context.@(entitySetName)@(includeExpressions).AsQueryable();
     }
     else
     {
-            @:var @entitySetVar = _context.@entitySetName.AsQueryable();
-            @:return @(entitySetVar);
+            @:return _context.@(entitySetName).AsQueryable();
     }
 }
         }
@@ -326,16 +326,21 @@ namespace @Model.ControllerNamespace
                 {
 @{
     var filters = new List<string>();
-    foreach (var property in modelProperties)
-    {
-        if (property == primaryKeyName) continue;
 
-        filters.Add($"m.{property}.Contains(searchValue)");
+    foreach (var property in Model.ModelMetadata.Properties)
+    {
+        if (property.Scaffold)
+        {
+            if (property.PropertyName == primaryKeyName) continue;
+
+            filters.Add($"m.{property.PropertyName}.ToString().Contains(searchValue)");
+        }
     }
+
 
     if (filters.Count > 0)
     {
-        var query = string.Join("\n||", filters);
+        var query = string.Join("\n                                || ", filters);
                     @:records = records.Where(m => @query);
     }
 }
@@ -352,7 +357,7 @@ namespace @Model.ControllerNamespace
 @{
     foreach (var property in modelProperties)
     {
-                        @:@property = x.@property;
+                        @:@property = x.@property,
     }
 }
 	                    Options = ""

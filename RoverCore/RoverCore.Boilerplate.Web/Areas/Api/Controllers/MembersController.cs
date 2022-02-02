@@ -33,13 +33,12 @@ public class MembersController : Controller
     /// <param name="model"></param>
     /// <returns></returns>
     [AllowAnonymous]
-    [HttpPost("authenticate")]
     public async Task<ApiResponse> Authenticate(AuthenticateRequest model)
     {
         var member = await _userService.Authenticate(model);
 
         if (member == null)
-            return new ApiResponse(System.Net.HttpStatusCode.NotFound, model, "Email or password is incorrect");
+            return new ApiResponse(System.Net.HttpStatusCode.NotFound, model, "Username or password is incorrect");
 
         return new ApiResponse(System.Net.HttpStatusCode.OK, member);
     }
@@ -49,7 +48,6 @@ public class MembersController : Controller
     /// Returns a specific member
     /// </summary>
     /// <param name="id"></param>    
-    [HttpGet("{id}")]
     public async Task<ApiResponse> GetMember(int id)
     {
         // TODO: Add validation for an id

@@ -1,17 +1,18 @@
 ﻿using RoverCore.Boilerplate.Domain.Entities;
+using RoverCore.Boilerplate.Domain.Entities.Identity;
 
 namespace RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 
 public class AuthenticateResponse
 {
-    public AuthenticateResponse(Member member, string token)
+    public AuthenticateResponse(ApplicationUser user, string token)
     {
-        MemberId = member.MemberId;
-        Email = member.Email;
+        Id = user.Id;
+        Username = user.UserName;
         Token = token;
     }
 
-    public int MemberId { get; set; }
-    public string Email { get; set; }
+    public string Id { get; set; }
+    public string Username { get; set; }
     public string Token { get; set; }
 }
