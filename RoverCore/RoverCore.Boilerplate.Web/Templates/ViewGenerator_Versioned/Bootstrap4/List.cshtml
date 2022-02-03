@@ -37,6 +37,30 @@
 @:<body>
         //    PushIndent("    ");
     }
+	
+@:<div class="page-header d-print-none mb-2">
+	@:<div class="row align-items-center">
+		@:<div class="col">
+			@:<div class="page-pretitle">
+				@:Administration
+			@:</div>
+			@:<h2 class="page-title">
+				@:Manage @(Model.ViewDataTypeShortName)
+			@:</h2>
+		@:</div>
+		@:<div class="col-auto ms-auto d-print-none">
+			@:<div class="btn-list">
+			@:  
+				@:<a asp-action="Create" class="btn btn-primary d-none d-sm-inline-block">
+					@:<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+					@:Create new @(Model.ViewDataTypeShortName)
+				@:</a>
+			@:
+			@:</div>
+		@:</div>
+	@:</div>
+@:</div>
+
 @:<div class="card shadow">	
     @:<div class="card-header">	
         @:<h2>Manage @(Model.ViewDataTypeShortName)</h2>	
@@ -70,52 +94,6 @@
                 @:<th>Actions</th>
             @:</tr>
         @:</thead>
-        @:<tbody>
-    @:@@foreach (var item in Model) {
-            @:<tr>
-            foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
-            {
-                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
-                    && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
-                {
-                <td>
-                    @@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
-                </td>
-                }
-                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
-                {
-                <td>
-                    @@Html.DisplayFor(modelItem => item.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
-                </td>
-                }
-            }
-            string pkName = GetPrimaryKeyName();
-            if (pkName != null)
-            {
-                @:<td>
-                        @:<div class="dropdown">
-                            @:<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @:Action
-                            @:</button>
-                            @:<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                @:<a asp-action="Edit" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-wrench" style="width:16px"></i> Edit</a>
-                                @:<a asp-action="Details" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-info" style="width:16px"></i> Details</a>
-                                @:<a asp-action="Delete" asp-route-id="@@item.@pkName" class="dropdown-item"><i class="fa fa-trash" style="width:16px"></i> Delete</a>
-                            @:</div>
-                        @:</div>
-                @:</td>
-            }
-            else
-            {
-                <td>
-                    @@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            }
-            @:</tr>
-    @:}
-        @:</tbody>
 
     @:</table>
 @:    </div>	
@@ -140,18 +118,65 @@
     @:<script type="text/javascript">	
         @:$(document).ready(function () {	
             @:$('[data-toggle="tooltip"]').tooltip();	
-            @:var table = $('#@Model.ViewName').DataTable(	
-                @:{	
-                    @:pageLength: 25,	
-                    @:responsive: true,	
-                    @:order: [[1, "asc"]],	
-                    @:"language": {	
-                        @:"emptyTable": "No items have been created."	
-                    @:}	
-                @:}	
-            @:);	
+                @:var table = $('#@Model.ViewName').DataTable(
+                    @:{
+                        @:"processing": true,
+                        @:"serverSide": true,
+                        @:"filter": true,
+                        @:"ajax": {
+                            @:"url": "/identity/users/getusers",
+                            @:"type": "POST",
+                            @:"datatype": "json"
+                        @:},
+                        @:"columnDefs": [
+                                @:{
+                                    @:"defaultContent": "-", "targets": "_all"
+                                @:},
+                                @:{
+                                @:"targets": [0],
+                                @:"visible": false,
+                                @:"searchable": false
+                            @:}],
+                        @:"columns": [
+						string pkName = GetPrimaryKeyName();
+						if (pkName != null)
+						{						
+                        @:{ "data": "@pkName", "name": "@pkName", "autoWidth": true },
+						}
+						foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
+						{		
+							if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+								&& property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)							
+								{
+								@:{ "data": "@GetValueExpression(property)", "name": "@GetValueExpression(property)", "autoWidth": true },
+								}
+								else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+								{
+								@:{ "data": "@GetValueExpression(navigation)", "name": "@GetValueExpression(navigation)", "autoWidth": true },
+
+								}								
+						}
+                        @:{
+                            @:"render": function(data, type, row) {
+                                @:var controls = "<a href='/Users/Edit/" +
+                                    @:row.id +
+                                    @:"' class='btn btn-primary'><i class='fa fa-wrench'></i> Edit</a> " +
+                                    @:"<a href='/Users/Delete/" +
+                                    @:row.id +
+                                    @:"' class='btn btn-primary'><i class='fa fa-trash'></i> Delete</a>";
+									@:
+                                @:return controls;
+                            @:}
+                        @:}
+						@:],
+						@:pageLength: 10,
+						@:responsive: true,
+						@:order: [[2, "asc"]],
+						@:"language": {
+							@:"emptyTable": "No items found."
+                    @:}
+				@:});
             @:table.columns.adjust().draw();	
-            @:$("#@container").slideDown();	
         @:});	
     @:</script>	
 }
