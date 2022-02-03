@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
@@ -18,7 +17,6 @@ using System.Threading.Tasks;
 using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
-
 @{
     foreach (var namespaceName in Model.RequiredNamespaces)
     {
@@ -48,7 +46,7 @@ namespace @Model.ControllerNamespace
     }
     var bindString = string.Join(",", modelProperties);
     var contextTypeName = Model.ContextTypeName;
-    var entitySetName = Model.ModelMetadata.EntitySetName;
+    var entitySetName = Model.ModelMetadata.EntitySetName.ToString();
     var entitySetVar = Model.EntitySetVariable ??
         (String.IsNullOrEmpty(entitySetName)
             ? entitySetName
