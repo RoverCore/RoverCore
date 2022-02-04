@@ -17,9 +17,6 @@
     @:Layout = "@Model.LayoutPageFile";
         }
 @:}
-@:
-@:<h1>@Model.ViewName</h1>
-@:
     }
     else
     {
@@ -39,55 +36,70 @@
         //    PushIndent("    ");
     }
 }
-
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				@@ViewData["AreaTitle"]
+			</div>
+			<h2 class="page-title">
+				Delete @(Model.ViewDataTypeShortName)
+			</h2>
+		</div>
+	</div>
+</div>
 <div class="card shadow mb-5">
     <div class="card-header">
-        <h3>Are you sure you want to delete this?</h3>
+        <h3>Are you sure you want to delete this record?</h3>
     </div>
     <div class="card-body">
         <dl class="row">
-        @{
-            Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
-            Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
+            @{
+                Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
+                Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
 
-            foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
-            {
-                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
-                    && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+                foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
                 {
-                <dt class = "col-sm-2">
-                    @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
-                </dt>
-                <dd class = "col-sm-10">
-                    @@Html.DisplayFor(model => model.@GetValueExpression(property))
-                </dd>
-                }
-                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
-                {
-                <dt class = "col-sm-2">
-                    @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
-                </dt>
-                <dd class = "col-sm-10">
-                    @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
-                </dd>
-                }
-            }
-            @:</dl>
-            @:
-            @:<form asp-action="@Model.ViewName">
-                foreach (var property in Model.ModelMetadata.Properties)
-                {
-                    if(property.IsPrimaryKey){
-                @:<input type="hidden" asp-for="@GetValueExpression(property)" />
+                    if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+                        && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+                    {
+                        <dt class="col-sm-2">
+                            @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                        </dt>
+                        <dd class="col-sm-10">
+                            @@Html.DisplayFor(model => model.@GetValueExpression(property))
+                        </dd>
+                    }
+                    else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+                    {
+                        <dt class="col-sm-2">
+                            @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                        </dt>
+                        <dd class="col-sm-10">
+                            @@Html.DisplayFor(model => model.@GetValueExpression(navigation).@navigation.DisplayPropertyName)
+                        </dd>
                     }
                 }
-                @:<input type="submit" value="Delete" class="btn btn-danger" /> 
-                @:<a asp-action="Index" class="btn btn-default ml-3">Back to List</a>
-            @:</form>
-        @:</div>
-    @:</div>
-@:</div>
+            }
+        </dl>
             
+        <form asp-action="@Model.ViewName">
+            @{
+                foreach (var property in Model.ModelMetadata.Properties)
+                {
+                    if (property.IsPrimaryKey)
+                    {
+                        @:<input type="hidden" asp-for="@GetValueExpression(property)"/>
+                    }
+                }
+            }
+            <input type="submit" value="Delete" class="btn btn-danger"/>
+            <a asp-action="Index" class="btn btn-default ml-3">Back to List</a>
+        </form>
+    </div>
+</div>
+
+ @{           
     if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
     {
         //ClearIndent();

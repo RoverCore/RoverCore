@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services;
@@ -45,6 +46,7 @@ namespace @Model.ControllerNamespace
         }
     }
     var bindString = string.Join(",", modelProperties);
+    var areaTitle = string.IsNullOrEmpty(Model.AreaName) ? "Administration" : Model.AreaName;
     var contextTypeName = Model.ContextTypeName;
     var entitySetName = Model.ModelMetadata.EntitySetName.ToString();
     var entitySetVar = Model.EntitySetVariable ??
@@ -83,6 +85,7 @@ namespace @Model.ControllerNamespace
     {
         private const string createBindingFields = "@bindString";
         private const string editBindingFields = "@bindString";
+        private const string areaTitle = "@areaTitle";
 
         private readonly @Model.ContextTypeName _context;
 
@@ -104,8 +107,9 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix/Details/5
         public async Task<IActionResult> Details(@primaryKeyNullableTypeName id)
         {
+            ViewData["AreaTitle"] = areaTitle;
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
                 .Then("@Model.ModelTypeName Details");            
 
             if (id == null)
@@ -127,7 +131,7 @@ namespace @Model.ControllerNamespace
         public IActionResult Create()
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
                 .Then("Create @Model.ModelTypeName");     
 
 @{
@@ -145,6 +149,8 @@ namespace @Model.ControllerNamespace
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind(createBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
         {
+            ViewData["AreaTitle"] = areaTitle;
+
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
             .Then("Create @Model.ModelTypeName");     
@@ -178,8 +184,10 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix/Edit/5
         public async Task<IActionResult> Edit(@primaryKeyNullableTypeName id)
         {
+            ViewData["AreaTitle"] = areaTitle;
+
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
             .Then("Edit @Model.ModelTypeName");     
 
             if (id == null)
@@ -210,8 +218,10 @@ namespace @Model.ControllerNamespace
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(@primaryKeyShortTypeName id, [Bind(editBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
         {
+            ViewData["AreaTitle"] = areaTitle;
+
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
             .Then("Edit @Model.ModelTypeName");  
         
             if (id != @Model.ModelVariable.@primaryKeyName)
@@ -264,8 +274,10 @@ namespace @Model.ControllerNamespace
         // GET: @routePrefix/Delete/5
         public async Task<IActionResult> Delete(@primaryKeyNullableTypeName id)
         {
+            ViewData["AreaTitle"] = areaTitle;
+
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
             .Then("Delete @Model.ModelTypeName");  
 
             if (id == null)
