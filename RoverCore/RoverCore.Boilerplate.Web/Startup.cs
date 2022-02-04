@@ -16,6 +16,7 @@ using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
+using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using Serviced;

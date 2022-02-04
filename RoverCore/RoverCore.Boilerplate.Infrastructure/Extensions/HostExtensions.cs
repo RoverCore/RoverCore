@@ -6,6 +6,7 @@ using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
+using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 

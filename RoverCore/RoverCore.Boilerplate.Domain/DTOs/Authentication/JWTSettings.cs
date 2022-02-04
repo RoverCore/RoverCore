@@ -1,4 +1,4 @@
-﻿namespace RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
+﻿namespace RoverCore.Boilerplate.Domain.DTOs.Authentication;
 
 public class JWTSettings
 {

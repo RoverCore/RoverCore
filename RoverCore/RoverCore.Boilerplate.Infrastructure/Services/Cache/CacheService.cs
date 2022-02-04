@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using RoverCore.Boilerplate.Infrastructure.Models.CacheViewModels;
+using RoverCore.Boilerplate.Infrastructure.Services.Cache.Models;
 using Serviced;
 
-namespace RoverCore.Boilerplate.Infrastructure.Services;
+namespace RoverCore.Boilerplate.Infrastructure.Services.Cache;
 
 public class CacheService : ITransient
 {

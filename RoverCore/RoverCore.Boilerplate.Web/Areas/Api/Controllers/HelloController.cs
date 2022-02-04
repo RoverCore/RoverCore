@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services;
+using RoverCore.Boilerplate.Infrastructure.Services.Cache;
+using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 
@@ -10,23 +15,35 @@ namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 [Area("Api")]
 public class HelloController : Controller
 {
-    private readonly RoverCore.Boilerplate.Infrastructure.Services.SettingsService _settingsService;
+    private readonly SettingsService _settingsService;
     private readonly CacheService _cache;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public HelloController(RoverCore.Boilerplate.Infrastructure.Services.SettingsService settingsService, CacheService cache)
+    public HelloController(SettingsService settingsService, CacheService cache, UserManager<ApplicationUser> userManager)
     {
         _settingsService = settingsService;
         _cache = cache;
+        _userManager = userManager;
     }
 
-    // GET: api/v1/Sample
+    // GET: api/hello/notprotected
     [AllowAnonymous]  // Don't require JWT authentication to access this method
-    [HttpGet("Sample")]
-    public object Sample()
+    public object NotProtected()
     {
         return new
         {
-            Result = "Hello World"
+            Result = "Hello random stranger!"
+        };
+    }
+
+    // GET: api/hello/protected
+    public async Task<object> Protected()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        return new
+        {
+            Result = $"Hello authenticated user {user.UserName}!"
         };
     }
 

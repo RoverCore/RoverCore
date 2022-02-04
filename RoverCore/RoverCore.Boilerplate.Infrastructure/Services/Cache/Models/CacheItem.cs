@@ -1,4 +1,4 @@
-﻿namespace RoverCore.Boilerplate.Infrastructure.Models.CacheViewModels;
+﻿namespace RoverCore.Boilerplate.Infrastructure.Services.Cache.Models;
 
 #pragma warning disable CS8618
 public class CacheItem<T>

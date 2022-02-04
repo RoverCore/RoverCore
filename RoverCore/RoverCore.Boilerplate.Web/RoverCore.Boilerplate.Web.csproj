@@ -25,7 +25,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="RestSharp" Version="107.1.2" />
 		<PackageReference Include="RoverCore.BreadCrumbs" Version="1.0.3" />
-		<PackageReference Include="RoverCore.Navigation" Version="1.0.3" />
+		<PackageReference Include="RoverCore.Navigation" Version="1.0.4" />
 		<PackageReference Include="RoverCore.Serviced" Version="1.0.9" />
 		<PackageReference Include="RoverCore.ToastNotification" Version="1.2.3" />
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />

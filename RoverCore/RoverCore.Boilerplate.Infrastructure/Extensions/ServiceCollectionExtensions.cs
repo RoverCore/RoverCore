@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
-using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;

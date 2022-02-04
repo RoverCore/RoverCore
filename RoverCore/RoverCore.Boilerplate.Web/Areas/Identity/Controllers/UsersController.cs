@@ -12,9 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RoverCore.Boilerplate.Domain.DTOs.Datatables;
-using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
+using RoverCore.Boilerplate.Web.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -226,6 +227,7 @@ public class UsersController : BaseController<UsersController>
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> GetUsers(DtRequest request)
     {
         try
@@ -286,7 +288,9 @@ public class UsersController : BaseController<UsersController>
         }
         catch (Exception ex)
         {
-            throw;
+            _logger.LogError(ex, "Error generating user index json");
         }
+
+        return StatusCode(500);
     }
 }

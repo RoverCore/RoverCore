@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace RoverCore.Boilerplate.Web.Helpers;
+namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
-public static class ControllerUtil
+public static class ModelStateExtensions
 {
     /// <summary>
     /// Remove any modelstate errors that don't pertain to the actual fields we are binding

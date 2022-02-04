@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
+using RoverCore.Boilerplate.Infrastructure.Services.User;
 using RoverCore.Boilerplate.Web.Areas.Api.Models;
-using RoverCore.Boilerplate.Web.Helpers;
+using RoverCore.Boilerplate.Web.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 
@@ -33,13 +34,12 @@ public class MembersController : Controller
     /// <param name="model"></param>
     /// <returns></returns>
     [AllowAnonymous]
-    [HttpPost("authenticate")]
     public async Task<ApiResponse> Authenticate(AuthenticateRequest model)
     {
         var member = await _userService.Authenticate(model);
 
         if (member == null)
-            return new ApiResponse(System.Net.HttpStatusCode.NotFound, model, "Email or password is incorrect");
+            return new ApiResponse(System.Net.HttpStatusCode.NotFound, model, "Username or password is incorrect");
 
         return new ApiResponse(System.Net.HttpStatusCode.OK, member);
     }
@@ -49,7 +49,6 @@ public class MembersController : Controller
     /// Returns a specific member
     /// </summary>
     /// <param name="id"></param>    
-    [HttpGet("{id}")]
     public async Task<ApiResponse> GetMember(int id)
     {
         // TODO: Add validation for an id

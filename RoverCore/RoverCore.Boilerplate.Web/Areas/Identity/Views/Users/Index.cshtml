@@ -57,6 +57,11 @@
     </div>
 </div>
 
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+	@Html.AntiForgeryToken()
+}
+
 @section Styles {
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.css" />
@@ -77,6 +82,9 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
                 var table = $('#index').DataTable(
                     {
                         "processing": true,
@@ -85,6 +93,7 @@
                         "ajax": {
                             "url": "/identity/users/getusers",
                             "type": "POST",
+                            "data": {"__RequestVerificationToken" : token},
                             "datatype": "json"
                         },
                         "columnDefs": [
@@ -104,12 +113,12 @@
                         { "data": "roles", "name": "Roles", "autoWidth": true },
                         {
                             "render": function(data, type, row) {
-                                var controls = "<a href='/Users/Edit/" +
+                                var controls = "<a href='/identity/users/edit/" +
                                     row.id +
-                                    "' class='btn btn-white btn-bitbucket'><i class='fa fa-wrench'></i> Edit</a> " +
-                                    "<a href='/Users/Delete/" +
+                                    "' class='btn btn-primary'><i class='fa fa-wrench'></i> Edit</a> " +
+                                    "<a href='/identity/users/delete/" +
                                     row.id +
-                                    "' class='btn btn-white btn-bitbucket'><i class='fa fa-trash'></i> Delete</a>";
+                                    "' class='btn btn-primary'><i class='fa fa-trash'></i> Delete</a>";
 
                                 return controls;
                             }
