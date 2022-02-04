@@ -183,9 +183,9 @@
 					}
                         @:{
                             @:"render": function(data, type, row) {
-                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='icon las la-wrench me-1'></i> Edit</a>" +
-                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='icon las la-info-circle' me-1></i> Details</a>" +
-                                    @:"<a href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-danger'><i class='icon las la-trash me-1'></i> Delete</a>";
+                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary me-1'><i class='icon las la-wrench'></i> Edit</a>" +
+                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary me-1'><i class='icon las la-info-circle'></i> Details</a>" +
+                                    @:"<a href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-danger me-1'><i class='icon las la-trash'></i> Delete</a>";
 								    @:
                                 @:return controls;
                             @:}
