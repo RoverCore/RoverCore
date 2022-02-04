@@ -38,11 +38,20 @@
         //    PushIndent("    ");
     }
 
+@:<div class="page-header d-print-none mb-2">
+	@:<div class="row align-items-center">
+		@:<div class="col">
+			@:<div class="page-pretitle">
+				@:Administration
+			@:</div>
+			@:<h2 class="page-title">
+				@:Create @(Model.ViewDataTypeShortName)
+			@:</h2>
+		@:</div>
+	@:</div>
+@:</div>
 @:<div class="card shadow mb-5">
-    @:<div class="card-header">
-        @:<h2>Create @Model.ViewDataTypeShortName</h2>
-    @:</div>
-    @:<div class="card-body">
+	@:<div class="card-body">
         @:<div class="row">
             @:<div class="col-md-4">
                 @:<form asp-action="@Model.ViewName">

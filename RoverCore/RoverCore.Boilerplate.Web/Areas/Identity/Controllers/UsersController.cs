@@ -226,6 +226,7 @@ public class UsersController : BaseController<UsersController>
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> GetUsers(DtRequest request)
     {
         try

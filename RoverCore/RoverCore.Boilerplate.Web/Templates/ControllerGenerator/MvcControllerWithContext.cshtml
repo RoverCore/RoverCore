@@ -305,7 +305,8 @@ namespace @Model.ControllerNamespace
 }
         }
 
-        [HttpPost]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Get@(entitySetName)(DtRequest request)
         {
             try

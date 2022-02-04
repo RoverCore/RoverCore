@@ -4,12 +4,21 @@
     ViewData["Title"] = "Create User";
 }
 
-<div class="ibox">
-    <div class="ibox-title">
-        <h2>Create</h2>
-        <h4>User</h4>
-    </div>
-    <div class="ibox-content">
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<!-- Page pre-title -->
+			<div class="page-pretitle">
+				Identity
+			</div>
+			<h2 class="page-title">
+				Create User
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
         <div class="row">
             <div class="col-md-4">
                 <form asp-action="Create">
