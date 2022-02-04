@@ -155,8 +155,9 @@ namespace @Model.ControllerNamespace
     }
                 @:_context.Add(@Model.ModelVariable);
                 @:await _context.SaveChangesAsync();
+                @:
                 @:_toast.Success("Created successfully.");
-
+                @:
 }                return RedirectToAction(nameof(Index));
             }
 @{
@@ -186,11 +187,13 @@ namespace @Model.ControllerNamespace
                 return NotFound();
             }
 @{
+            @:
     foreach (var property in relatedProperties.Values)
     {
             @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
     }
 }
+
             return View(@Model.ModelVariable);
         }
 
@@ -356,7 +359,8 @@ namespace @Model.ControllerNamespace
 @{
     foreach (var property in modelProperties)
     {
-                        @:@property = x.@property,
+        var propertyRevised = FirstLower(property);
+                        @:@propertyRevised = x.@property,
     }
 }
 	                    Options = ""
@@ -404,5 +408,12 @@ namespace @Model.ControllerNamespace
 
     bool IsGuid(string typeName) {
         return String.Equals("System.Guid", typeName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    string FirstLower(string s)
+    {
+        if(string.IsNullOrEmpty(s))
+            return s;
+        return s[0].ToString().ToLower() + s.Substring(1);
     }
 }

@@ -8,6 +8,7 @@
     var container = @Model.ViewName + "_container";
     var recordsAction = $"Get{Model.ModelMetadata.EntitySetName}";
     string pkName = GetPrimaryKeyName();
+    string pkNameRevised = FirstLower(pkName);
 
     if (Model.IsPartialView)
     {
@@ -168,21 +169,23 @@
 					foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
 					{		
 						if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
-							&& property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)							
-							{
-						@:{ "data": "@GetValueExpression(property)", "name": "@GetValueExpression(property)", "autoWidth": true },
-							}
-							else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
-							{
-						@:{ "data": "@GetValueExpression(navigation)", "name": "@GetValueExpression(navigation)", "autoWidth": true },
+							&& property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+						{
+						    var dataName = FirstLower(GetValueExpression(property));
+						@:{ "data": "@dataName", "name": "@GetValueExpression(property)", "autoWidth": true },
+						}
+						else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+						{
+						    var dataName = FirstLower(GetValueExpression(navigation));
+						@:{ "data": "@dataName", "name": "@GetValueExpression(navigation)", "autoWidth": true },
 
-							}								
+						}								
 					}
                         @:{
                             @:"render": function(data, type, row) {
-                                @:var controls = "<a href='@@Url.Action("Edit")" + row.id + "' class='btn btn-primary'><i class='las la-wrench'></i> Edit</a> " +
-                                    @:"<a href='@@Url.Action("Details")" + row.id + "' class='btn btn-primary'><i class='las la-info-circle'></i> Details</a>";
-                                    @:"<a href='@@Url.Action("Delete")" + row.id + "' class='btn btn-primary'><i class='las la-trash'></i> Delete</a>";
+                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-wrench'></i> Edit</a> " +
+                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-info-circle'></i> Details</a>";
+                                    @:"<a href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-trash'></i> Delete</a>";
 								    @:
                                 @:return controls;
                             @:}
@@ -225,5 +228,12 @@
     string GetEnumerableTypeExpression(string typeName)
     {
         return "IEnumerable<" + typeName + ">";
+    }
+
+    string FirstLower(string s)
+    {
+        if(string.IsNullOrEmpty(s))
+            return s;
+        return s[0].ToString().ToLower() + s.Substring(1);
     }
 }
