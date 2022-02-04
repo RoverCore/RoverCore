@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 using RoverCore.Boilerplate.Web.Areas.Admin.Models.ConfigurationViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.BreadCrumbs.Services;
@@ -15,10 +16,10 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 public class ConfigurationController : BaseController<ConfigurationController>
 {
 	private readonly ApplicationDbContext _context;
-	private readonly Infrastructure.Services.SettingsService _settingsService;
+	private readonly SettingsService _settingsService;
 
 	public ConfigurationController(ApplicationDbContext context,
-		Infrastructure.Services.SettingsService settingsService)
+		SettingsService settingsService)
 	{
 		_context = context;
 		_settingsService = settingsService;

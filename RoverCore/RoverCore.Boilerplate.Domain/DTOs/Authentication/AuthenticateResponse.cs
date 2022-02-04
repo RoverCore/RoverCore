@@ -1,7 +1,6 @@
-﻿using RoverCore.Boilerplate.Domain.Entities;
-using RoverCore.Boilerplate.Domain.Entities.Identity;
+﻿using RoverCore.Boilerplate.Domain.Entities.Identity;
 
-namespace RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
+namespace RoverCore.Boilerplate.Domain.DTOs.Authentication;
 
 public class AuthenticateResponse
 {

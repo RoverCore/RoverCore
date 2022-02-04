@@ -81,6 +81,9 @@ namespace @Model.ControllerNamespace
     [Authorize(Roles = "Admin")]
     public class @Model.ControllerName : BaseController<@Model.ControllerName>
     {
+        private const string createBindingFields = "@bindString";
+        private const string editBindingFields = "@bindString";
+
         private readonly @Model.ContextTypeName _context;
 
         public @(Model.ControllerName)(@Model.ContextTypeName context)
@@ -140,11 +143,14 @@ namespace @Model.ControllerNamespace
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("@bindString")] @Model.ModelTypeName @Model.ModelVariable)
+        public async Task<IActionResult> Create([Bind(createBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
             .Then("Create @Model.ModelTypeName");     
+            
+            // Remove validation errors from fields that aren't in the binding field list
+            ModelState.Scrub(createBindingFields);           
 
             if (ModelState.IsValid)
             {
@@ -202,7 +208,7 @@ namespace @Model.ControllerNamespace
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(@primaryKeyShortTypeName id, [Bind("@bindString")] @Model.ModelTypeName @Model.ModelVariable)
+        public async Task<IActionResult> Edit(@primaryKeyShortTypeName id, [Bind(editBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
@@ -223,6 +229,8 @@ namespace @Model.ControllerNamespace
             @:model.@(property) = @(Model.ModelVariable).@(property);
     }
 }
+            // Remove validation errors from fields that aren't in the binding field list
+            ModelState.Scrub(editBindingFields);           
 
             if (ModelState.IsValid)
             {
@@ -377,8 +385,10 @@ namespace @Model.ControllerNamespace
             }
             catch (Exception ex)
             {
-                throw;
+                _logger.LogError(ex, "Error generating @entitySetName index json");
             }
+            
+            return StatusCode(500);
         }
 
     }

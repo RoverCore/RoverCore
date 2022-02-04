@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
+using RoverCore.Boilerplate.Infrastructure.Services.User;
 using RoverCore.Boilerplate.Web.Areas.Api.Models;
-using RoverCore.Boilerplate.Web.Helpers;
+using RoverCore.Boilerplate.Web.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 

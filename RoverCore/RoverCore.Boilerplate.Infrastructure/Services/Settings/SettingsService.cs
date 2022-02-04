@@ -5,11 +5,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using Serviced;
 
-namespace RoverCore.Boilerplate.Infrastructure.Services;
+namespace RoverCore.Boilerplate.Infrastructure.Services.Settings;
 
 public class SettingsService : IScoped
 {

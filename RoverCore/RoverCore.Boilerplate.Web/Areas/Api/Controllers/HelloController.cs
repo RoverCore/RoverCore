@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services;
+using RoverCore.Boilerplate.Infrastructure.Services.Cache;
+using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 
@@ -13,11 +15,11 @@ namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 [Area("Api")]
 public class HelloController : Controller
 {
-    private readonly RoverCore.Boilerplate.Infrastructure.Services.SettingsService _settingsService;
+    private readonly SettingsService _settingsService;
     private readonly CacheService _cache;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public HelloController(RoverCore.Boilerplate.Infrastructure.Services.SettingsService settingsService, CacheService cache, UserManager<ApplicationUser> userManager)
+    public HelloController(SettingsService settingsService, CacheService cache, UserManager<ApplicationUser> userManager)
     {
         _settingsService = settingsService;
         _cache = cache;

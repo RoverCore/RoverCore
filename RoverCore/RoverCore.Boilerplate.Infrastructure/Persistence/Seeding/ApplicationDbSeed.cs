@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
-namespace RoverCore.Boilerplate.Web.Configuration;
+namespace RoverCore.Boilerplate.Infrastructure.Persistence.Seeding;
 
 public class ApplicationDbSeed : ISeeder
 {

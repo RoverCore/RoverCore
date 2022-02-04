@@ -1,0 +1,128 @@
+﻿@model IEnumerable<RoverCore.Boilerplate.Domain.Entities.Member>
+
+@{
+        ViewData["Title"] = "Index";
+        var routeData = ViewContext.RouteData.Values;
+        var viewController = routeData["controller"].ToString();
+        var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
+                                                                                                      
+        var recordsUrl = Url.Action("GetMember");
+        
+}
+
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				Administration
+			</div>
+			<h2 class="page-title">
+				Manage Member
+			</h2>
+		</div>
+		<div class="col-auto ms-auto d-print-none">
+			<div class="btn-list">
+			  
+				<a asp-action="Create" class="btn btn-primary d-none d-sm-inline-block">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+					Create new Member
+				</a>
+			
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card shadow">	
+    <div class="card-body table-responsive" id="Index_container">	
+        <table class="table" id="Index">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemberId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+    </div>	
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+	@Html.AntiForgeryToken();
+}
+@section Styles {	
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
+}	
+
+@section Scripts {	
+	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.25/af-2.3.7/b-1.7.1/b-html5-1.7.1/b-print-1.7.1/cr-1.5.4/date-1.1.0/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
+    <script type="text/javascript">	
+	
+	$(document).ready(function () {	
+			
+			$('[data-toggle="tooltip"]').tooltip();	
+			
+			var form = $('#__AjaxAntiForgeryForm');
+			var token = $('input[name="__RequestVerificationToken"]', form).val();
+			
+            var table = $('#Index').DataTable(
+                {
+                    "processing": true,
+                    "serverSide": true,
+                    "filter": true,
+                    "ajax": {
+                        "url": "@Url.Action("GetMember")",
+                        "type": "POST",
+						"data": {"__RequestVerificationToken" : token},
+						"datatype": "json"
+                    },
+                    "columnDefs": [
+                            {
+                                "defaultContent": "-", "targets": "_all"
+                            },
+                            {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
+                        }],
+                    "columns": [
+					    { "data": "MemberId", "name": "MemberId", "autoWidth": true },
+						{ "data": "firstName", "name": "FirstName", "autoWidth": true },
+						{ "data": "lastName", "name": "LastName", "autoWidth": true },
+						{ "data": "email", "name": "Email", "autoWidth": true },
+                        {
+                            "render": function(data, type, row) {
+                                var controls = "<a href='@(Url.Action("Edit"))/" + row.memberId + "' class='btn btn-primary'><i class='icon las la-wrench'></i> Edit</a> " +
+                                    "<a href='@(Url.Action("Details"))/" + row.memberId + "' class='btn btn-primary'><i class='icon las la-info-circle'></i> Details</a>";
+                                    "<a href='@(Url.Action("Delete"))/" + row.memberId + "' class='btn btn-primary'><i class='icon las la-trash'></i> Delete</a>";
+								    
+                                return controls;
+                            }
+                        }
+					],
+					pageLength: 10,
+					responsive: true,
+					order: [[2, "asc"]],
+					"language": {
+						"emptyTable": "No records found."
+                }
+			});
+			table.columns.adjust().draw();	
+        });	
+    </script>	
+
+}

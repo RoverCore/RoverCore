@@ -94,7 +94,7 @@
                     @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
                 </th>
                 }
-                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation) && property.Scaffold)
                 {
                 <th>
                     @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
@@ -174,7 +174,7 @@
 						    var dataName = FirstLower(GetValueExpression(property));
 						@:{ "data": "@dataName", "name": "@GetValueExpression(property)", "autoWidth": true },
 						}
-						else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+						else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation) && property.Scaffold)
 						{
 						    var dataName = FirstLower(GetValueExpression(navigation));
 						@:{ "data": "@dataName", "name": "@GetValueExpression(navigation)", "autoWidth": true },
@@ -183,9 +183,9 @@
 					}
                         @:{
                             @:"render": function(data, type, row) {
-                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-wrench'></i> Edit</a> " +
-                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-info-circle'></i> Details</a>";
-                                    @:"<a href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='las la-trash'></i> Delete</a>";
+                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='icon las la-wrench'></i> Edit</a> " +
+                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='icon las la-info-circle'></i> Details</a>";
+                                    @:"<a href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-primary'><i class='icon las la-trash'></i> Delete</a>";
 								    @:
                                 @:return controls;
                             @:}

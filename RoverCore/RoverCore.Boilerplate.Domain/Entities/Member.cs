@@ -22,10 +22,12 @@ public class Member
     public string Email { get; set; }
 
     [Required]
+    [ScaffoldColumn(false)]
     [JsonIgnore]
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
     public string Password { get; set; }
 
     [JsonIgnore]
+    [ScaffoldColumn(false)]
     public string PasswordSalt { get; set; }
 }

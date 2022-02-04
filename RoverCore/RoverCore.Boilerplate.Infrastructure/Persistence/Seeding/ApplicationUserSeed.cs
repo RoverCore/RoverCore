@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
-namespace RoverCore.Boilerplate.Web.Configuration;
+namespace RoverCore.Boilerplate.Infrastructure.Persistence.Seeding;
 
 public class ApplicationUserSeed : ISeeder
 {

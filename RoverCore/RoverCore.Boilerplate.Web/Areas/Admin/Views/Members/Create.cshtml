@@ -1,0 +1,57 @@
+﻿@model RoverCore.Boilerplate.Domain.Entities.Member
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				Administration
+			</div>
+			<h2 class="page-title">
+				Create Member
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card shadow mb-5">
+	<div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-default mt-4">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

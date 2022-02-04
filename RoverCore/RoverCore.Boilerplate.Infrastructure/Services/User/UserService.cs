@@ -2,17 +2,14 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RoverCore.Boilerplate.Domain.Entities;
+using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Models.AuthenticationModels;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using Serviced;
 
-namespace RoverCore.Boilerplate.Infrastructure.Services;
+namespace RoverCore.Boilerplate.Infrastructure.Services.User;
 
 public interface IUserService
 {
