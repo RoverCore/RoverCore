@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using RoverCore.BreadCrumbs.Services;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
@@ -17,9 +13,13 @@ using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 using RoverCore.Boilerplate.Infrastructure.Services.Settings;
+using RoverCore.BreadCrumbs.Services;
 using RoverCore.Navigation.Services;
 using RoverCore.ToastNotification;
 using Serviced;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace RoverCore.Boilerplate.Web;
 
@@ -105,15 +105,15 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-		if (env.IsDevelopment())
-		{
-			app.UseDeveloperExceptionPage();
-		}
-		else
-		{
-			app.UseExceptionHandler("/error/500");
-			app.UseHsts();
-		}
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/error/500");
+            app.UseHsts();
+        }
         app.UseStatusCodePagesWithReExecute("/error/{0}");
 
         app.UseHttpsRedirection();
@@ -121,38 +121,38 @@ public class Startup
         app.UseCookiePolicy();
         app.UseRouting();
 
-	    // global cors policy
-		app.UseCors(x => x
-		    .AllowAnyOrigin()
-		    .AllowAnyMethod()
-		    .AllowAnyHeader());
+        // global cors policy
+        app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
-	    app.UseAuthentication();
-	    app.UseAuthorization();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
-	    app.UseEndpoints(endpoints =>
+        app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
 
-		    endpoints.MapControllerRoute(
-			    name: "areas",
-			    pattern: "{area:exists}/{controller}/{action=Index}/{id?}"
-		    );
+            endpoints.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller}/{action=Index}/{id?}"
+            );
 
-		    endpoints.MapControllerRoute(
-			    name: "default",
-			    pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
-	    });
+        });
 
-	    app.UseSwagger();
-	    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+        app.UseSwagger();
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
 
-	    // Load configuration settings from database
-	    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-	    {
-		    var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
-		    settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
-	    }
+        // Load configuration settings from database
+        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+        {
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+        }
     }
 }

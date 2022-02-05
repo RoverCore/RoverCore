@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace RoverCore.Boilerplate.Web;
 
@@ -35,12 +35,12 @@ public class Program
 
         if (overrideSeed || overrideMigration)
         {
-	        Log.Information("Starting seeding/migration process");
-	        BuildWebHost(args)
-		        .RunMigrations(overrideMigration) // Apply any new EF migrations
-		        .RunSeeders(overrideSeed); // Run any auto-registered seeders
+            Log.Information("Starting seeding/migration process");
+            BuildWebHost(args)
+                .RunMigrations(overrideMigration) // Apply any new EF migrations
+                .RunSeeders(overrideSeed); // Run any auto-registered seeders
 
-	        return;
+            return;
         }
 
         try

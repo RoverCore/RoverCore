@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Models;
 

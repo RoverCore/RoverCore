@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace RoverCore.Boilerplate.Domain.DTOs.Datatables;
 
 public class DtRequest
 {
     [JsonPropertyName("draw")]
-	public int Draw { get; set; }
-	[JsonPropertyName("start")]
+    public int Draw { get; set; }
+    [JsonPropertyName("start")]
     public int Start { get; set; }
     [JsonPropertyName("length")]
     public int Length { get; set; }
@@ -25,30 +20,30 @@ public class DtRequest
 
 public class DtColumn
 {
-	[JsonPropertyName("data")]
-	public string Data { get; set; }
-	[JsonPropertyName("name")]
-	public string Name { get; set; }
-	[JsonPropertyName("searchable")]
-	public bool Searchable { get; set; }
-	[JsonPropertyName("orderable")]
-	public bool Orderable { get; set; }
-	[JsonPropertyName("search")]
-	public DtSearch Search { get; set; }
+    [JsonPropertyName("data")]
+    public string Data { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+    [JsonPropertyName("searchable")]
+    public bool Searchable { get; set; }
+    [JsonPropertyName("orderable")]
+    public bool Orderable { get; set; }
+    [JsonPropertyName("search")]
+    public DtSearch Search { get; set; }
 }
 
 public class DtSearch
 {
-	[JsonPropertyName("value")]
-	public string Value { get; set; }
-	[JsonPropertyName("regex")]
-	public string Regex { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; }
+    [JsonPropertyName("regex")]
+    public string Regex { get; set; }
 }
 
 public class DtOrder
 {
-	[JsonPropertyName("column")]
-	public int Column { get; set; }
-	[JsonPropertyName("dir")]
-	public string Dir { get; set; }
+    [JsonPropertyName("column")]
+    public int Column { get; set; }
+    [JsonPropertyName("dir")]
+    public string Dir { get; set; }
 }

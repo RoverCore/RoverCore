@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RoverCore.Boilerplate.Web.Models;
+using System.Linq;
 
 namespace RoverCore.Boilerplate.Web.Controllers;
 
@@ -23,5 +22,5 @@ public class ErrorController : Controller
         }
         return View();
     }
-    
+
 }

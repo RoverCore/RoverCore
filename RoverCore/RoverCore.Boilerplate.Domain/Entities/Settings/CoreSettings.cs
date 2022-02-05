@@ -19,7 +19,7 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
         /// Any ISeeder seeders in the project will run on startup if true
         /// </summary>
         [DisplayName("Seed Data On Startup")]
-        [Editable(true)] 
+        [Editable(true)]
         public bool SeedDataOnStartup { get; set; } = true;
     }
 

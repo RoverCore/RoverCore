@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using RoverCore.Boilerplate.Domain.Entities;
-using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
-using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 

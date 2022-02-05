@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -7,12 +6,13 @@ using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using Serviced;
+using System.Reflection;
 
 namespace RoverCore.Boilerplate.Infrastructure.Services.Settings;
 
 public class SettingsService : IScoped
 {
-	private const string SettingsKey = "ApplicationSettings";
+    private const string SettingsKey = "ApplicationSettings";
     private readonly ApplicationDbContext _context;
     private readonly ApplicationSettings _settings;
     private readonly ILogger _logger;
@@ -32,25 +32,25 @@ public class SettingsService : IScoped
     /// <returns></returns>
     public async Task LoadPersistedSettings()
     {
-	    var svConfig = _cache.Get<ConfigurationItem>(SettingsKey);
+        var svConfig = _cache.Get<ConfigurationItem>(SettingsKey);
 
-	    svConfig ??= await InitializeCache();
+        svConfig ??= await InitializeCache();
 
-	    if (svConfig != null)
-	    {
-		    try
-		    {
-			    var savedSettingsJson = svConfig.Value ?? string.Empty;
-			    var savedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(savedSettingsJson);
+        if (svConfig != null)
+        {
+            try
+            {
+                var savedSettingsJson = svConfig.Value ?? string.Empty;
+                var savedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(savedSettingsJson);
 
-			    // Copy saved settings to existing singleton service
-			    CopySettings(savedSettings!, _settings);
+                // Copy saved settings to existing singleton service
+                CopySettings(savedSettings!, _settings);
 
             }
             catch (Exception ex)
-		    {
+            {
                 _logger.LogError(ex, $"Unable to load {SettingsKey} settings from database");
-		    }
+            }
         }
     }
 
@@ -60,7 +60,7 @@ public class SettingsService : IScoped
     /// <returns></returns>
     public ApplicationSettings GetSettings()
     {
-	    return _settings;
+        return _settings;
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ public class SettingsService : IScoped
     /// <returns></returns>
     public async Task SaveSettings()
     {
-	    await Commit(SettingsKey, JsonConvert.SerializeObject(_settings));
+        await Commit(SettingsKey, JsonConvert.SerializeObject(_settings));
     }
 
     /// <summary>
@@ -80,38 +80,38 @@ public class SettingsService : IScoped
     public async Task PatchSettings(ApplicationSettings newSettings)
     {
         // Copy new settings to existing singleton service
-	    CopySettings(newSettings, _settings);
+        CopySettings(newSettings, _settings);
 
         await Commit(SettingsKey, JsonConvert.SerializeObject(_settings));
     }
 
     private void CopySettings(ApplicationSettings? source, ApplicationSettings target)
     {
-	    if (source == null) return;
+        if (source == null) return;
 
-	    // Copy new settings to existing singleton service
-	    foreach (PropertyInfo property in typeof(ApplicationSettings).GetProperties().Where(p => p.CanWrite))
-	    {
-		    var value = property.GetValue(source, null);
+        // Copy new settings to existing singleton service
+        foreach (PropertyInfo property in typeof(ApplicationSettings).GetProperties().Where(p => p.CanWrite))
+        {
+            var value = property.GetValue(source, null);
 
             if (value != null)
-	            property.SetValue(target, value, null);
-	    }
+                property.SetValue(target, value, null);
+        }
     }
 
     private async Task Commit(string key, string value)
     {
         var configItem = await _context.ConfigurationItem
-	        .FirstOrDefaultAsync(x => x.Key == key);
+            .FirstOrDefaultAsync(x => x.Key == key);
 
         if (configItem is null)
         {
-	        configItem = new ConfigurationItem
-	        {
-		        Key = key,
-		        Value = value
-	        };
-	        _context.Add(configItem);
+            configItem = new ConfigurationItem
+            {
+                Key = key,
+                Value = value
+            };
+            _context.Add(configItem);
         }
 
         configItem.Value = value;
@@ -121,12 +121,12 @@ public class SettingsService : IScoped
 
     private async Task<ConfigurationItem?> InitializeCache()
     {
-	    var svConfig = await _context.ConfigurationItem
-		    .FirstOrDefaultAsync(x => x.Key == SettingsKey);
+        var svConfig = await _context.ConfigurationItem
+            .FirstOrDefaultAsync(x => x.Key == SettingsKey);
 
         if (svConfig != null)
         {
-	        _cache.Set(SettingsKey, svConfig);
+            _cache.Set(SettingsKey, svConfig);
         }
 
         return svConfig;

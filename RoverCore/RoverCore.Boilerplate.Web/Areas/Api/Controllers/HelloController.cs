@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Infrastructure.Services.Cache;
 using RoverCore.Boilerplate.Infrastructure.Services.Settings;
+using System.Threading.Tasks;
 
 namespace RoverCore.Boilerplate.Web.Areas.Api.Controllers;
 

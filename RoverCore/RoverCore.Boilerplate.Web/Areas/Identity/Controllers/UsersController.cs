@@ -3,19 +3,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
+using RoverCore.Boilerplate.Infrastructure.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
+using RoverCore.Boilerplate.Web.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Web.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -211,19 +210,19 @@ public class UsersController : BaseController<UsersController>
 
     private IQueryable<UserViewModel> GetUsersAsync()
     {
-	    return _context.Users
-		    .Include(x => x.UserRoles)
-		    .ThenInclude(x => x.Role)
-		    .Select(
-		    x => new UserViewModel()
-		    {
-			    Id = x.Id,
-			    Email = x.Email,
-			    FirstName = x.FirstName,
-			    LastName = x.LastName,
-			    Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
-		    }).AsQueryable();
-        
+        return _context.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .Select(
+            x => new UserViewModel()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
+            }).AsQueryable();
+
     }
 
     [HttpPost]
@@ -261,8 +260,8 @@ public class UsersController : BaseController<UsersController>
 
                 default:
 
-                    users = sortColumnDirection == "asc" ? 
-	                    users.OrderBy(sortColumn) :
+                    users = sortColumnDirection == "asc" ?
+                        users.OrderBy(sortColumn) :
                         users.OrderByDescending(sortColumn);
 
                     break;
@@ -273,15 +272,15 @@ public class UsersController : BaseController<UsersController>
 
             recordsTotal = usersList.Count();
             var data = usersList.Skip(request.Start).Take(request.Length)
-	            .Select(x => new
-	            {
-	                Id = x.Id,
-	                FirstName = x.FirstName,
-	                LastName = x.LastName,
-	                Roles = String.Join(", ", x.Roles),
-	                Email = x.Email,
-	                Options = ""
-	            }).ToList();
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Roles = String.Join(", ", x.Roles),
+                    Email = x.Email,
+                    Options = ""
+                }).ToList();
 
             var jsonData = new { draw = request.Draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
             return Ok(jsonData);

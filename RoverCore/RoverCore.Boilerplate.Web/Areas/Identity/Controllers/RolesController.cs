@@ -1,22 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoverCore.BreadCrumbs.Services;
+using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
-using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
+using RoverCore.Boilerplate.Infrastructure.Extensions;
+using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Controllers;
+using RoverCore.BreadCrumbs.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
-using RoverCore.Boilerplate.Web.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
@@ -39,8 +33,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
         public IActionResult Index()
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .Then("Manage Roles");            
-            
+            .Then("Manage Roles");
+
             return View();
         }
 
@@ -50,7 +44,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             ViewData["AreaTitle"] = areaTitle;
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
                 .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-                .Then("ApplicationRole Details");            
+                .Then("ApplicationRole Details");
 
             if (id == null)
             {
@@ -72,7 +66,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
                 .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-                .Then("Create ApplicationRole");     
+                .Then("Create ApplicationRole");
 
             return View();
         }
@@ -88,10 +82,10 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "RolesController", new { Area = "Identity" })
-            .Then("Create ApplicationRole");     
-            
+            .Then("Create ApplicationRole");
+
             // Remove validation errors from fields that aren't in the binding field list
-            ModelState.Scrub(createBindingFields);           
+            ModelState.Scrub(createBindingFields);
 
             if (ModelState.IsValid)
             {
@@ -101,9 +95,9 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
                 _context.Add(applicationRole);
                 await _context.SaveChangesAsync();
-                
+
                 _toast.Success("Created successfully.");
-                
+
                 return RedirectToAction(nameof(Index));
             }
             return View(applicationRole);
@@ -116,7 +110,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Edit ApplicationRole");     
+            .Then("Edit ApplicationRole");
 
             if (id == null)
             {
@@ -128,7 +122,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             {
                 return NotFound();
             }
-            
+
 
             return View(applicationRole);
         }
@@ -144,20 +138,20 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Edit ApplicationRole");  
-        
+            .Then("Edit ApplicationRole");
+
             if (id != applicationRole.Id)
             {
                 return NotFound();
             }
-            
+
             ApplicationRole model = await _context.Roles.FindAsync(id);
 
             model.Name = applicationRole.Name;
             model.NormalizedName = applicationRole.NormalizedName;
             model.ConcurrencyStamp = applicationRole.ConcurrencyStamp;
             // Remove validation errors from fields that aren't in the binding field list
-            ModelState.Scrub(editBindingFields);           
+            ModelState.Scrub(editBindingFields);
 
             if (ModelState.IsValid)
             {
@@ -189,7 +183,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Delete ApplicationRole");  
+            .Then("Delete ApplicationRole");
 
             if (id == null)
             {
@@ -214,7 +208,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             var applicationRole = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(applicationRole);
             await _context.SaveChangesAsync();
-            
+
             _toast.Success("ApplicationRole deleted successfully");
 
             return RedirectToAction(nameof(Index));
@@ -230,8 +224,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             return _context.Roles.AsQueryable();
         }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetRoles(DtRequest request)
         {
             try
@@ -252,27 +246,28 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
                                 || m.NormalizedName.Contains(searchValue)
                                 || m.ConcurrencyStamp.Contains(searchValue));
                 }
-                
+
                 records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
 
                 var recordsList = await records.ToListAsync();
 
                 recordsTotal = recordsList.Count();
                 var data = recordsList.Skip(request.Start).Take(request.Length)
-	                .Select(x => new
+                    .Select(x => new
                     {
                         id = x.Id,
                         name = x.Name,
                         normalizedName = x.NormalizedName,
                         concurrencyStamp = x.ConcurrencyStamp,
-	                    Options = ""
-	                }).ToList();
+                        Options = ""
+                    }).ToList();
 
-                var jsonData = new { 
-                    draw = request.Draw, 
-                    recordsFiltered = recordsTotal, 
-                    recordsTotal = recordsTotal, 
-                    data = data 
+                var jsonData = new
+                {
+                    draw = request.Draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = data
                 };
 
                 return Ok(jsonData);
@@ -281,7 +276,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             {
                 _logger.LogError(ex, "Error generating Roles index json");
             }
-            
+
             return StatusCode(500);
         }
 

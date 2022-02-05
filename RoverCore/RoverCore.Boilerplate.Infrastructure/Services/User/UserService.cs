@@ -1,13 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using Serviced;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace RoverCore.Boilerplate.Infrastructure.Services.User;
 

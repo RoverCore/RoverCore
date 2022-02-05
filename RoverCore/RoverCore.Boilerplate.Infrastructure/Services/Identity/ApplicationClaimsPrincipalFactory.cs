@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
+using System.Security.Claims;
 
 namespace RoverCore.Boilerplate.Infrastructure.Services.Identity;
 

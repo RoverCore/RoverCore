@@ -70,17 +70,17 @@ public class ApplicationDbSeed : ISeeder
             var precords = JsonConvert.DeserializeObject<List<TEntity>>(GetJson(jsonFile));
             if (precords != null)
             {
-	            foreach (var rec in precords)
-	            {
-		            var p2 = rec.GetType().GetProperty(matchingProperty)?.GetValue(rec, null);
-		            var exists = records.FirstOrDefault(c => c.GetType().GetProperty(matchingProperty)!.GetValue(c, null)!.Equals(p2));
+                foreach (var rec in precords)
+                {
+                    var p2 = rec.GetType().GetProperty(matchingProperty)?.GetValue(rec, null);
+                    var exists = records.FirstOrDefault(c => c.GetType().GetProperty(matchingProperty)!.GetValue(c, null)!.Equals(p2));
 
-		            if (exists == null)
-		            {
-			            dbset.Add(rec);
-			            _context.SaveChanges();
-		            }
-	            }
+                    if (exists == null)
+                    {
+                        dbset.Add(rec);
+                        _context.SaveChanges();
+                    }
+                }
             }
         }
 
