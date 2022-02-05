@@ -1,51 +1,32 @@
 ﻿@model RoverCore.Boilerplate.Domain.Entities.Identity.ApplicationRole
 
 @{
+	Layout = null;
     ViewData["Title"] = "Delete";
 }
-<div class="page-header d-print-none mb-2">
-	<div class="row align-items-center">
-		<div class="col">
-			<div class="page-pretitle">
-				@ViewData["AreaTitle"]
-			</div>
-			<h2 class="page-title">
-				Delete Role
-			</h2>
-		</div>
-	</div>
-</div>
-<div class="card shadow mb-5">
-    <div class="card-header">
-        <h3>Are you sure you want to delete this record?</h3>
-    </div>
-    <div class="card-body">
-        <dl class="row">
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Name)
-                        </dt>
-                        <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Name)
-                        </dd>
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.NormalizedName)
-                        </dt>
-                        <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.NormalizedName)
-                        </dd>
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
-                        </dt>
-                        <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.ConcurrencyStamp)
-                        </dd>
-        </dl>
+
+<dl class="row">
+	<dt class="col-sm-3">
+		@Html.DisplayNameFor(model => model.Name)
+	</dt>
+	<dd class="col-sm-9">
+		@Html.DisplayFor(model => model.Name)
+	</dd>
+	<dt class="col-sm-3">
+		@Html.DisplayNameFor(model => model.NormalizedName)
+	</dt>
+	<dd class="col-sm-9">
+		@Html.DisplayFor(model => model.NormalizedName)
+	</dd>
+	<dt class="col-sm-3">
+		@Html.DisplayNameFor(model => model.ConcurrencyStamp)
+	</dt>
+	<dd class="col-sm-9">
+		@Html.DisplayFor(model => model.ConcurrencyStamp)
+	</dd>
+</dl>
             
-        <form asp-action="Delete">
-                        <input type="hidden" asp-for="Id"/>
-            <input type="submit" value="Delete" class="btn btn-danger"/>
-            <a asp-action="Index" class="btn btn-default ml-3">Back to List</a>
-        </form>
-    </div>
-</div>
+<form asp-action="Delete" id="deleteForm">
+	<input type="hidden" asp-for="Id"/>
+</form>
 

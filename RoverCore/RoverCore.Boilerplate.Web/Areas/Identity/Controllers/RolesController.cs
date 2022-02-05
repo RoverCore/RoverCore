@@ -248,9 +248,9 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    records = records.Where(m => m.Name.ToString().Contains(searchValue)
-                                || m.NormalizedName.ToString().Contains(searchValue)
-                                || m.ConcurrencyStamp.ToString().Contains(searchValue));
+                    records = records.Where(m => m.Name.Contains(searchValue)
+                                || m.NormalizedName.Contains(searchValue)
+                                || m.ConcurrencyStamp.Contains(searchValue));
                 }
                 
                 records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);

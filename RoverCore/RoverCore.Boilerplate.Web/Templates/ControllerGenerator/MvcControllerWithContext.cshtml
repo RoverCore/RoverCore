@@ -355,7 +355,7 @@ namespace @Model.ControllerNamespace
         {
             if (property.PropertyName == primaryKeyName) continue;
 
-            filters.Add($"m.{property.PropertyName}.ToString().Contains(searchValue)");
+            filters.Add($"m.{property.PropertyName}.Contains(searchValue)");
         }
     }
 
