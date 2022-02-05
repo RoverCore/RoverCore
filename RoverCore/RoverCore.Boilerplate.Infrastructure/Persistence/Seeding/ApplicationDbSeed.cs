@@ -16,7 +16,7 @@ public class ApplicationDbSeed : ISeeder
 
     public string GetJson(string seedFile)
     {
-        var file = System.IO.File.ReadAllText(Path.Combine("Configuration", "SeedData", seedFile));
+        var file = File.ReadAllText(Path.Combine("Configuration", "SeedData", seedFile));
 
         return file;
     }

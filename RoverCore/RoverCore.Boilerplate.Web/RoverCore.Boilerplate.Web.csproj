@@ -11,6 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Areas\Admin\Data\**" />
+	  <Content Remove="Areas\Admin\Data\**" />
+	  <EmbeddedResource Remove="Areas\Admin\Data\**" />
+	  <None Remove="Areas\Admin\Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
@@ -38,7 +45,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Areas\Admin\Data\" />
 		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
 		<Folder Include="Services\" />

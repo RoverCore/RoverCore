@@ -41,22 +41,22 @@ public class ConfigurationController : BaseController<ConfigurationController>
     public async Task<IActionResult> Edit(
         [Bind("SiteName,Company,ApplyMigrationsOnStartup,SeedDataOnStartup")] ApplicationSettings newSettings)
     {
-        var _settings = _settingsService.GetSettings();
+        var settings = _settingsService.GetSettings();
 
         if (ModelState.IsValid)
         {
-            _settings.SiteName = newSettings.SiteName;
-            _settings.Company = newSettings.Company;
+            settings.SiteName = newSettings.SiteName;
+            settings.Company = newSettings.Company;
 
-            _settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
-            _settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
+            settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
+            settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
 
             await _settingsService.SaveSettings();
 
             return RedirectToAction(nameof(Index));
         }
 
-        return View("Index", _settings);
+        return View("Index", settings);
     }
 
 }

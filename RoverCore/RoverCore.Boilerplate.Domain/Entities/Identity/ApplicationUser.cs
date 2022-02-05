@@ -11,10 +11,10 @@ public class ApplicationUser : IdentityUser<string>
     [Required]
     [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
     [Display(Name = "First Name")]
-    public string FirstName { get; set; } = String.Empty;
+    public string FirstName { get; set; } = string.Empty;
 
     [Display(Name = "Last Name")]
-    public string LastName { get; set; } = String.Empty;
+    public string LastName { get; set; } = string.Empty;
 
     // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-6.0
     public virtual ICollection<ApplicationUserClaim> Claims { get; set; }

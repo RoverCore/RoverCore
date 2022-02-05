@@ -7,32 +7,33 @@
 <h1>Role Details</h1>
 
 <div class="card shadow mb-5">
-    <div class="card-header">
-        <h3>Role</h3>
-    </div>
-    <div class="card-body">
-        <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NormalizedName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NormalizedName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ConcurrencyStamp)
-        </dd>
-    </dl>
-    </div>
+	<div class="card-header">
+		<h3>Role</h3>
+	</div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class = "col-sm-2">
+				@Html.DisplayNameFor(model => model.Name)
+			</dt>
+			<dd class = "col-sm-10">
+				@Html.DisplayFor(model => model.Name)
+			</dd>
+			<dt class = "col-sm-2">
+				@Html.DisplayNameFor(model => model.NormalizedName)
+			</dt>
+			<dd class = "col-sm-10">
+				@Html.DisplayFor(model => model.NormalizedName)
+			</dd>
+			<dt class = "col-sm-2">
+				@Html.DisplayNameFor(model => model.ConcurrencyStamp)
+			</dt>
+			<dd class = "col-sm-10">
+				@Html.DisplayFor(model => model.ConcurrencyStamp)
+			</dd>
+		</dl>
+	</div>
 </div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> 
-    <a asp-action="Index" class="btn btn-default ml-3">Back to List</a>
-</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> 
+<a asp-action="Index" class="btn btn-default ml-3">Back to List</a>
+

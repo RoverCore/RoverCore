@@ -24,9 +24,9 @@ public static class PasswordHasher
 
     public static PasswordHash Hash(this string password, string salt)
     {
-        var _salt = Convert.FromBase64String(salt);
+        var saltBytes = Convert.FromBase64String(salt);
 
-        return Hash(password, _salt);
+        return Hash(password, saltBytes);
     }
 
     public static PasswordHash Hash(this string password, byte[] salt)

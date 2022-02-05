@@ -2,7 +2,7 @@
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
-public static class IQueryableExtensions
+public static class QueryableExtensions
 {
     public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string propertyName, IComparer<object>? comparer = null)
     {

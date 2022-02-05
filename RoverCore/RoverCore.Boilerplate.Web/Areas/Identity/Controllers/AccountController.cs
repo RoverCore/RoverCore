@@ -93,7 +93,7 @@ public class AccountController : BaseController<AccountController>
 
         if (user == null)
         {
-            throw new ApplicationException($"Unable to load two-factor authentication user.");
+            throw new ApplicationException("Unable to load two-factor authentication user.");
         }
 
         var model = new LoginWith2faViewModel { RememberMe = rememberMe };
@@ -148,7 +148,7 @@ public class AccountController : BaseController<AccountController>
         var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
         if (user == null)
         {
-            throw new ApplicationException($"Unable to load two-factor authentication user.");
+            throw new ApplicationException("Unable to load two-factor authentication user.");
         }
 
         ViewData["ReturnUrl"] = returnUrl;
@@ -169,7 +169,7 @@ public class AccountController : BaseController<AccountController>
         var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
         if (user == null)
         {
-            throw new ApplicationException($"Unable to load two-factor authentication user.");
+            throw new ApplicationException("Unable to load two-factor authentication user.");
         }
 
         var recoveryCode = model.RecoveryCode.Replace(" ", string.Empty);

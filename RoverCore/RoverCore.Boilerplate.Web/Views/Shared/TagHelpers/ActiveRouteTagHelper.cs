@@ -92,7 +92,7 @@ public class ActiveRouteTagHelper : TagHelper
             classAttr = new TagHelperAttribute("class", "active");
             output.Attributes.Add(classAttr);
         }
-        else if (classAttr.Value == null || classAttr.Value.ToString().IndexOf("active") < 0)
+        else if (classAttr.Value == null || classAttr!.Value!.ToString()!.IndexOf("active", StringComparison.Ordinal) < 0)
         {
             output.Attributes.SetAttribute("class", classAttr.Value == null
                 ? "active"

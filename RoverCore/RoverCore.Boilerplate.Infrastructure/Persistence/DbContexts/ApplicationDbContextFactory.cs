@@ -22,7 +22,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(path)
-                .AddJsonFile($"appsettings.json")
+                .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{envName}.json")
                 .Build();
 
