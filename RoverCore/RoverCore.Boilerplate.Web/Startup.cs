@@ -105,15 +105,15 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-	    if (env.IsDevelopment())
-	    {
-		    app.UseDeveloperExceptionPage();
-	    }
-	    else
-	    {
-		    app.UseExceptionHandler("/error/500");
-            app.UseHsts();
-        }
+		if (env.IsDevelopment())
+		{
+			app.UseDeveloperExceptionPage();
+		}
+		else
+		{
+			app.UseExceptionHandler("/error/500");
+			app.UseHsts();
+		}
         app.UseStatusCodePagesWithReExecute("/error/{0}");
 
         app.UseHttpsRedirection();
@@ -122,7 +122,7 @@ public class Startup
         app.UseRouting();
 
 	    // global cors policy
-	    app.UseCors(x => x
+		app.UseCors(x => x
 		    .AllowAnyOrigin()
 		    .AllowAnyMethod()
 		    .AllowAnyHeader());
