@@ -58,7 +58,7 @@ public class ApplicationDbSeed : ISeeder
     /// <param name="jsonFile">JSON encoded array of database records</param>
     /// <param name="dbset">Database dbset to insert into</param>
     /// <param name="matchingProperty">Json files will not have primary id keys, so this is used to check to see if a record already exists in table</param>
-    public void SeedDatabaseOrUpdate<TEntity>(string jsonFile, DbSet<TEntity> dbset, string matchingProperty = null) where TEntity : class
+    public void SeedDatabaseOrUpdate<TEntity>(string jsonFile, DbSet<TEntity> dbset, string? matchingProperty = null) where TEntity : class
     {
         var records = dbset.ToList();
         if (records == null || records.Count == 0)
@@ -68,19 +68,20 @@ public class ApplicationDbSeed : ISeeder
         else if (matchingProperty != null)
         {
             var precords = JsonConvert.DeserializeObject<List<TEntity>>(GetJson(jsonFile));
-            foreach (var rec in precords)
+            if (precords != null)
             {
+	            foreach (var rec in precords)
+	            {
+		            var p2 = rec.GetType().GetProperty(matchingProperty)?.GetValue(rec, null);
+		            var exists = records.FirstOrDefault(c => c.GetType().GetProperty(matchingProperty)!.GetValue(c, null)!.Equals(p2));
 
-                var p2 = rec.GetType().GetProperty(matchingProperty).GetValue(rec, null);
-                var exists = records.FirstOrDefault(c => c.GetType().GetProperty(matchingProperty).GetValue(c, null).Equals(p2));
-
-                if (exists == null)
-                {
-                    dbset.Add(rec);
-                    _context.SaveChanges();
-                }
+		            if (exists == null)
+		            {
+			            dbset.Add(rec);
+			            _context.SaveChanges();
+		            }
+	            }
             }
-
         }
 
 

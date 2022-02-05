@@ -18,12 +18,15 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts
         ApplicationDbContext IDesignTimeDbContextFactory<ApplicationDbContext>.CreateDbContext(string[] args)
         {
             var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var path = AppContext.BaseDirectory;
 
             if (String.IsNullOrEmpty(envName))
                 envName = "Development";
 
+            Console.WriteLine($"ApplicationDbContextFactory: Using base path = {path}");
+
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
+                .SetBasePath(path)
                 .AddJsonFile($"appsettings.json")
                 .AddJsonFile($"appsettings.{envName}.json")
                 .Build();

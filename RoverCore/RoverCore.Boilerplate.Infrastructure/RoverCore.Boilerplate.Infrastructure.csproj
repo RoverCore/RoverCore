@@ -40,4 +40,15 @@
 	  <ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
 	</ItemGroup>
 
+	<!-- appsettings* inclusion is used by the ApplicationDbContextFactory - Note that they reference files from the Web project -->
+	<ItemGroup>
+		<Content Include="..\RoverCore.Boilerplate.Web\appsettings.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+		<Content Include="..\RoverCore.Boilerplate.Web\appsettings.*.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<DependentUpon>appsettings.json</DependentUpon>
+		</Content>
+	</ItemGroup>
+
 </Project>
