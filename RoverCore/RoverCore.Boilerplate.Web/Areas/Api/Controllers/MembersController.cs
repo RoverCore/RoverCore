@@ -89,8 +89,8 @@ public class MembersController : Controller
         }
 
         // Check to see if member already exists
-        var _membercheck = await _context.Member.FirstOrDefaultAsync(m => m.Email == safemember.Email);
-        if (_membercheck != null)
+        var membercheck = await _context.Member.FirstOrDefaultAsync(m => m.Email == safemember.Email);
+        if (membercheck != null)
             return new ApiResponse(System.Net.HttpStatusCode.BadRequest, null, "An account for this email already exists");
 
         // Securely hash the member password

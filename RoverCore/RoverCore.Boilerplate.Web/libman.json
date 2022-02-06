@@ -1,0 +1,93 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/vendor/animate.css/",
+      "files": [
+        "animate.min.css",
+        "animate.compat.css",
+        "animate.compat.min.css",
+        "animate.css"
+      ]
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/vendor/jquery/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/vendor/select2/"
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.12",
+      "destination": "wwwroot/vendor/jquery-validation-unobtrusive/",
+      "files": [
+        "jquery.validate.unobtrusive.min.js",
+        "jquery.validate.unobtrusive.js"
+      ]
+    },
+    {
+      "library": "moment.js@2.29.1",
+      "destination": "wwwroot/vendor/moment.js/"
+    },
+    {
+      "library": "limonte-sweetalert2@11.4.0",
+      "destination": "wwwroot/vendor/limonte-sweetalert2/"
+    },
+    {
+      "library": "simplemde@1.11.2",
+      "destination": "wwwroot/vendor/simplemde/"
+    }
+  ,
+{
+  "library": "line-awesome@1.3.0",
+  "destination": "wwwroot/fonts/lineawesome/",
+  "files": [
+    "line-awesome/css/line-awesome.min.css",
+    "line-awesome/css/line-awesome.css",
+    "line-awesome/fonts/la-brands-400.eot",
+    "line-awesome/fonts/la-brands-400.svg",
+    "line-awesome/fonts/la-brands-400.ttf",
+    "line-awesome/fonts/la-brands-400.woff",
+    "line-awesome/fonts/la-brands-400.woff2",
+    "line-awesome/fonts/la-regular-400.eot",
+    "line-awesome/fonts/la-regular-400.svg",
+    "line-awesome/fonts/la-regular-400.ttf",
+    "line-awesome/fonts/la-regular-400.woff",
+    "line-awesome/fonts/la-regular-400.woff2",
+    "line-awesome/fonts/la-solid-900.eot",
+    "line-awesome/fonts/la-solid-900.svg",
+    "line-awesome/fonts/la-solid-900.ttf",
+    "line-awesome/fonts/la-solid-900.woff",
+    "line-awesome/fonts/la-solid-900.woff2"
+  ]
+}
+,
+{
+  "library": "tabler-icons@1.35.0",
+  "destination": "wwwroot/fonts/tabler/"
+}
+,
+{
+  "library": "datatables.net-bs5@1.11.4",
+  "destination": "wwwroot/vendor/datatables.net-bs5/"
+}
+,
+{
+  "library": "datatables.net@2.1.1",
+  "destination": "wwwroot/vendor/datatables.net/"
+}
+,
+{
+  "library": "datatables.net-responsive-bs5@2.2.9",
+  "destination": "wwwroot/vendor/datatables.net-responsive-bs5/"
+}
+,
+{
+  "library": "pdfmake@0.2.4",
+  "destination": "wwwroot/vendor/pdfmake/"
+}
+]
+}
