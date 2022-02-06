@@ -161,7 +161,7 @@ public class Startup
         });
 
         // Schedule hangfire jobs -- Add your jobs in this method
-		JobConfiguration.Schedule();
+		ConfigureJobs.Schedule();
 
         app.UseSwagger();
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
