@@ -82,6 +82,10 @@
     {
       "library": "select2@4.0.13",
       "destination": "wwwroot/vendor/select2/"
+    },
+    {
+      "library": "tinymce@5.10.2",
+      "destination": "wwwroot/lib/tinymce/"
     }
   ]
 }

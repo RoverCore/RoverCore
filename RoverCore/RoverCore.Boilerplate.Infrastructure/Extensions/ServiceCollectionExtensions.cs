@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,8 @@ using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using System.Text;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
@@ -42,6 +45,26 @@ public static class ServiceCollectionExtensions
 
 
         return services;
+    }
+
+    public static IServiceCollection AddHangfire(this IServiceCollection services, IConfiguration configuration)
+    {
+	    services.AddHangfire(config => config
+		    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+		    .UseSimpleAssemblyNameTypeSerializer()
+		    .UseRecommendedSerializerSettings()
+		    .UseSqlServerStorage(configuration.GetConnectionString("AppContext"), new SqlServerStorageOptions
+		    {
+			    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+			    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+			    QueuePollInterval = TimeSpan.Zero,
+			    UseRecommendedIsolationLevel = true,
+			    DisableGlobalLocks = true
+		    }));
+
+        services.AddHangfireServer();
+
+	    return services;
     }
 
     /// <summary>

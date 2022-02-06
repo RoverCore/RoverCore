@@ -20,6 +20,9 @@ using Serviced;
 using System;
 using System.IO;
 using System.Reflection;
+using Hangfire;
+using RoverCore.Boilerplate.Infrastructure.Services.Hangfire.Authorization;
+using RoverCore.Boilerplate.Web.Jobs;
 
 namespace RoverCore.Boilerplate.Web;
 
@@ -100,6 +103,8 @@ public class Startup
             config.Position = NotyfPosition.BottomRight;
         });
 
+        // Add Hangfire job manager
+        services.AddHangfire(_configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,6 +135,14 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
+        // Set up hangfire capabilities
+        var options = new DashboardOptions
+        {
+	        Authorization = new[] { new HangfireAuthorizationFilter() }
+        };
+
+        app.UseHangfireDashboard("/admin/job/hangfire", options);
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
@@ -143,7 +156,12 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            endpoints.MapHangfireDashboard();
+
         });
+
+        // Schedule hangfire jobs -- Add your jobs in this method
+		JobConfiguration.Schedule();
 
         app.UseSwagger();
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
