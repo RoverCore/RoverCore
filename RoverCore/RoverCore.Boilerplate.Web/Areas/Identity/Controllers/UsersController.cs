@@ -43,7 +43,7 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Create()
     {
-        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync(), "Name", "Name");
         return View();
     }
 
@@ -82,7 +82,7 @@ public class UsersController : BaseController<UsersController>
 
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync(), "Name", "Name");
         return View(viewModel);
     }
 
@@ -91,7 +91,7 @@ public class UsersController : BaseController<UsersController>
         var user = await _context.Users.FindAsync(id);
         var roles = await _userManager.GetRolesAsync(user);
 
-        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync(), "Name", "Name");
 
         var viewModel = new UserViewModel
         {
@@ -155,7 +155,7 @@ public class UsersController : BaseController<UsersController>
             return RedirectToAction(nameof(Index));
         }
 
-        ViewBag.Roles = new SelectList(await _roleManager.Roles.ToListAsync(), "Name", "Name");
+        ViewBag.Roles = new SelectList(await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync(), "Name", "Name");
 
         return View(viewModel);
     }

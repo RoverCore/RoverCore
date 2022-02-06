@@ -4,41 +4,50 @@
     ViewData["Title"] = "User Details";
 }
 
-<div class="ibox">
-    <div class="ibox-title">
-        <h2>Details</h2>
-        <h4>User</h4>
-    </div>
-    <div class="ibox-content">
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.FirstName)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.LastName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.LastName)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Roles)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Roles)
-            </dd>
-        </dl>
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-            <a asp-action="Index" class="btn btn-default">Back to List</a>
-        </div>
-    </div>
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				Identity
+			</div>
+			<h2 class="page-title">
+				User Details
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card shadow mb-5">
+	<div class="card-body">
+		<dl class="dl-horizontal">
+			<dt>
+				@Html.DisplayNameFor(model => model.Email)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Email)
+			</dd>
+			<dt>
+				@Html.DisplayNameFor(model => model.FirstName)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.FirstName)
+			</dd>
+			<dt>
+				@Html.DisplayNameFor(model => model.LastName)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.LastName)
+			</dd>
+			<dt>
+				@Html.DisplayNameFor(model => model.Roles)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Roles)
+			</dd>
+		</dl>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+	<a asp-action="Index" class="btn btn-default">Back to List</a>
 </div>

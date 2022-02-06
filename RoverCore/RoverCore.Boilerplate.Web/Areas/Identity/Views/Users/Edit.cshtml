@@ -4,14 +4,22 @@
     ViewData["Title"] = "Edit User";
 }
 
-<div class="ibox">
-    <div class="ibox-title">
-        <h2>Edit</h2>
-        <h4>User</h4>
-    </div>
-    <div class="ibox-content">
-        <div class="row">
-            <div class="col-md-4">
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				Identity
+			</div>
+			<h2 class="page-title">
+				Edit User
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card shadow mb-5">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-4">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
@@ -32,7 +40,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Roles" class="control-label"></label>
-                        <select asp-for="Roles" asp-items="ViewBag.Roles" class="form-control">
+                        <select asp-for="Roles" asp-items="ViewBag.Roles" class="form-control js-select2">
                             <option value="">Please select a role</option>
                         </select>
                         <span asp-validation-for="Roles" class="text-danger"></span>
@@ -51,8 +59,23 @@
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </form>
-            </div>
-        </div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+			</div>
+		</div>
+
+	</div>
 </div>
+<a asp-action="Index">Back to List</a>
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css" />
+}
+
+@section Scripts {
+	<script src="~/vendor/select2/select2.min.js"></script>
+    
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.js-select2').select2();
+		});
+	</script>
+}
