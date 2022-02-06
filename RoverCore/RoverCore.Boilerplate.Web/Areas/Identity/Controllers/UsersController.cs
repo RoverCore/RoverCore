@@ -15,6 +15,7 @@ using RoverCore.Boilerplate.Web.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using RoverCore.BreadCrumbs.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -38,11 +39,18 @@ public class UsersController : BaseController<UsersController>
 
     public IActionResult Index()
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .Then("Manage Users");
+
         return View(new UserViewModel());
     }
 
     public async Task<IActionResult> Create()
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("Create User");
+
         ViewBag.Roles = new SelectList(await _roleManager.Roles.OrderBy(x => x.Name).ToListAsync(), "Name", "Name");
         return View();
     }
@@ -51,6 +59,10 @@ public class UsersController : BaseController<UsersController>
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Email,FirstName,LastName,Roles,Password,ConfirmPassword")] UserViewModel viewModel)
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("Create User");
+
         if (string.IsNullOrEmpty(viewModel.Password))
         {
             ModelState.AddModelError("Password", "Password is required when creating a user");
@@ -88,6 +100,10 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Edit(string id)
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("Edit User");
+
         var user = await _context.Users.FindAsync(id);
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -109,6 +125,10 @@ public class UsersController : BaseController<UsersController>
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(string id, [Bind("Id,Email,FirstName,LastName,Roles,Password,ConfirmPassword")] UserViewModel viewModel)
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("Edit User");
+
         if (id != viewModel.Id)
         {
             return NotFound();
@@ -162,6 +182,10 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Details(string id)
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("User Details");
+
         var user = await _context.Users.FindAsync(id);
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -179,6 +203,10 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Delete(string id)
     {
+	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
+		    .Then("Delete User");
+
         var user = await _context.Users.FindAsync(id);
         var roles = await _userManager.GetRolesAsync(user);
 

@@ -44,7 +44,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             ViewData["AreaTitle"] = areaTitle;
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
                 .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-                .Then("ApplicationRole Details");
+                .Then("Role Details");
 
             if (id == null)
             {
@@ -66,7 +66,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
                 .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-                .Then("Create ApplicationRole");
+                .Then("Create Role");
 
             return View();
         }
@@ -82,7 +82,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "RolesController", new { Area = "Identity" })
-            .Then("Create ApplicationRole");
+            .Then("Create Role");
 
             // Remove validation errors from fields that aren't in the binding field list
             ModelState.Scrub(createBindingFields);
@@ -110,7 +110,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Edit ApplicationRole");
+            .Then("Edit Role");
 
             if (id == null)
             {
@@ -138,7 +138,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Edit ApplicationRole");
+            .Then("Edit Role");
 
             if (id != applicationRole.Id)
             {
@@ -183,7 +183,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .ThenAction("Manage Roles", "Index", "Roles", new { Area = "Identity" })
-            .Then("Delete ApplicationRole");
+            .Then("Delete Role");
 
             if (id == null)
             {
@@ -209,7 +209,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             _context.Roles.Remove(applicationRole);
             await _context.SaveChangesAsync();
 
-            _toast.Success("ApplicationRole deleted successfully");
+            _toast.Success("Role deleted successfully");
 
             return RedirectToAction(nameof(Index));
         }
