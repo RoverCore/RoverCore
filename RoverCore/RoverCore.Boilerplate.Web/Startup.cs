@@ -163,11 +163,11 @@ public class Startup
 
         });
 
-        // Schedule hangfire jobs -- Add your jobs in this method
-		ConfigureJobs.Schedule();
-
         app.UseSwagger();
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1"); });
+
+        // Schedule Hangfire jobs -- Add your jobs in this method
+        ConfigureJobs.Schedule();
 
         // Load configuration settings from database
         using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
