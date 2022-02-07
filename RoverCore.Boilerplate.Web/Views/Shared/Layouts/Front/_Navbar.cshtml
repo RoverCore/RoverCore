@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using RoverCore.Boilerplate.Domain.Entities.Identity
+@inject RoverCore.Boilerplate.Domain.Entities.Settings.ApplicationSettings Settings
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -10,8 +11,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <a href=".">
-                RoverCore
+            <a asp-area="" asp-controller="Home" asp-action="Index">
+                @Settings.SiteName
             </a>
         </h1>
         <div class="navbar-nav flex-row order-md-last">
