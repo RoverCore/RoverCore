@@ -6,18 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Persistence\Seeding\SeedData\Members.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Persistence\Seeding\SeedData\Members.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
 		<PackageReference Include="MailKit" Version="3.1.0" />

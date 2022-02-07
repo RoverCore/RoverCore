@@ -3,33 +3,62 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class=" border-top-wide border-primary d-flex flex-column">
+    <div>
+      <div class="container-tight py-4">
+        <div class="text-center mb-4">
+          <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
+        </div>
+          <form class="card card-md" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" autocomplete="off">
+              <div asp-validation-summary="All" class="text-danger"></div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-default">Register</button>
-        </form>
+              <div class="card-body">
+                  <h2 class="card-title text-center mb-4">Register a new account</h2>
+                  <div class="mb-3">
+                      <label asp-for="Email" class="form-label"></label>
+                      <input asp-for="Email" class="form-control" />
+                      <span asp-validation-for="Email" class="text-danger"></span>
+                  </div>
+                  <div class="mb-2">
+                      <label class="form-label">
+                          Password
+                      </label>
+                      <div class="input-group input-group-flat">
+                          <input asp-for="Password" class="form-control" />
+                          <span class="input-group-text">
+                              <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+                              </a>
+                          </span>
+                      </div>
+                      <span asp-validation-for="Password" class="text-danger"></span>                          
+                  </div>
+                  <div class="mb-2">
+                      <label class="form-label">
+                          Confirm Password
+                      </label>
+                      <div class="input-group input-group-flat">
+                          <input asp-for="ConfirmPassword" class="form-control" />
+                          <span class="input-group-text">
+                              <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2"/><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+                              </a>
+                          </span>
+                      </div>
+                      <span asp-validation-for="ConfirmPassword" class="text-danger"></span>                          
+                  </div>
+                  <div class="form-footer">
+                      <button type="submit" class="btn btn-primary w-100">Register</button>
+                  </div>
+              </div>
+          </form>
+        <div class="text-center text-muted mt-3">
+          Already have an account? <a asp-area="Identity" asp-controller="Account" asp-action="Login" tabindex="-1">Login</a>
+        </div>
+      </div>
     </div>
-</div>
+</div>    
+
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
