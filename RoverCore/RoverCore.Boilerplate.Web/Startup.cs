@@ -138,7 +138,10 @@ public class Startup
         // Set up hangfire capabilities
         var options = new DashboardOptions
         {
-	        Authorization = new[] { new HangfireAuthorizationFilter() }
+	        Authorization = new[] { new HangfireAuthorizationFilter() },
+            AppPath = "#",
+            DashboardTitle = "",
+            DisplayStorageConnectionString = false
         };
 
         app.UseHangfireDashboard("/admin/job/hangfire", options);
