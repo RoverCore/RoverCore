@@ -302,12 +302,12 @@ public class UsersController : BaseController<UsersController>
             var data = usersList.Skip(request.Start).Take(request.Length)
                 .Select(x => new
                 {
+                    Options = "",
                     Id = x.Id,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     Roles = String.Join(", ", x.Roles),
-                    Email = x.Email,
-                    Options = ""
+                    Email = x.Email
                 }).ToList();
 
             var jsonData = new { draw = request.Draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };

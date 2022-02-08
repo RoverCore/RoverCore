@@ -71,8 +71,8 @@
 @:</div>
 
 @:<div class="card shadow">	
-    @:<div class="card-body table-responsive" id="@container">	
-        @:<table class="table" id="@Model.ViewName">
+    @:<div class="card-body crud table-responsive" id="@container">	
+        @:<table class="table" id="@Model.ViewName" style="width: 100%">
         @:<thead>
             @:<tr>
             Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
@@ -140,7 +140,6 @@
 
 @:@@section Styles {	
     @:<link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.css" />
-    @:<link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-responsive-bs5/responsive.bootstrap5.min.css">
 @:}	
 @:
 @:@@section Scripts {	
@@ -149,7 +148,6 @@
     @:<script type="text/javascript" src="~/vendor/pdfmake/vfs_fonts.min.js"></script>
     @:<script type="text/javascript" src="~/vendor/datatables.net/jquery.dataTables.min.js"></script>
 	@:<script src="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.js"></script>
-	@:<script src="~/vendor/datatables.net-responsive-bs5/responsive.bootstrap5.min.js"></script>
     @:<script type="text/javascript">	
 	@:
 	@:$(document).ready(function () {	
@@ -175,39 +173,52 @@
                                 @:"defaultContent": "-", "targets": "_all"
                             @:},
                             @:{
-                            @:"targets": [0],
+                            @:"targets": [1],
                             @:"visible": false,
                             @:"searchable": false
                         @:}],
                     @:"columns": [
+                        @:{
+                            @:"render": function(data, type, row) {
+                                @:var controls = "<div class=\"btn-group\">" + 
+                                    @:"<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">Action</button>" +
+                                    @:"<ul class=\"dropdown-menu\">" +
+                                    @:"<li><a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
+                                    @:"<li><a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
+                                    @:"<li><button data-href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                    @:"</ul>";
+
+                                @:return controls;
+                            @:},
+                            @:"width": "5%",
+                            @:"orderable": false,
+                            @:"searchable": false
+                        @:},
 					if (pkName != null)
 					{						
 					    @:{ "data": "@pkName", "name": "@pkName", "autoWidth": true },
 					}
-					foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
-					{		
+                    var modelProps = Model.ModelMetadata.ModelType.GetProperties();
+                    var last = modelProps.Length > 0 ? modelProps[modelProps.Length-1] : null;
+					foreach (var item in modelProps)
+					{
+					    var terminator = "";
+					    if (item != last)
+					        terminator = ",";
+
 						if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
 							&& property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
 						{
 						    var dataName = FirstLower(GetValueExpression(property));
-						@:{ "data": "@dataName", "name": "@GetValueExpression(property)", "autoWidth": true },
+						@:{ "data": "@dataName", "name": "@GetValueExpression(property)", "autoWidth": true }@terminator
 						}
 						else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation) && property.Scaffold)
 						{
 						    var dataName = FirstLower(GetValueExpression(navigation));
-						@:{ "data": "@dataName", "name": "@GetValueExpression(navigation)", "autoWidth": true },
+						@:{ "data": "@dataName", "name": "@GetValueExpression(navigation)", "autoWidth": true }@terminator
 
 						}								
 					}
-                        @:{
-                            @:"render": function(data, type, row) {
-                                @:var controls = "<a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='btn btn-primary me-1'><i class='icon las la-wrench'></i> Edit</a>" +
-                                    @:"<a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='btn btn-primary me-1'><i class='icon las la-info-circle'></i> Details</a>" +
-                                    @:"<button data-href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='btn btn-danger delete-button me-1'><i class='icon las la-trash'></i> Delete</button>";
-								    @:
-                                @:return controls;
-                            @:}
-                        @:}
 					@:],
 					@:pageLength: 10,
 					@:responsive: true,

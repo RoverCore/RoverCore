@@ -376,14 +376,19 @@ namespace @Model.ControllerNamespace
                 var data = recordsList.Skip(request.Start).Take(request.Length)
 	                .Select(x => new
                     {
+                        Options = "",
 @{
-    foreach (var property in modelProperties)
+    for (int i = 0; i < modelProperties.Count; i++)
     {
+        var property = modelProperties[i];
+        var propvalue = $"x.{property}";
+        if (i < modelProperties.Count - 1)
+            propvalue += ",";
+
         var propertyRevised = FirstLower(property);
-                        @:@propertyRevised = x.@property,
+                        @:@propertyRevised = @propvalue
     }
 }
-	                    Options = ""
 	                }).ToList();
 
                 var jsonData = new { 

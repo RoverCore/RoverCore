@@ -29,27 +29,27 @@
 	</div>
 </div>
 <div class="card shadow">
-    <div class="card-body table-responsive" id="index_container">
+    <div class="card-body crud table-responsive" id="index_container">
 
-        <table class="table table-bordered" id="index">
+        <table class="table table-bordered" id="index" style="width: 100%">
             <thead>
             <tr>
-	            <th>
-		            @Html.DisplayNameFor(model => model.Id)
-	            </th>
-	            <th>
-		            @Html.DisplayNameFor(model => model.FirstName)
-	            </th>
-	            <th>
-		            @Html.DisplayNameFor(model => model.LastName)
-	            </th>
-	            <th>
-		            @Html.DisplayNameFor(model => model.Email)
-	            </th>
-	            <th>
-		            Roles
-	            </th>
-	            <th></th>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    Roles
+                </th>
             </tr>
             </thead>
         </table>
@@ -64,7 +64,6 @@
 
 @section Styles {
 	<link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.css" />
-	<link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-responsive-bs5/responsive.bootstrap5.min.css">
 }
 
 @section Scripts {
@@ -73,7 +72,6 @@
 	<script src="~/vendor/pdfmake/vfs_fonts.min.js"></script>
 	<script src="~/vendor/datatables.net/jquery.dataTables.min.js"></script>
 	<script src="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.js"></script>
-	<script src="~/vendor/datatables.net-responsive-bs5/responsive.bootstrap5.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -99,25 +97,33 @@
                                     "defaultContent": "-", "targets": "_all"
                                 },
                                 {
-                                "targets": [0],
+                                "targets": [1],
                                 "visible": false,
                                 "searchable": false
                             }],
                         "columns": [
-                        { "data": "id", "name": "Id", "autoWidth": true },
-                        { "data": "firstName", "name": "First Name", "autoWidth": true },
-                        { "data": "lastName", "name": "Last Name", "autoWidth": true },
-                        { "data": "email", "name": "Email", "autoWidth": true },
-                        { "data": "roles", "name": "Roles", "autoWidth": true },
-                        {
-                            "render": function(data, type, row) {
-	                            var controls = "<a href='@(Url.Action("Edit"))/" + row.id + "' class='btn btn-primary me-1'><i class='icon las la-wrench'></i> Edit</a>" +
-		                            "<a href='@(Url.Action("Details"))/" + row.id + "' class='btn btn-primary me-1'><i class='icon las la-info-circle'></i> Details</a>" +
-		                            "<button data-href='@(Url.Action("Delete"))/" + row.id + "' class='btn btn-danger delete-button me-1'><i class='icon las la-trash'></i> Delete</a>";
+                            {
+                                "render": function(data, type, row) {
+                                    var uuid = "btn" + Math.random().toString(36).slice(-8);
+                                    var controls = "<div class=\"btn-group\">" + 
+                                        "<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">Action</button>" +
+                                        "<ul class=\"dropdown-menu\">" +
+                                        "<li><a href='@(Url.Action("Edit"))/" + row.id + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
+                                        "<li><a href='@(Url.Action("Details"))/" + row.id + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
+                                        "<li><button data-href='@(Url.Action("Delete"))/" + row.id + "' class='dropdown-item'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                        "</ul>";
 
-                                return controls;
-                            }
-                        }
+                                    return controls;
+                                },
+                                "width": "5%",
+                                "orderable": false,
+                                "searchable": false
+                            },
+                            { "data": "id", "name": "Id", "autoWidth": true },
+                            { "data": "firstName", "name": "First Name", "autoWidth": true },
+                            { "data": "lastName", "name": "Last Name", "autoWidth": true },
+                            { "data": "email", "name": "Email", "autoWidth": true },
+                            { "data": "roles", "name": "Roles", "autoWidth": true }
                     ],
                     pageLength: 10,
                     responsive: true,
@@ -128,10 +134,14 @@
             }
         );
 
-
             table.columns.adjust().draw();
 
         });
+
+        $(window).resize(function() {
+            table.columns.adjust().draw();
+        });
+
     </script>
 
 }

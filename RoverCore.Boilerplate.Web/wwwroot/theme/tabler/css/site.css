@@ -7,6 +7,10 @@
     --tblr-font-sans-serif: "Poppins",-apple-system,BlinkMacSystemFont,San Francisco,Segoe UI,Roboto,Helvetica Neue,sans-serif;
 }
 
+.card-body.crud {
+    padding-bottom: 5rem;
+}
+
 .breadcrumb {
     margin-bottom: 1rem;
 }
@@ -34,7 +38,7 @@
     padding-right: 0.50em;
 }
 
-.dropdown-item {
+.navbar .dropdown-item {
     width: auto;
     padding-left: 3.25rem;
     color: inherit;

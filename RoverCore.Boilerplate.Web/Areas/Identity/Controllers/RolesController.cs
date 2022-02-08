@@ -255,11 +255,11 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
                 var data = recordsList.Skip(request.Start).Take(request.Length)
                     .Select(x => new
                     {
+                        Options = "",
                         id = x.Id,
                         name = x.Name,
                         normalizedName = x.NormalizedName,
-                        concurrencyStamp = x.ConcurrencyStamp,
-                        Options = ""
+                        concurrencyStamp = x.ConcurrencyStamp
                     }).ToList();
 
                 var jsonData = new
