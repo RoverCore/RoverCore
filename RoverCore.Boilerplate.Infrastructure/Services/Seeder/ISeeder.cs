@@ -10,8 +10,3 @@ public interface ISeeder : IScoped
 public interface ISeeder<T> : ISeeder
 {
 }
-/*
-public interface ISeeder<T> : IScoped<T>, ISeeder
-{
-}
-*/

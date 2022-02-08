@@ -99,6 +99,12 @@ public class SettingsService : IScoped
         }
     }
 
+    /// <summary>
+    /// Persist the settings to storage
+    /// </summary>
+    /// <param name="key">key to store configuration under</param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     private async Task Commit(string key, string value)
     {
         var configItem = await _context.ConfigurationItem

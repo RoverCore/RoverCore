@@ -181,11 +181,11 @@
                         @:{
                             @:"render": function(data, type, row) {
                                 @:var controls = "<div class=\"btn-group\">" + 
-                                    @:"<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">Action</button>" +
+                                    @:"<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"icon las la-cog me-1\"></i> Action</button>" +
                                     @:"<ul class=\"dropdown-menu\">" +
                                     @:"<li><a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
                                     @:"<li><a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
-                                    @:"<li><button data-href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                    @:"<li><button data-href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='dropdown-item delete-button'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
                                     @:"</ul>";
 
                                 @:return controls;

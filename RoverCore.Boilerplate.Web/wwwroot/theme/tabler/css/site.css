@@ -56,13 +56,14 @@
     border-radius: 0px;
 }
 
-.theme-dark .text-muted {
+/*
+    .theme-dark .text-muted {
     color: rgba(255,255,255,.7) !important;
 }
 
 .theme-light .text-muted {
     color: rgba(30,41,59,.7) !important;
-}
+}*/
 
 .cookiealert.show {
     opacity: 1;

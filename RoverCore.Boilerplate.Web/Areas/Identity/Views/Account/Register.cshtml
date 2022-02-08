@@ -1,4 +1,6 @@
 ﻿@model RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels.RegisterViewModel
+@inject RoverCore.Boilerplate.Domain.Entities.Settings.ApplicationSettings Settings
+
 @{
     ViewData["Title"] = "Register";
 }
@@ -7,7 +9,7 @@
     <div>
       <div class="container-tight py-4">
           <div class="text-center mb-2">
-              <a href="." class="navbar-brand navbar-brand-autodark"><img src="~/theme/front/img/rover.svg" style="height: 4rem" alt=""></a>
+              <a href="." class="navbar-brand navbar-brand-autodark"><img src="@Settings.LogoImageUrlSmall" style="height: 4rem" alt=""></a>
           </div>
           <form class="card card-md" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" autocomplete="off">
               <div class="card-body">

@@ -106,11 +106,11 @@
                                 "render": function(data, type, row) {
                                     var uuid = "btn" + Math.random().toString(36).slice(-8);
                                     var controls = "<div class=\"btn-group\">" + 
-                                        "<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">Action</button>" +
+                                        "<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"icon las la-cog me-1\"></i> Action</button>" +
                                         "<ul class=\"dropdown-menu\">" +
                                         "<li><a href='@(Url.Action("Edit"))/" + row.id + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
                                         "<li><a href='@(Url.Action("Details"))/" + row.id + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
-                                        "<li><button data-href='@(Url.Action("Delete"))/" + row.id + "' class='dropdown-item'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                        "<li><button data-href='@(Url.Action("Delete"))/" + row.id + "' class='dropdown-item delete-button'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
                                         "</ul>";
 
                                     return controls;
@@ -136,10 +136,16 @@
 
             table.columns.adjust().draw();
 
-        });
+            $(document).on('click', '.delete-button', function(){ 
+                var $btn = $(this);
+                var url = $btn.data("href");
+                $('#modal-dialog-content').load(url);
+                $('#modal-dialog').modal('show');
+            });
 
-        $(window).resize(function() {
-            table.columns.adjust().draw();
+            $(document).on('click', '.delete-confirm', function() {
+                $('#deleteForm').submit();
+            });
         });
 
     </script>

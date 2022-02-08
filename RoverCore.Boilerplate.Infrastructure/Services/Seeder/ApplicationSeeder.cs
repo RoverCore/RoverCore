@@ -4,6 +4,11 @@ using RoverCore.Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Services.Seeder;
 
+/// <summary>
+/// This is the primary service responsible for calling all classes that implement the ISeeder
+/// interface.  You'll note that it itself implements ISeeder, which allows it to be automatically
+/// registered as a service.  
+/// </summary>
 public class ApplicationSeederService : ISeeder
 {
     private readonly ILogger _logger;
@@ -18,8 +23,16 @@ public class ApplicationSeederService : ISeeder
         _serviceProvider = serviceProvider;
     }
 
+    /// <summary>
+    /// Perform the seeding function by calling any other registered seeders.
+    /// </summary>
+    /// <returns></returns>
     public async Task SeedAsync()
     {
+        // The service registry contains a list of all the automatically-registered
+        // services using the Serviced service.  This code creates a list of all of
+        // the other registered ISeeders in the assemblies specified in Startup.
+        // (see services.AddServiced line)
         List<Type> seederTypes = _servicedRegistry.FilterServiceTypes<ISeeder>()
             .Where(t => t.Name != GetType().Name)
             .ToList();
@@ -27,6 +40,7 @@ public class ApplicationSeederService : ISeeder
 
         _logger.LogInformation("ApplicationSeeder beginning execution");
 
+        // Iterate through each of the seeders and call their seeding method
         foreach (var stype in seederTypes)
         {
             var seederService = _serviceProvider.GetService(stype);

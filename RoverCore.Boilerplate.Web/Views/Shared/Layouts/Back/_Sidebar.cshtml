@@ -8,18 +8,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <h1 class="navbar-brand navbar-brand-autodark">
-                <a href=".">
+                <a asp-area="Dashboard" asp-controller="Home" asp-action="Index">
                     <div class="d-inline-flex flex-row align-items-center">
-                        <img src="~/theme/front/img/rover.svg" height="32" alt="@Settings.SiteName" class="navbar-brand-image me-2">
+                        <img src="@Settings.LogoImageUrlSmall" height="32" alt="@Settings.SiteName" class="navbar-brand-image me-2">
                         <p class="mt-0 mb-0 p-1">@Settings.SiteName</p>
                     </div>
                 </a>
             </h1>
         <div class="navbar-nav flex-row d-lg-none">
             @await Html.PartialAsync("~/Views/Shared/Partials/_NavbarPartial.cshtml")
-
-            @* Here we import the navigation bar view component that is custom *@
-            
         </div>
             <div class="collapse navbar-collapse" id="navbar-menu">
                 @(await Component.InvokeAsync<NavbarViewComponent>())

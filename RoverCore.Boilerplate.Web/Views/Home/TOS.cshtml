@@ -1,3 +1,5 @@
+@inject RoverCore.Boilerplate.Domain.Entities.Settings.ApplicationSettings Settings
+
 @{
     Layout = "Layouts/Empty/_Layout";
 }
@@ -7,10 +9,10 @@
         <div class="navbar-brand navbar-brand-autodark">
             <div class="d-flex flex-row">
                 <div class="p-3">
-                    <img src="/theme/front/img/rover.svg" style="height:3rem">
+                    <img src="@Settings.LogoImageUrlSmall" style="height:3rem">
                 </div>
                 <div class="align-self-center">
-                    <div class="fs-1 fw-bolder">RoverCore</div>
+                    <div class="fs-1 fw-bolder">@Settings.SiteName</div>
                 </div>
             </div>
         </div>

@@ -15,5 +15,9 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
         public string SiteName { get; set; } = string.Empty;
 
         public string Company { get; set; } = string.Empty;
+
+        [DisplayName("Small Logo Url")]
+        public string LogoImageUrlSmall { get; set; } = string.Empty;
+
     }
 }
