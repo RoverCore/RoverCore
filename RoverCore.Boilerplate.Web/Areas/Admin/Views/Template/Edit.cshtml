@@ -1,0 +1,61 @@
+﻿@model RoverCore.Boilerplate.Domain.Entities.Template.Template
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				@ViewData["AreaTitle"]
+			</div>
+			<h2 class="page-title">
+				Edit Template
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card shadow mb-5">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Slug" class="control-label"></label>
+                        <input asp-for="Slug" class="form-control" />
+                        <span asp-validation-for="Slug" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Body" class="control-label"></label>
+                        <textarea asp-for="Body" class="form-control"></textarea>
+                        <span asp-validation-for="Body" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-default mt-4">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

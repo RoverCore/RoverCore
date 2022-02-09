@@ -1,0 +1,65 @@
+﻿@model RoverCore.Boilerplate.Domain.Entities.Template.Template
+
+@{
+    ViewData["Title"] = "Create Template";
+}
+
+
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				@ViewData["AreaTitle"]
+			</div>
+			<h2 class="page-title">
+				Create Template
+			</h2>
+		</div>
+	</div>
+</div>
+<div class="card shadow mb-5">
+	<div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label asp-for="Slug" class="control-label"></label>
+                            <a tabindex="0" class="form-help" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content="<p>Slugs are small identifiers that can be used to easily identify this template.  Changing an existing slug may break portions of this web application that depend on it.</p>">?</a>
+                            <input asp-for="Slug" class="form-control mt-1" />
+                            <span asp-validation-for="Slug" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control mt-1" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Body" class="control-label"></label>
+                        <textarea asp-for="Body" class="form-control"></textarea>
+                        <span asp-validation-for="Body" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create Template" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-default mt-4">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

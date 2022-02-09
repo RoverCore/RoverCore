@@ -60,10 +60,6 @@
       ]
     },
     {
-      "library": "tabler-icons@1.35.0",
-      "destination": "wwwroot/fonts/tabler/"
-    },
-    {
       "library": "datatables.net-bs5@1.11.4",
       "destination": "wwwroot/vendor/datatables.net-bs5/"
     },
@@ -84,8 +80,30 @@
       "destination": "wwwroot/vendor/select2/"
     },
     {
-      "library": "tinymce@5.10.2",
-      "destination": "wwwroot/lib/tinymce/"
+      "library": "he@1.2.0",
+      "destination": "wwwroot/vendor/he/"
+    },
+    {
+      "library": "tabler-icons@1.35.0",
+      "destination": "wwwroot/fonts/tabler/",
+      "files": [
+        "iconfont/tabler-icons.min.css",
+        "iconfont/fonts/tabler-icons.eot",
+        "iconfont/fonts/tabler-icons.ttf",
+        "iconfont/fonts/tabler-icons.woff",
+        "iconfont/fonts/tabler-icons.woff2"
+      ]
+    },
+    {
+      "library": "monaco-editor@0.32.1",
+      "destination": "wwwroot/vendor/monaco-editor/",
+      "files": [
+        "min/vs/editor/editor.main.js",
+        "min/vs/basic-languages/liquid/liquid.js",
+        "min/vs/basic-languages/liquid/liquid.min.js",
+        "min/vs/loader.js",
+        "min/vs/loader.min.js"
+      ]
     }
   ]
 }

@@ -1,0 +1,164 @@
+﻿@model IEnumerable<RoverCore.Boilerplate.Domain.Entities.Template.Template>
+
+@{
+        ViewData["Title"] = "Index";
+        var routeData = ViewContext.RouteData.Values;
+        var viewController = routeData["controller"].ToString();
+        var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
+                                                                                                      
+        var recordsUrl = Url.Action("GetTemplate");
+        
+}
+
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				@ViewData["AreaTitle"]
+			</div>
+			<h2 class="page-title">
+				Manage Template
+			</h2>
+		</div>
+		<div class="col-auto ms-auto d-print-none">
+			<div class="btn-list">
+			  
+				<a asp-action="Create" class="btn btn-primary d-none d-sm-inline-block">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+					Create new Template
+				</a>
+			
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card shadow">	
+    <div class="card-body crud table-responsive" id="Index_container">	
+        <table class="table" id="Index" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Slug)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </th>
+            </tr>
+        </thead>
+    </table>
+    </div>	
+</div>
+
+<div class="modal modal-blur fade show" id="modal-dialog" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Are you sure you want to delete this record?</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modal-dialog-content"></div>			
+			<div class="modal-footer">
+				<button type="button" class="btn me-auto" data-bs-dismiss="modal">Go Back</button>
+				<button type="button" class="btn btn-danger delete-confirm" data-bs-dismiss="modal">Delete</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+	@Html.AntiForgeryToken();
+}
+@section Styles {	
+    <link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.css" />
+}	
+
+@section Scripts {	
+	
+	<script type="text/javascript" src="~/vendor/pdfmake/pdfmake.min.js"></script>
+    <script type="text/javascript" src="~/vendor/pdfmake/vfs_fonts.min.js"></script>
+    <script type="text/javascript" src="~/vendor/datatables.net/jquery.dataTables.min.js"></script>
+	<script src="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">	
+	
+	$(document).ready(function () {	
+			
+			$('[data-toggle="tooltip"]').tooltip();	
+			
+			var form = $('#__AjaxAntiForgeryForm');
+			var token = $('input[name="__RequestVerificationToken"]', form).val();
+			
+            var table = $('#Index').DataTable(
+                {
+                    "processing": true,
+                    "serverSide": true,
+                    "filter": true,
+                    "ajax": {
+                        "url": "@Url.Action("GetTemplate")",
+                        "type": "POST",
+						"data": {"__RequestVerificationToken" : token},
+						"datatype": "json"
+                    },
+                    "columnDefs": [
+                            {
+                                "defaultContent": "-", "targets": "_all"
+                            },
+                            {
+                            "targets": [1],
+                            "visible": false,
+                            "searchable": false
+                        }],
+                    "columns": [
+                        {
+                            "render": function(data, type, row) {
+                                var controls = "<div class=\"btn-group\">" + 
+                                    "<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"icon las la-cog me-1\"></i> Action</button>" +
+                                    "<ul class=\"dropdown-menu\">" +
+                                    "<li><a href='@(Url.Action("Edit"))/" + row.id + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
+                                    "<li><a href='@(Url.Action("Details"))/" + row.id + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
+                                    "<li><button data-href='@(Url.Action("Delete"))/" + row.id + "' class='dropdown-item delete-button'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                    "</ul>";
+                                return controls;
+                            },
+                            "width": "5%",
+                            "orderable": false,
+                            "searchable": false
+                        },
+					    { "data": "Id", "name": "Id", "autoWidth": true },
+						{ "data": "slug", "name": "Slug", "autoWidth": true },
+						{ "data": "name", "name": "Name", "autoWidth": true },
+						{ "data": "updated", "name": "Updated", "autoWidth": true }
+					],
+					pageLength: 10,
+					responsive: true,
+					order: [[2, "asc"]],
+					"language": {
+						"emptyTable": "No records found."
+                }
+			});
+
+			table.columns.adjust().draw();	
+
+			$(document).on('click', '.delete-button', function(){ 
+				var $btn = $(this);
+				var url = $btn.data("href");
+				$('#modal-dialog-content').load(url);
+				$('#modal-dialog').modal('show');
+			});
+
+			$(document).on('click', '.delete-confirm', function() {
+				$('#deleteForm').submit();
+			});
+
+        });	
+    </script>	
+
+}

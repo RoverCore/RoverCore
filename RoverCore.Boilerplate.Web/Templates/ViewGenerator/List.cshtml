@@ -78,6 +78,8 @@
             Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
             Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
 
+                @:<th>Actions</th>
+
             if (pkName != null)
             {
                 <th>
@@ -101,7 +103,6 @@
                 </th>
                 }
             }
-                @:<th>Actions</th>
             @:</tr>
         @:</thead>
 
