@@ -96,14 +96,7 @@
     },
     {
       "library": "monaco-editor@0.32.1",
-      "destination": "wwwroot/vendor/monaco-editor/",
-      "files": [
-        "min/vs/editor/editor.main.js",
-        "min/vs/basic-languages/liquid/liquid.js",
-        "min/vs/basic-languages/liquid/liquid.min.js",
-        "min/vs/loader.js",
-        "min/vs/loader.min.js"
-      ]
+      "destination": "wwwroot/vendor/monaco-editor/"
     }
   ]
 }
