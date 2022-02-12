@@ -1,4 +1,4 @@
-﻿@model RoverCore.Boilerplate.Domain.Entities.Template.Template
+﻿@model RoverCore.Boilerplate.Domain.Entities.Templates.Template
 
 @{
     ViewData["Title"] = "Details";
@@ -21,44 +21,44 @@
         <h3>Template</h3>
     </div>
     <div class="card-body">
-        <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Body)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-    </dl>
+	    <dl class="row">
+		    <dt class = "col-sm-2">
+			    @Html.DisplayNameFor(model => model.Slug)
+		    </dt>
+		    <dd class = "col-sm-10">
+			    @Html.DisplayFor(model => model.Slug)
+		    </dd>
+		    <dt class = "col-sm-2">
+			    @Html.DisplayNameFor(model => model.Name)
+		    </dt>
+		    <dd class = "col-sm-10">
+			    @Html.DisplayFor(model => model.Name)
+		    </dd>
+		    <dt class = "col-sm-2">
+			    @Html.DisplayNameFor(model => model.Description)
+		    </dt>
+		    <dd class = "col-sm-10">
+			    @Html.DisplayFor(model => model.Description)
+		    </dd>
+		    <dt class = "col-sm-2">
+			    @Html.DisplayNameFor(model => model.Created)
+		    </dt>
+		    <dd class = "col-sm-10">
+			    @Html.DisplayFor(model => model.Created)
+		    </dd>
+		    <dt class = "col-sm-2">
+			    @Html.DisplayNameFor(model => model.Updated)
+		    </dt>
+		    <dd class = "col-sm-10">
+			    @Html.DisplayFor(model => model.Updated)
+		    </dd>
+	    </dl>
+	    <div class="row">
+		    <div class="col embed-responsive embed-responsive-21by9">
+			    <b>Body</b>
+			    <iframe class="embed-responsive-item w-100" style="min-height: 30rem" srcdoc="@Model.Body"></iframe>
+		    </div>
+	    </div>
     </div>
 </div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> 

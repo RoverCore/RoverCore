@@ -1,4 +1,4 @@
-﻿@model RoverCore.Boilerplate.Domain.Entities.Template.Template
+﻿@model RoverCore.Boilerplate.Domain.Entities.Templates.Template
 
 @{
     ViewData["Title"] = "Edit";
@@ -18,8 +18,8 @@
 <div class="card shadow mb-5">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Edit">
+            <div class="col-md-8">
+                <form asp-action="Edit" id="editContentForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="form-group">
@@ -38,9 +38,9 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Body" class="control-label"></label>
-                        <textarea asp-for="Body" class="form-control"></textarea>
-                        <span asp-validation-for="Body" class="text-danger"></span>
+	                    <label asp-for="Body" class="control-label"></label>
+	                    <div id="Body" class="border shadow-sm" style="min-height: 600px; display: none">@Model.Body</div>
+	                    <span asp-validation-for="Body" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
@@ -56,6 +56,73 @@
     <a asp-action="Index" class="btn btn-default mt-4">Back to List</a>
 </div>
 
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var require = {
+            paths: {
+                'vs': '/vendor/monaco-editor/min/vs'
+            }
+        };
+    </script>
+
+    <script src="~/vendor/he/he.js"></script>
+    <script src="~/vendor/monaco-editor/min/vs/loader.js"></script>
+
+    <script type="text/javascript">
+        var contentElem = document.getElementById("Body");
+        var escapedhtml = contentElem.innerHTML;
+        var content = he.decode(escapedhtml);
+        contentElem.innerHTML = '';
+
+        $("#Body").show();
+
+        $(document).ready(function() {
+
+            require(['vs/editor/editor.main'],
+                () => {
+                    // Initialize the editor
+                    const editor = monaco.editor.create(document.getElementById("Body"),
+                        {
+                            theme: 'vs',
+                            model: monaco.editor.createModel(content, "liquid"),
+                            wordWrap: 'off',
+                            automaticLayout: true,
+                            minimap: {
+                                enabled: true
+                            },
+                            scrollbar: {
+                                vertical: 'auto',
+                                horizontal: 'auto'
+                            }
+                        });
+
+                    const form = document.getElementById("editContentForm");
+                    form.addEventListener("formdata",
+                        e => {
+                            e.formData.append('body', editor.getModel().getValue());
+                        });
+
+                    document.editor = editor;
+                });
+
+            function insert(content) {
+                var p = document.editor.getPosition();
+                document.editor.executeEdits("",
+                    [
+                        {
+                            range: new monaco.Range(p.lineNumber,
+                                p.column,
+                                p.lineNumber,
+                                p.column),
+                            text: content
+                        }
+                    ]
+                );
+            }
+
+        });
+    </script>
 }

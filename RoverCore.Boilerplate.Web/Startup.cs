@@ -21,7 +21,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using Hangfire;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using RoverCore.Boilerplate.Infrastructure.Services.Hangfire.Authorization;
+using RoverCore.Boilerplate.Infrastructure.Services.Templates;
 using RoverCore.Boilerplate.Web.Jobs;
 
 namespace RoverCore.Boilerplate.Web;
@@ -91,6 +94,7 @@ public class Startup
         });
 
         // Configure email service
+        services.AddEmailServices(_configuration);
         services.AddTransient<IEmailSender, EmailSender>();
 
         // Add third-party application layer services
@@ -173,7 +177,12 @@ public class Startup
         using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+
+            // Load persisted settings
             settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+
+            // Load templates
+            var templateService = serviceScope.ServiceProvider.GetRequiredService<TemplateService>();
         }
     }
 }

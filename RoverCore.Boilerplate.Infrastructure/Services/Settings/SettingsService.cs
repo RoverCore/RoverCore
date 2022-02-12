@@ -60,6 +60,8 @@ public class SettingsService : IScoped
     /// <returns></returns>
     public ApplicationSettings GetSettings()
     {
+	    _settings.Email ??= new EmailSettings();
+
         return _settings;
     }
 

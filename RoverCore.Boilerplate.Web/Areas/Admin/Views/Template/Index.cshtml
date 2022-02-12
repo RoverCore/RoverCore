@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RoverCore.Boilerplate.Domain.Entities.Template.Template>
+﻿@model IEnumerable<RoverCore.Boilerplate.Domain.Entities.Templates.Template>
 
 @{
         ViewData["Title"] = "Index";
@@ -17,7 +17,7 @@
 				@ViewData["AreaTitle"]
 			</div>
 			<h2 class="page-title">
-				Manage Template
+				Manage Email Templates
 			</h2>
 		</div>
 		<div class="col-auto ms-auto d-print-none">
@@ -87,6 +87,8 @@
     <script type="text/javascript" src="~/vendor/pdfmake/vfs_fonts.min.js"></script>
     <script type="text/javascript" src="~/vendor/datatables.net/jquery.dataTables.min.js"></script>
 	<script src="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.js"></script>
+	<script src="~/vendor/moment.js/moment.min.js"></script>
+	<script src="//cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
     <script type="text/javascript">	
 	
 	$(document).ready(function () {	
@@ -115,7 +117,11 @@
                             "targets": [1],
                             "visible": false,
                             "searchable": false
-                        }],
+                        },
+	                    {
+							"targets": [4],
+							render: $.fn.dataTable.render.moment( 'YYYY-MM-DD HH:mm', 'LLL' )
+	                    }],
                     "columns": [
                         {
                             "render": function(data, type, row) {

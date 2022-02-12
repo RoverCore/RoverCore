@@ -8,8 +8,10 @@ using RoverCore.Boilerplate.Domain.DTOs.Authentication;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using System.Text;
+using FluentEmail.MailKitSmtp;
 using Hangfire;
 using Hangfire.SqlServer;
+using RoverCore.Boilerplate.Infrastructure.Services.Templates;
 
 namespace RoverCore.Boilerplate.Infrastructure.Extensions;
 
@@ -43,6 +45,12 @@ public static class ServiceCollectionExtensions
                 x => x.MigrationsAssembly("RoverCore.Boilerplate.Infrastructure"));
         });
 
+        services.AddDbContextFactory<ApplicationDbContext>(options =>
+        {
+	        options.UseSqlServer(configuration.GetConnectionString("AppContext"),
+		        x => x.MigrationsAssembly("RoverCore.Boilerplate.Infrastructure"));
+        });
+
 
         return services;
     }
@@ -65,6 +73,34 @@ public static class ServiceCollectionExtensions
         services.AddHangfireServer();
 
 	    return services;
+    }
+
+    public static IServiceCollection AddEmailServices(this IServiceCollection services, IConfiguration configuration)
+    {
+	    var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();
+
+	    var provider = new VirtualFileProvider();
+
+	    services.AddSingleton<VirtualFileProvider>(provider);
+	    services.AddFluentEmail(settings.Email.DefaultSenderAddress, settings.Email.DefaultSenderName)
+		    .AddLiquidRenderer(config =>
+		    {
+			    config.FileProvider = provider;
+		    })
+		    .AddMailKitSender(new SmtpClientOptions 
+		    {
+                Server = settings.Email.Server,
+                Port = settings.Email.Port,
+                User = settings.Email.User,
+                Password = settings.Email.Password,
+                UseSsl = settings.Email.UseSsl,
+                RequiresAuthentication = settings.Email.RequiresAuthentication,
+                PreferredEncoding = settings.Email.PreferredEncoding,
+                UsePickupDirectory = settings.Email.UsePickupDirectory,
+                MailPickupDirectory = settings.Email.MailPickupDirectory
+		    });
+
+        return services;
     }
 
     /// <summary>

@@ -39,7 +39,7 @@ public class ConfigurationController : BaseController<ConfigurationController>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
-        [Bind("SiteName,Company,ApplyMigrationsOnStartup,SeedDataOnStartup")] ApplicationSettings newSettings)
+        [Bind("SiteName,Company,ApplyMigrationsOnStartup,SeedDataOnStartup,Email,LogoImageUrlSmall")] ApplicationSettings newSettings)
     {
         var settings = _settingsService.GetSettings();
 
@@ -47,11 +47,29 @@ public class ConfigurationController : BaseController<ConfigurationController>
         {
             settings.SiteName = newSettings.SiteName;
             settings.Company = newSettings.Company;
+            settings.LogoImageUrlSmall = newSettings.LogoImageUrlSmall;
 
             settings.ApplyMigrationsOnStartup = newSettings.ApplyMigrationsOnStartup;
             settings.SeedDataOnStartup = newSettings.SeedDataOnStartup;
 
-            await _settingsService.SaveSettings();
+            // Email settings
+            settings.Email.DefaultSenderAddress = newSettings.Email.DefaultSenderAddress;
+            settings.Email.DefaultSenderName = newSettings.Email.DefaultSenderName;
+
+            /*
+            // Not yet implemented - Can't change smtp settings for Mailkit without restarting
+            settings.Email.Server = newSettings.Email.Server;
+			settings.Email.Port = newSettings.Email.Port;
+			settings.Email.User = newSettings.Email.User;
+			settings.Email.Password = newSettings.Email.Password;
+			settings.Email.UseSsl = newSettings.Email.UseSsl;
+			settings.Email.RequiresAuthentication = newSettings.Email.RequiresAuthentication;
+			settings.Email.PreferredEncoding = newSettings.Email.PreferredEncoding;
+			settings.Email.UsePickupDirectory = newSettings.Email.UsePickupDirectory;
+			settings.Email.MailPickupDirectory = newSettings.Email.MailPickupDirectory;
+            */
+
+		    await _settingsService.SaveSettings();
 
             return RedirectToAction(nameof(Index));
         }

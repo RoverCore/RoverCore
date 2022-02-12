@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Domain.Entities.Template;
+using RoverCore.Boilerplate.Domain.Entities.Templates;
 
 namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 

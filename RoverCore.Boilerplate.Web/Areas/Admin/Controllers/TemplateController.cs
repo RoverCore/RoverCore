@@ -15,8 +15,9 @@ using System.Threading.Tasks;
 using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
-using RoverCore.Boilerplate.Domain.Entities.Template;
+using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using RoverCore.Boilerplate.Infrastructure.Services.Templates;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 {
@@ -28,18 +29,18 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         private const string editBindingFields = "Id,Slug,Name,Description,Body";
         private const string areaTitle = "Admin";
 
-        private readonly ApplicationDbContext _context;
+        private readonly TemplateService _templateService;
 
-        public TemplateController(ApplicationDbContext context)
+        public TemplateController(TemplateService templateService)
         {
-            _context = context;
+            _templateService = templateService;
         }
 
         // GET: Admin/Template
         public IActionResult Index()
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .Then("Manage Template");            
+            .Then("Manage Email Templates");            
             
             return View();
         }
@@ -49,7 +50,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         {
             ViewData["AreaTitle"] = areaTitle;
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage Template", "Index", "Template", new { Area = "Admin" })
+                .ThenAction("Manage Email Templates", "Index", "Template", new { Area = "Admin" })
                 .Then("Template Details");            
 
             if (id == null)
@@ -57,8 +58,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var template = await _context.Template
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var template = await _templateService.FindTemplateById((int)id);
+
             if (template == null)
             {
                 return NotFound();
@@ -71,7 +72,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         public IActionResult Create()
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage Template", "Index", "Template", new { Area = "Admin" })
+                .ThenAction("Manage Email Templates", "Index", "Template", new { Area = "Admin" })
                 .Then("Create Template");     
 
             return View();
@@ -95,11 +96,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                template.Created = DateTime.UtcNow;
-                template.Updated = DateTime.UtcNow;
-                
-                _context.Add(template);
-                await _context.SaveChangesAsync();
+                await _templateService.CreateTemplate(template);
                 
                 _toast.Success("Created successfully.");
                 
@@ -114,7 +111,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
             ViewData["AreaTitle"] = areaTitle;
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage Template", "Index", "Template", new { Area = "Admin" })
+            .ThenAction("Manage Email Templates", "Index", "Template", new { Area = "Admin" })
             .Then("Edit Template");     
 
             if (id == null)
@@ -122,7 +119,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var template = await _context.Template.FindAsync(id);
+            var template = await _templateService.FindTemplateById((int)id);
             if (template == null)
             {
                 return NotFound();
@@ -142,21 +139,13 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
             ViewData["AreaTitle"] = areaTitle;
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage Template", "Index", "Template", new { Area = "Admin" })
+            .ThenAction("Manage Email Templates", "Index", "Template", new { Area = "Admin" })
             .Then("Edit Template");  
         
             if (id != template.Id)
             {
                 return NotFound();
             }
-            
-            Template model = await _context.Template.FindAsync(id);
-
-            model.Slug = template.Slug;
-            model.Name = template.Name;
-            model.Description = template.Description;
-            model.Body = template.Body;
-            model.Updated = DateTime.UtcNow;
 
             // Remove validation errors from fields that aren't in the binding field list
             ModelState.Scrub(editBindingFields);           
@@ -165,12 +154,13 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
             {
                 try
                 {
-                    await _context.SaveChangesAsync();
+	                await _templateService.UpdateTemplate(template);
+                    
                     _toast.Success("Updated successfully.");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TemplateExists(template.Id))
+                    if (!_templateService.TemplateExists(template.Id))
                     {
                         return NotFound();
                     }
@@ -190,7 +180,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
             ViewData["AreaTitle"] = areaTitle;
 
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage Template", "Index", "Template", new { Area = "Admin" })
+            .ThenAction("Manage Email Templates", "Index", "Template", new { Area = "Admin" })
             .Then("Delete Template");  
 
             if (id == null)
@@ -198,8 +188,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var template = await _context.Template
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var template = await _templateService.FindTemplateById((int)id);
+
             if (template == null)
             {
                 return NotFound();
@@ -213,23 +203,11 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var template = await _context.Template.FindAsync(id);
-            _context.Template.Remove(template);
-            await _context.SaveChangesAsync();
+			await _templateService.DeleteTemplate((int)id);
             
             _toast.Success("Template deleted successfully");
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TemplateExists(int id)
-        {
-            return _context.Template.Any(e => e.Id == id);
-        }
-
-        private IQueryable<Template> GetTemplateQueryable()
-        {
-            return _context.Template.AsQueryable();
         }
 
 		[HttpPost]
@@ -243,7 +221,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                 var searchValue = request.Search.Value;
 
                 int recordsTotal = 0;
-                var records = GetTemplateQueryable();
+                var records = _templateService.GetTemplateQueryable();
 
                 sortColumn = string.IsNullOrEmpty(sortColumn) ? "Id" : sortColumn.Replace(" ", "");
                 sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
@@ -268,7 +246,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                         id = x.Id,
                         slug = x.Slug,
                         name = x.Name,
-                        updated = x.Updated
+                        updated = x.Updated.ToString("yyyy-MM-dd HH:mm")
 	                }).ToList();
 
                 var jsonData = new { 

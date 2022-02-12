@@ -23,6 +23,9 @@
 		<a href="#tabs-core" class="nav-link active" data-bs-toggle="tab">Site Details</a>
 	</li>
 	<li class="nav-item">
+		<a href="#tabs-email" class="nav-link" data-bs-toggle="tab">Email</a>
+	</li>
+	<li class="nav-item">
 		<a href="#tabs-startup" class="nav-link" data-bs-toggle="tab">Startup</a>
 	</li>
 	<li class="nav-item ms-auto">
@@ -61,6 +64,127 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label class="control-label">Small Logo Image URL</label>
+								<input asp-for="LogoImageUrlSmall" class="form-control"/>
+								<span asp-validation-for="LogoImageUrlSmall" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="tabs-email">
+					<div class="row pt-2 pb-3">
+						<div class="col">
+							<p class="m-0 text-muted">These settings allow your application to send email using SMTP.</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10">
+							<div class="form-group">
+								<label asp-for="Email.DefaultSenderAddress" class="control-label"></label>
+								<input asp-for="Email.DefaultSenderAddress" class="form-control"/>
+								<span asp-validation-for="Email.DefaultSenderAddress" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10">
+							<div class="form-group">
+								<label asp-for="Email.DefaultSenderName" class="control-label"></label>
+								<input asp-for="Email.DefaultSenderName" class="form-control"/>
+								<span asp-validation-for="Email.DefaultSenderName" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					@{ 
+					/*
+					// NOT YET IMPLEMENTED
+					<div class="row">
+						<div class="col-4">
+							<div class="form-group">
+								<label asp-for="Email.Server" class="control-label"></label>
+								<input asp-for="Email.Server" class="form-control"/>
+								<span asp-validation-for="Email.Server" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-2">
+							<div class="form-group">
+								<label asp-for="Email.Port" class="control-label"></label>
+								<input asp-for="Email.Port" class="form-control"/>
+								<span asp-validation-for="Email.Port" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-4">
+							<div class="form-group">
+								<label asp-for="Email.User" class="control-label"></label>
+								<input asp-for="Email.User" class="form-control"/>
+								<span asp-validation-for="Email.User" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<label asp-for="Email.Password" class="control-label"></label>
+								<input asp-for="Email.Password" class="form-control"/>
+								<span asp-validation-for="Email.Password" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group d-flex">
+								<label asp-for="Email.UseSsl" class="form-check form-switch">
+									<input asp-for="Email.UseSsl" class="form-check-input"/>
+									<span class="form-check-label">Use SSL?</span>
+								</label>
+								<span asp-validation-for="Email.UseSsl" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group d-flex">
+								<label asp-for="Email.RequiresAuthentication" class="form-check form-switch">
+									<input asp-for="Email.RequiresAuthentication" class="form-check-input"/>
+									<span class="form-check-label">Require Authentication?</span>
+								</label>
+								<span asp-validation-for="Email.RequiresAuthentication" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="form-group d-flex">
+								<label asp-for="Email.UsePickupDirectory" class="form-check form-switch">
+									<input asp-for="Email.UsePickupDirectory" class="form-check-input"/>
+									<span class="form-check-label">Use Pickup Directory?</span>
+								</label>
+								<span asp-validation-for="Email.UsePickupDirectory" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10">
+							<div class="form-group">
+								<label asp-for="Email.MailPickupDirectory" class="control-label"></label>
+								<input asp-for="Email.MailPickupDirectory" class="form-control"/>
+								<span asp-validation-for="Email.MailPickupDirectory" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10">
+							<div class="form-group">
+								<label asp-for="Email.PreferredEncoding" class="control-label"></label>
+								<input asp-for="Email.PreferredEncoding" class="form-control"/>
+								<span asp-validation-for="Email.PreferredEncoding" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					*/}
 				</div>
 				<div class="tab-pane" id="tabs-startup">
 					<div class="row">

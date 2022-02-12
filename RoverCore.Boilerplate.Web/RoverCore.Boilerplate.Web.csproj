@@ -12,9 +12,13 @@
 
 	<ItemGroup>
 	  <Compile Remove="Areas\Admin\Data\**" />
+	  <Compile Remove="Services\**" />
 	  <Content Remove="Areas\Admin\Data\**" />
+	  <Content Remove="Services\**" />
 	  <EmbeddedResource Remove="Areas\Admin\Data\**" />
+	  <EmbeddedResource Remove="Services\**" />
 	  <None Remove="Areas\Admin\Data\**" />
+	  <None Remove="Services\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,7 +53,6 @@
 	<ItemGroup>
 		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
-		<Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>
