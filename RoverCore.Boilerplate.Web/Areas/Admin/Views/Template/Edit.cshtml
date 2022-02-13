@@ -16,10 +16,11 @@
 	</div>
 </div>
 <div class="card shadow mb-5">
-    <div class="card-body">
+	<div class="card-body">
+		<form asp-action="Edit" id="editContentForm">
+
         <div class="row">
             <div class="col-md-8">
-                <form asp-action="Edit" id="editContentForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="form-group">
@@ -33,21 +34,36 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+	                    <label asp-for="Description" class="control-label"></label>
+	                    <input asp-for="Description" class="form-control" />
+	                    <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
+            </div>
+        </div>
+		<div class="row">
+			<div class="col-12">
                     <div class="form-group">
 	                    <label asp-for="Body" class="control-label"></label>
-	                    <div id="Body" class="border shadow-sm" style="min-height: 600px; display: none">@Model.Body</div>
+	                    <div id="Body" class="border shadow-sm" style="display: none">@Model.Body</div>
+	                    <div class="wrapper">
+		                    <div class="editor">
+			                    <div class="editor__code">
+				                    <div id="editorCode"></div>
+			                    </div>
+
+			                    <div class="editor__preview">
+				                    <iframe id="editorPreview" frameborder="0"></iframe>
+			                    </div>
+		                    </div>
+	                    </div>
 	                    <span asp-validation-for="Body" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
-                </form>
             </div>
         </div>
+		</form>
 
     </div>
 </div>
@@ -56,6 +72,40 @@
     <a asp-action="Index" class="btn btn-default mt-4">Back to List</a>
 </div>
 
+@section Styles {
+	<style type="text/css">
+		.wrapper {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.editor {
+			width: 100%;
+			height: 500px;
+			display: flex;
+			box-shadow: 0 7px 7px rgba(0, 0, 0, .1), 0 -2px 3px rgba(0, 0, 0, .125);
+		}
+
+		.editor__code {
+			position: relative;
+			border: none;
+			flex-basis: 60%;
+		}
+
+		.editor__preview {
+			position: relative;
+			flex-basis: 40%;
+		}
+
+		.editor__code > *,
+		.editor__preview > * {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -77,14 +127,15 @@
         var content = he.decode(escapedhtml);
         contentElem.innerHTML = '';
 
-        $("#Body").show();
+        const editorCode = document.getElementById("editorCode");
+        const editorPreview = document.getElementById('editorPreview').contentWindow.document;
 
         $(document).ready(function() {
 
             require(['vs/editor/editor.main'],
                 () => {
                     // Initialize the editor
-                    const editor = monaco.editor.create(document.getElementById("Body"),
+                    const editor = monaco.editor.create(editorCode,
                         {
                             theme: 'vs',
                             model: monaco.editor.createModel(content, "liquid"),
@@ -99,6 +150,10 @@
                             }
                         });
 
+                    editor.onDidChangeModelContent(() => {
+	                    editorPreview.body.innerHTML = editor.getModel().getValue();
+                    });
+
                     const form = document.getElementById("editContentForm");
                     form.addEventListener("formdata",
                         e => {
@@ -106,6 +161,7 @@
                         });
 
                     document.editor = editor;
+                    editorPreview.body.innerHTML = content;
                 });
 
             function insert(content) {
