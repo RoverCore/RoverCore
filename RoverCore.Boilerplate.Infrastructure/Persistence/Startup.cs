@@ -17,7 +17,7 @@ public static class Startup
 		{
 			options.UseSqlServer(configuration.GetConnectionString("AppContext"),
 				x => x.MigrationsAssembly("RoverCore.Boilerplate.Infrastructure"));
-		});
+		}, optionsLifetime: ServiceLifetime.Singleton, contextLifetime: ServiceLifetime.Scoped);
 
 		services.AddDbContextFactory<ApplicationDbContext>(options =>
 		{
