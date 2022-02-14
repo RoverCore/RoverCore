@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.Boilerplate.Web.Extensions;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using RoverCore.Boilerplate.Infrastructure.Common;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 

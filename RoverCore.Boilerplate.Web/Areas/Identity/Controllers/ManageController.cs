@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.ManageViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.Boilerplate.Web.Extensions;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using RoverCore.Boilerplate.Infrastructure.Common;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
