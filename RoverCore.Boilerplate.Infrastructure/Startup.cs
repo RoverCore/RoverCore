@@ -27,6 +27,9 @@ public static class Startup
 		// Add Caching
 		Common.Cache.Startup.ConfigureServices(services, configuration);
 
+		// Add Templates
+		Common.Templates.Startup.ConfigureServices(services, configuration);
+
 		// Add Email services
 		Common.Email.Startup.ConfigureServices(services, configuration);
 
