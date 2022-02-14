@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 
-namespace RoverCore.Boilerplate.Infrastructure.Common.Extensions;
+namespace RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 
 public static class ContextExtensions
 {
