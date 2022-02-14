@@ -43,8 +43,5 @@
 			<DependentUpon>appsettings.json</DependentUpon>
 		</Content>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Common\Identity\Services\" />
-	</ItemGroup>
 
 </Project>

@@ -98,7 +98,7 @@ public class Startup
         services.AddEmailServices(_configuration);
         services.AddTransient<IEmailSender, EmailSender>();
 
-        // Add third-party application layer services
+        // Add third-party presentation layer services
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();
         services.AddScoped<NavigationService>();
         services.AddNotyf(config =>
