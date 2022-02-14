@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.IO;
 using System.Linq;
+using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 
 namespace RoverCore.Boilerplate.Web;
 

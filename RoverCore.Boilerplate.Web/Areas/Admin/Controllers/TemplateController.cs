@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using System;
@@ -14,10 +13,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
+using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
+using RoverCore.Boilerplate.Infrastructure.Common.Templates;
+using RoverCore.Boilerplate.Infrastructure.Common.Templates.Services;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
-using RoverCore.Boilerplate.Infrastructure.Services.Templates;
+using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 {

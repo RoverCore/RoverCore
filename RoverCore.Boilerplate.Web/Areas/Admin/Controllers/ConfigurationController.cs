@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
-using RoverCore.Boilerplate.Infrastructure.Services.Settings;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.BreadCrumbs.Services;
 using System.Threading.Tasks;
+using RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 
