@@ -52,6 +52,7 @@ public class Startup
             .AddCors() // Adds cross-origin sharing services
             .AddHttpContextAccessor();  // Add default HttpContextAccessor service
 
+        // Add a cookie policy to the site
         services.Configure<CookiePolicyOptions>(options =>
         {
             // This lambda determines whether user consent for non-essential 
