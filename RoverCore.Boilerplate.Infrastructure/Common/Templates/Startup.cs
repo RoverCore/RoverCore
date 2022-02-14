@@ -3,8 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
+using RoverCore.Boilerplate.Infrastructure.Common.Templates.Services;
 
-namespace RoverCore.Boilerplate.Infrastructure.Common.Settings;
+namespace RoverCore.Boilerplate.Infrastructure.Common.Templates;
 
 public static class Startup
 {
@@ -13,22 +14,15 @@ public static class Startup
 	/// </summary>
 	public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 	{
-		// Add ApplicationsSettings service
-		var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();
-		services.AddSingleton(settings);
-
-		// Adds IOptions capabilities
-		services.AddOptions();
+		services.AddScoped<TemplateService>();
 	}
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
 	{
 		using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 		{
-			var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
-
-			// Load persisted settings
-			settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
+			// Load templates
+			var templateService = serviceScope.ServiceProvider.GetRequiredService<TemplateService>();
 		}
 	}
 }

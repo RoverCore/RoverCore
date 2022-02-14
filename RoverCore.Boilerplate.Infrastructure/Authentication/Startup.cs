@@ -40,5 +40,6 @@ public static class Startup
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
 	{
+		app.UseAuthentication();
 	}
 }

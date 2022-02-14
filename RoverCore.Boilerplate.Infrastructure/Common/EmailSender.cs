@@ -6,6 +6,9 @@ namespace RoverCore.Boilerplate.Infrastructure.Common;
 // This class is used by the application to send email for account confirmation and password reset.
 // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
 
+/// <summary>
+/// OBSOLETE : TO BE REPLACED WITH FLUENT EMAIL
+/// </summary>
 public class EmailSender : IEmailSender
 {
     public EmailSender(IConfiguration configuration)

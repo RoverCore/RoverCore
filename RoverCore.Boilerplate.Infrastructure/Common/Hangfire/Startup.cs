@@ -3,6 +3,7 @@ using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RoverCore.Boilerplate.Infrastructure.Common.Hangfire.Filters;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Hangfire;
 
@@ -28,6 +29,16 @@ public static class Startup
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
 	{
+		// Set up hangfire capabilities
+		var options = new DashboardOptions
+		{
+			Authorization = new[] { new HangfireAuthorizationFilter() },
+			AppPath = "#",
+			DashboardTitle = "",
+			DisplayStorageConnectionString = false
+		};
+
+		app.UseHangfireDashboard("/admin/job/hangfire", options);
 	}
 }
 

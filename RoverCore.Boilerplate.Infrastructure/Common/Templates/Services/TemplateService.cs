@@ -6,7 +6,7 @@ using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 {
-    public class TemplateService : IScoped
+    public class TemplateService 
     {
         private readonly VirtualFileProvider _virtualFileProvider;
         private readonly ApplicationDbContext _context;

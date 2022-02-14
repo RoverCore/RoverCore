@@ -43,23 +43,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         // Auto-register services implementing IScoped, ITransient, ISingleton (thanks to Georgi Stoyanov)
-        services.AddServiced(typeof(Startup).Assembly,
-            typeof(ApplicationSeederService).Assembly);
+        Infrastructure.Startup.ConfigureServicesDiscovery(services, typeof(Startup).Assembly, typeof(ApplicationSeederService).Assembly);
 
-        // Settings and configuration services
-        services.AddSettings(_configuration) // Add ApplicationsSettings service
-            .AddOptions(); // Adds IOptions capabilities        
-
-        // RoverCore infrastructure services - These extension methods can be adapted to set up additional services
-        services.AddPersistence(_configuration) // Add services that persist data (ef core,etc)
-            .AddAuthenticationScheme(_configuration)  // Adds authentication services
-            .AddCaching();  // Adds caching services
-
-        // Add custom identity user, roles, etc.
-        services.AddIdentity<ApplicationUser, ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddClaimsPrincipalFactory<ApplicationClaimsPrincipalFactory>()
-            .AddDefaultTokenProviders();
+        // Configure infrastructure services (see Startup.cs of the Infrastructure project)
+        Infrastructure.Startup.ConfigureServices(services, _configuration);
 
         services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration
             .AddCors() // Adds cross-origin sharing services
@@ -94,8 +81,7 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
-        // Configure email service
-        services.AddEmailServices(_configuration);
+        // Configure email service - OBSOLETE - WILL BE REPLACED
         services.AddTransient<IEmailSender, EmailSender>();
 
         // Add third-party presentation layer services
@@ -108,8 +94,6 @@ public class Startup
             config.Position = NotyfPosition.BottomRight;
         });
 
-        // Add Hangfire job manager
-        services.AddHangfire(_configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -137,19 +121,8 @@ public class Startup
             .AllowAnyMethod()
             .AllowAnyHeader());
 
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        // Set up hangfire capabilities
-        var options = new DashboardOptions
-        {
-	        Authorization = new[] { new HangfireAuthorizationFilter() },
-            AppPath = "#",
-            DashboardTitle = "",
-            DisplayStorageConnectionString = false
-        };
-
-        app.UseHangfireDashboard("/admin/job/hangfire", options);
+        // Configure infrastructure middleware
+        Infrastructure.Startup.Configure(app, _configuration);
 
         app.UseEndpoints(endpoints =>
         {
@@ -164,8 +137,6 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            endpoints.MapHangfireDashboard();
-
         });
 
         app.UseSwagger();
@@ -173,17 +144,5 @@ public class Startup
 
         // Schedule Hangfire jobs -- Add your jobs in this method
         ConfigureJobs.Schedule();
-
-        // Load configuration settings from database
-        using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-        {
-            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
-
-            // Load persisted settings
-            settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
-
-            // Load templates
-            var templateService = serviceScope.ServiceProvider.GetRequiredService<TemplateService>();
-        }
     }
 }
