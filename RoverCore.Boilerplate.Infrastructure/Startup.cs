@@ -14,6 +14,8 @@ public static class Startup
 {
 	public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 	{
+		// Add Persistence services
+		// RoverCore.Boilerplate.Infrastructure.Persistence.Startup.ConfigureServices(services, configuration);
 	}
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
