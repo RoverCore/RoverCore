@@ -58,6 +58,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
 		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
+		<ProjectReference Include="..\RoverCore.Datatables\RoverCore.Datatables.csproj" />
 	</ItemGroup>
 
 </Project>

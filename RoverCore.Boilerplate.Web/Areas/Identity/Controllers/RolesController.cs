@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Controllers;
@@ -12,9 +11,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
+using RoverCore.Datatables.DTOs;
+using RoverCore.Datatables.Extensions;
+using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
+	public class ApplicationRoleDto : DtBaseResponse
+	{
+        public string Name { get; set; }
+	}
+
     [Area("Identity")]
     [Authorize(Roles = "Admin")]
     public class RolesController : BaseController<RolesController>
@@ -227,10 +234,11 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetRoles(DtRequest request)
+        public async Task<IActionResult> GetRoles(RoverCore.Datatables.DTOs.DtRequest request)
         {
             try
             {
+                /*
                 var sortColumn = request.Columns[request.Order[0].Column].Name;
                 var sortColumnDirection = request.Order[0].Dir;
                 var searchValue = request.Search.Value;
@@ -270,6 +278,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
                     recordsTotal = recordsTotal,
                     data = data
                 };
+                */
+                var jsonData = await _context.Roles.GetDatatableResponse<ApplicationRole, ApplicationRoleDto>(request);
 
                 return Ok(jsonData);
             }
