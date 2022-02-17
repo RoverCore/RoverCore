@@ -14,7 +14,6 @@ using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.Datatables.DTOs;
 using RoverCore.Datatables.Extensions;
 using RoverCore.Datatables.Models;
-using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
 using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
@@ -240,7 +239,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
         {
             try
             {
-                var jsonData = await _context.Roles.GetDatatableResponse<ApplicationRole, ApplicationRoleIndexDto>(request);
+                var jsonData = await _context.Roles.GetDatatableResponseAsync<ApplicationRole, ApplicationRoleIndexDto>(request);
 
                 return Ok(jsonData);
             }

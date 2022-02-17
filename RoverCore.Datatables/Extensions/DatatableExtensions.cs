@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -61,18 +63,17 @@ namespace RoverCore.Datatables.Extensions
         /// <param name="request"></param>
         /// <param name="config">Optional Automapper configuration that maps TEntity to TEntityDTO</param>
         /// <returns></returns>
-        public static async Task<DtResponseData> GetDatatableResponse<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request, MapperConfiguration? config = null)
+        public static async Task<DtResponseData> GetDatatableResponseAsync<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request, MapperConfiguration? config = null)
 		    where TEntityDTO : class
 		    where TEntity : class
 	    {
+            var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
 		    var sortColumn = request.Columns[request.Order[0].Column].Name;
 		    var sortColumnDirection = request.Order[0].Dir;
-		    var searchValue = request.Search.Value;
 
 		    int recordsTotal = 0;
 		    var records = entity;
 
-		    
 		    sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
 
 		    if (!String.IsNullOrEmpty(sortColumn))
@@ -84,32 +85,113 @@ namespace RoverCore.Datatables.Extensions
 				    : records.OrderByDescending(sortColumn);
 		    }
 
-		    var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
-
             recordsTotal = await records.CountAsync();
             var recordsDto = records.ProjectTo<TEntityDTO>(mapperConfiguration);
 
 			// Apply any search filters to the dto version of the entity
-            if (!string.IsNullOrEmpty(searchValue))
+            if (!string.IsNullOrEmpty(request.Search.Value))
             {
-                recordsDto = recordsDto.ApplySearch(searchValue);
+                recordsDto = recordsDto.ApplySearch(request.Search.Value);
             }
 
             var recordsFiltered = await recordsDto.CountAsync();
 			var data = await recordsDto.Skip(request.Start).Take(request.Length).ToListAsync();
+            
+            var dataTransformed = TransformRecords<TEntityDTO>(data);
 
 		    var jsonData = new DtResponseData
 		    {
 			    Draw = request.Draw,
 			    RecordsFiltered = recordsFiltered,
 			    RecordsTotal = recordsTotal,
-			    Data = data
+			    Data = dataTransformed
 		    };
-
-			Debug.WriteLine(recordsDto.ToQueryString());
 
 		    return jsonData;
 	    }
+
+        /// <summary>
+        /// Uses the datatables request parameters to query entity and retrieve the appropriate records.  The TEntityDTO should be completely flattened and not include other objects as fields.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TEntityDTO"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="request"></param>
+        /// <param name="config">Optional Automapper configuration that maps TEntity to TEntityDTO</param>
+        /// <returns></returns>
+        public static DtResponseData GetDatatableResponse<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request, MapperConfiguration? config = null)
+            where TEntityDTO : class
+            where TEntity : class
+        {
+            var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
+            var sortColumn = request.Columns[request.Order[0].Column].Name;
+            var sortColumnDirection = request.Order[0].Dir;
+
+            int recordsTotal = 0;
+            var records = entity;
+
+            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
+
+            if (!String.IsNullOrEmpty(sortColumn))
+            {
+                sortColumn = sortColumn.Replace(" ", "");
+
+                records = sortColumnDirection == "asc"
+                    ? records.OrderBy(sortColumn)
+                    : records.OrderByDescending(sortColumn);
+            }
+
+            recordsTotal = records.Count();
+            var recordsDto = records.ProjectTo<TEntityDTO>(mapperConfiguration);
+
+            // Apply any search filters to the dto version of the entity
+            if (!string.IsNullOrEmpty(request.Search.Value))
+            {
+                recordsDto = recordsDto.ApplySearch(request.Search.Value);
+            }
+
+            var recordsFiltered = recordsDto.Count();
+            var data = recordsDto.Skip(request.Start).Take(request.Length).ToList();
+
+            var dataTransformed = TransformRecords<TEntityDTO>(data);
+
+            var jsonData = new DtResponseData
+            {
+                Draw = request.Draw,
+                RecordsFiltered = recordsFiltered,
+                RecordsTotal = recordsTotal,
+                Data = dataTransformed
+            };
+
+            return jsonData;
+        }
+
+        private static ICollection TransformRecords<T>(List<T> data)
+        {
+            PropertyInfo[] properties = typeof(T).GetProperties();
+            var dataTransformed = data.Select(x =>
+            {
+                var record = new Dictionary<string, Object>();
+
+                foreach (PropertyInfo property in properties)
+                {
+                    var propname = Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+                    var value = property.GetValue(x);
+
+                    // Convert dates to a format digestable by datatables
+                    if (property.PropertyType == typeof(DateTime) && value != null)
+                    {
+                        value = ((DateTime)value).ToString("yyyy-MM-dd HH:mm");
+                    }
+
+                    record.Add(propname, value);
+                }
+
+                return record;
+            }).ToList();
+
+            return dataTransformed;
+        }
 
 		/// <summary>
 		/// Credit to Ivan Stoev - https://stackoverflow.com/questions/59754832/ef-core-expression-tree-equivalent-for-iqueryable-search

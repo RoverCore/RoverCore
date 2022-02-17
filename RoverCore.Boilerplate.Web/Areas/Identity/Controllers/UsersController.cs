@@ -17,7 +17,6 @@ using RoverCore.Boilerplate.Infrastructure.Common;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Datatables.DTOs;
-using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
 using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
@@ -249,9 +248,9 @@ public class UsersController : BaseController<UsersController>
         return _context.Users.Any(x => x.Id == id);
     }
 
-    private IQueryable<UsersIndexDto> GetUsersAsync()
+    private async Task<IQueryable<UsersIndexDto>> GetUsersAsync()
     {
-        return _context.Users
+        var users = await _context.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
             .Select(
@@ -262,7 +261,9 @@ public class UsersController : BaseController<UsersController>
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Roles = String.Join(", ", x.UserRoles.Select(ur => ur.Role.Name).ToList())
-            }).AsQueryable();
+            }).ToListAsync();
+            
+            return users.AsQueryable();
 
     }
 
@@ -271,8 +272,9 @@ public class UsersController : BaseController<UsersController>
     public async Task<IActionResult> GetUsers(RoverCore.Datatables.DTOs.DtRequest request)
     {
 	    try
-	    {
-		    var jsonData = await GetUsersAsync().GetDatatableResponse<UsersIndexDto, UsersIndexDto>(request);
+        {
+            var users = await GetUsersAsync();
+            var jsonData = users.GetDatatableResponse<UsersIndexDto, UsersIndexDto>(request);
 
 		    return Ok(jsonData);
 	    }

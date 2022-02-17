@@ -10,8 +10,8 @@ using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
@@ -19,9 +19,20 @@ using RoverCore.Boilerplate.Infrastructure.Common.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates.Services;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
+using RoverCore.Datatables.Converters;
+using RoverCore.Datatables.DTOs;
+using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 {
+    public class TemplateIndexDto
+    {
+        public int Id { get; set; }
+        public string Slug { get; set; }
+        public string Name { get; set; }
+        public DateTime Updated { get; set; }
+    }
+
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class TemplateController : BaseController<TemplateController>
@@ -217,6 +228,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         {
             try
             {
+                /*
                 var sortColumn = request.Columns[request.Order[0].Column].Name;
                 var sortColumnDirection = request.Order[0].Dir;
                 var searchValue = request.Search.Value;
@@ -256,6 +268,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
                     recordsTotal = recordsTotal, 
                     data = data 
                 };
+                */
+                var jsonData = await _templateService.GetTemplateQueryable().GetDatatableResponseAsync<Template, TemplateIndexDto>(request);
 
                 return Ok(jsonData);
             }
