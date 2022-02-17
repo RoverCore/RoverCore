@@ -15,15 +15,16 @@ namespace RoverCore.Datatables.Extensions
 {
     public static class DatatableExtensions
     {
-	    /// <summary>
-	    /// Uses the datatables request parameters to query entity and retrieve the appropriate records
-	    /// </summary>
-	    /// <typeparam name="TEntity"></typeparam>
-	    /// <typeparam name="TEntityDTO"></typeparam>
-	    /// <param name="entity"></param>
-	    /// <param name="request"></param>
-	    /// <returns></returns>
-	    public static async Task<DtResponseData> GetDatatableResponse<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request)
+        /// <summary>
+        /// Uses the datatables request parameters to query entity and retrieve the appropriate records.  The TEntityDTO should be completely flattened and not include other objects as fields.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TEntityDTO"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="request"></param>
+        /// <param name="config">Optional Automapper configuration that maps TEntity to TEntityDTO</param>
+        /// <returns></returns>
+        public static async Task<DtResponseData> GetDatatableResponse<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request, MapperConfiguration? config = null)
 		    where TEntityDTO : DtBaseResponse
 		    where TEntity : class
 	    {
@@ -34,12 +35,19 @@ namespace RoverCore.Datatables.Extensions
 		    int recordsTotal = 0;
 		    var records = entity;
 
-		    sortColumn = string.IsNullOrEmpty(sortColumn) ? "Id" : sortColumn.Replace(" ", "");
+		    
 		    sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
 
-		    records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
+		    if (!String.IsNullOrEmpty(sortColumn))
+		    {
+			    sortColumn = sortColumn.Replace(" ", "");
 
-		    var mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
+                records = sortColumnDirection == "asc"
+				    ? records.OrderBy(sortColumn)
+				    : records.OrderByDescending(sortColumn);
+		    }
+
+		    var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
 
             recordsTotal = await records.CountAsync();
             var recordsDto = records.ProjectTo<TEntityDTO>(mapperConfiguration);
@@ -89,9 +97,9 @@ namespace RoverCore.Datatables.Extensions
             return source.Where(predicate);
         }
 
-        static Expression SearchStrings(Expression target, Expression search)
+        static Expression? SearchStrings(Expression target, Expression search)
         {
-            Expression result = null;
+            Expression? result = null;
 
             var properties = target.Type
                 .GetProperties()
@@ -99,14 +107,14 @@ namespace RoverCore.Datatables.Extensions
 
             foreach (var prop in properties)
             {
-                Expression condition = null;
+                Expression? condition = null;
                 var propValue = Expression.MakeMemberAccess(target, prop);
                 if (prop.PropertyType == typeof(string))
                 {
                     var comparand = Expression.Call(propValue, nameof(string.ToLower), Type.EmptyTypes);
                     condition = Expression.Call(comparand, nameof(string.Contains), Type.EmptyTypes, search);
                 }
-                else if (!prop.PropertyType.Namespace.StartsWith("System."))
+                else if (!(prop!.PropertyType!.Namespace!.StartsWith("System.")))
                 {
                     condition = SearchStrings(propValue, search);
                 }

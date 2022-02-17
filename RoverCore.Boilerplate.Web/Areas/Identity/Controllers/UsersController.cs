@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
@@ -16,8 +15,19 @@ using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.BreadCrumbs.Services;
+using RoverCore.Datatables.DTOs;
+using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
+using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
+
+public class UsersIndexDto : DtBaseResponse
+{
+	public string Email { get; set; }
+	public string FirstName { get; set; }
+	public string LastName { get; set; }
+	public string Roles { get; set; }
+}
 
 [ApiExplorerSettings(IgnoreApi = true)]
 [Area("Identity")]
@@ -236,88 +246,38 @@ public class UsersController : BaseController<UsersController>
         return _context.Users.Any(x => x.Id == id);
     }
 
-    private IQueryable<UserViewModel> GetUsersAsync()
+    private IQueryable<UsersIndexDto> GetUsersAsync()
     {
         return _context.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
             .Select(
-            x => new UserViewModel()
+            x => new UsersIndexDto()
             {
                 Id = x.Id,
                 Email = x.Email,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
+                Roles = String.Join(", ", x.UserRoles.Select(ur => ur.Role.Name).ToList())
             }).AsQueryable();
 
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GetUsers(DtRequest request)
+    public async Task<IActionResult> GetUsers(RoverCore.Datatables.DTOs.DtRequest request)
     {
-        try
-        {
-            var sortColumn = request.Columns[request.Order[0].Column].Name;
-            var sortColumnDirection = request.Order[0].Dir;
-            var searchValue = request.Search.Value;
+	    try
+	    {
+		    var jsonData = await GetUsersAsync().GetDatatableResponse<UsersIndexDto, UsersIndexDto>(request);
 
-            int recordsTotal = 0;
-            var users = GetUsersAsync();
+		    return Ok(jsonData);
+	    }
+	    catch (Exception ex)
+	    {
+		    _logger.LogError(ex, "Error generating Roles index json");
+	    }
 
-            sortColumn = string.IsNullOrEmpty(sortColumn) ? "LastName" : sortColumn.Replace(" ", "");
-            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                users = users.Where(m => m.FirstName.Contains(searchValue)
-                                            || m.LastName.Contains(searchValue)
-                                            || m.Email.Contains(searchValue)
-                                            || m.Roles.Contains(searchValue));
-            }
-
-            switch (sortColumn)
-            {
-                case "Roles":
-
-                    users = sortColumnDirection == "asc" ? users.OrderBy(x => string.Join(", ", x.Roles)) :
-                        users.OrderByDescending(x => string.Join(", ", x.Roles));
-
-                    break;
-
-                default:
-
-                    users = sortColumnDirection == "asc" ?
-                        users.OrderBy(sortColumn) :
-                        users.OrderByDescending(sortColumn);
-
-                    break;
-
-            }
-
-            var usersList = await users.ToListAsync();
-
-            recordsTotal = usersList.Count();
-            var data = usersList.Skip(request.Start).Take(request.Length)
-                .Select(x => new
-                {
-                    Options = "",
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Roles = String.Join(", ", x.Roles),
-                    Email = x.Email
-                }).ToList();
-
-            var jsonData = new { draw = request.Draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-            return Ok(jsonData);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error generating user index json");
-        }
-
-        return StatusCode(500);
+	    return StatusCode(500);
     }
 }

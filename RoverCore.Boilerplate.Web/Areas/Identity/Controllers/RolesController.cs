@@ -17,7 +17,7 @@ using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
-	public class ApplicationRoleDto : DtBaseResponse
+	public class ApplicationRoleIndexDto : DtBaseResponse
 	{
         public string Name { get; set; }
 	}
@@ -227,59 +227,13 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             return _context.Roles.Any(e => e.Id == id);
         }
 
-        private IQueryable<ApplicationRole> GetRolesQueryable()
-        {
-            return _context.Roles.AsQueryable();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetRoles(RoverCore.Datatables.DTOs.DtRequest request)
         {
             try
             {
-                /*
-                var sortColumn = request.Columns[request.Order[0].Column].Name;
-                var sortColumnDirection = request.Order[0].Dir;
-                var searchValue = request.Search.Value;
-
-                int recordsTotal = 0;
-                var records = GetRolesQueryable();
-
-                sortColumn = string.IsNullOrEmpty(sortColumn) ? "Id" : sortColumn.Replace(" ", "");
-                sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    records = records.Where(m => m.Name.Contains(searchValue)
-                                || m.NormalizedName.Contains(searchValue)
-                                || m.ConcurrencyStamp.Contains(searchValue));
-                }
-
-                records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
-
-                var recordsList = await records.ToListAsync();
-
-                recordsTotal = recordsList.Count();
-                var data = recordsList.Skip(request.Start).Take(request.Length)
-                    .Select(x => new
-                    {
-                        Options = "",
-                        id = x.Id,
-                        name = x.Name,
-                        normalizedName = x.NormalizedName,
-                        concurrencyStamp = x.ConcurrencyStamp
-                    }).ToList();
-
-                var jsonData = new
-                {
-                    draw = request.Draw,
-                    recordsFiltered = recordsTotal,
-                    recordsTotal = recordsTotal,
-                    data = data
-                };
-                */
-                var jsonData = await _context.Roles.GetDatatableResponse<ApplicationRole, ApplicationRoleDto>(request);
+                var jsonData = await _context.Roles.GetDatatableResponse<ApplicationRole, ApplicationRoleIndexDto>(request);
 
                 return Ok(jsonData);
             }

@@ -35,24 +35,18 @@
 <div class="card shadow">	
     <div class="card-body crud table-responsive" id="View_container">	
         <table class="table" id="View" style="width: 100%">
-        <thead>
-            <tr>
-                <th>Actions</th>
+	        <thead>
+	        <tr>
+		        <th>Actions</th>
 
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NormalizedName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ConcurrencyStamp)
-                </th>
-            </tr>
-        </thead>
+		        <th>
+			        @Html.DisplayNameFor(model => model.Id)
+		        </th>
+		        <th>
+			        @Html.DisplayNameFor(model => model.Name)
+		        </th>
+	        </tr>
+	        </thead>
     </table>
     </div>	
 </div>
@@ -134,10 +128,8 @@
                             "searchable": false
                         },
 					    { "data": "Id", "name": "Id", "autoWidth": true },
-						{ "data": "name", "name": "Name", "autoWidth": true },
-						{ "data": "normalizedName", "name": "NormalizedName", "autoWidth": true },
-						{ "data": "concurrencyStamp", "name": "ConcurrencyStamp", "autoWidth": true }
-					],
+						{ "data": "name", "name": "Name", "autoWidth": true }
+                    ],
 					pageLength: 10,
 					responsive: true,
 					order: [[2, "asc"]],
