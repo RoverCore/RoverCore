@@ -248,6 +248,10 @@ public class UsersController : BaseController<UsersController>
         return _context.Users.Any(x => x.Id == id);
     }
 
+    /// <summary>
+    /// Return a list of all users and the roles that they have (as a comma-separated string)
+    /// </summary>
+    /// <returns></returns>
     private async Task<IQueryable<UsersIndexDto>> GetUsersAsync()
     {
         var users = await _context.Users
@@ -264,7 +268,6 @@ public class UsersController : BaseController<UsersController>
             }).ToListAsync();
             
             return users.AsQueryable();
-
     }
 
     [HttpPost]
@@ -273,14 +276,17 @@ public class UsersController : BaseController<UsersController>
     {
 	    try
         {
+            // Query the database for all of the users and their roles
             var users = await GetUsersAsync();
+
+            // Filter the users list based on the datatables request
             var jsonData = users.GetDatatableResponse<UsersIndexDto, UsersIndexDto>(request);
 
 		    return Ok(jsonData);
 	    }
 	    catch (Exception ex)
 	    {
-		    _logger.LogError(ex, "Error generating Roles index json");
+		    _logger.LogError(ex, "Error generating Users index json");
 	    }
 
 	    return StatusCode(500);
