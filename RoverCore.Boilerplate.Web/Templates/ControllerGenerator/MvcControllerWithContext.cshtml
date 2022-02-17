@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoverCore.BreadCrumbs.Services;
+using RoverCore.Datatables.Extensions;
+using RoverCore.Datatables.Models;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Services;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
@@ -15,7 +17,7 @@ using RoverCore.Boilerplate.Web.Controllers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
+using System.ComponentModel.DataAnnotations;
 using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Extensions;
 @{
@@ -25,8 +27,8 @@ using RoverCore.Boilerplate.Infrastructure.Extensions;
     }
 }
 
-namespace @Model.ControllerNamespace
-{
+namespace @(Model.ControllerNamespace);
+
 @{
     string routePrefix;
     if (String.IsNullOrEmpty(Model.AreaName))
@@ -82,8 +84,24 @@ namespace @Model.ControllerNamespace
 }
     [Authorize(Roles = "Admin")]
     public class @Model.ControllerName : BaseController<@Model.ControllerName>
+	{
+		public class @(entitySetName)IndexViewModel {
+@{
+foreach (var property in Model.ModelMetadata.Properties)
+{
+    if (property.Scaffold || property.IsPrimaryKey)
     {
-        private const string createBindingFields = "@bindString";
+        if (property.IsPrimaryKey)
+        {
+			@:[Key]            
+        }
+	        @:public @property.ShortTypeName @property.PropertyName { get; set; }
+	}
+}
+}
+		}
+
+		private const string createBindingFields = "@bindString";
         private const string editBindingFields = "@bindString";
         private const string areaTitle = "@areaTitle";
 
@@ -314,89 +332,24 @@ namespace @Model.ControllerNamespace
             return _context.@(entitySetName).Any(e => e.@primaryKeyName == id);
         }
 
-        private IQueryable<@(Model.ModelTypeName)> Get@(entitySetName)Queryable()
-        {
-@{
-    if (!String.IsNullOrEmpty(includeExpressions))
-    {
-            @:return _context.@(entitySetName)@(includeExpressions).AsQueryable();
-    }
-    else
-    {
-            @:return _context.@(entitySetName).AsQueryable();
-    }
-}
-        }
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Get@(entitySetName)(DtRequest request)
         {
             try
-            {
-                var sortColumn = request.Columns[request.Order[0].Column].Name;
-                var sortColumnDirection = request.Order[0].Dir;
-                var searchValue = request.Search.Value;
-
-                int recordsTotal = 0;
-                var records = Get@(entitySetName)Queryable();
-
-                sortColumn = string.IsNullOrEmpty(sortColumn) ? "@primaryKeyName" : sortColumn.Replace(" ", "");
-                sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-                if (!string.IsNullOrEmpty(searchValue))
-                {
+			{
 @{
-    var filters = new List<string>();
-
-    foreach (var property in Model.ModelMetadata.Properties)
-    {
-        if (property.Scaffold)
-        {
-            if (property.PropertyName == primaryKeyName) continue;
-
-            filters.Add($"m.{property.PropertyName}.Contains(searchValue)");
-        }
-    }
-
-
-    if (filters.Count > 0)
-    {
-        var query = string.Join("\n                                || ", filters);
-                    @:records = records.Where(m => @query);
-    }
+	if (!String.IsNullOrEmpty(includeExpressions))
+	{
+				@:var query = _context.@(entitySetName)@(includeExpressions);
+	}
+	else
+	{
+				@:var query = _context.@(entitySetName);
+	}
+				@:var jsonData = await query.GetDatatableResponseAsync<@(entitySetName), @(entitySetName)IndexViewModel>(request);
 }
-                }
-                
-                records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
-
-                var recordsList = await records.ToListAsync();
-
-                recordsTotal = recordsList.Count();
-                var data = recordsList.Skip(request.Start).Take(request.Length)
-	                .Select(x => new
-                    {
-                        Options = "",
-@{
-    for (int i = 0; i < modelProperties.Count; i++)
-    {
-        var property = modelProperties[i];
-        var propvalue = $"x.{property}";
-        if (i < modelProperties.Count - 1)
-            propvalue += ",";
-
-        var propertyRevised = FirstLower(property);
-                        @:@propertyRevised = @propvalue
-    }
-}
-	                }).ToList();
-
-                var jsonData = new { 
-                    draw = request.Draw, 
-                    recordsFiltered = recordsTotal, 
-                    recordsTotal = recordsTotal, 
-                    data = data 
-                };
 
                 return Ok(jsonData);
             }
@@ -409,7 +362,7 @@ namespace @Model.ControllerNamespace
         }
 
     }
-}
+
 @functions
 {
     // This function converts the primary key short type name to its nullable equivalent when possible. This is required to make
