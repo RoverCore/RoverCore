@@ -235,7 +235,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetRoles(RoverCore.Datatables.DTOs.DtRequest request)
+        public async Task<IActionResult> GetRoles(DtRequest request)
         {
             try
             {

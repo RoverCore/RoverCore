@@ -23,7 +23,7 @@
         @:var routeData = ViewContext.RouteData.Values;
         @:var viewController = routeData["controller"].ToString();
         @:var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
-        @:                                                                                              
+        @:
         @:var recordsUrl = Url.Action("@recordsAction");
         @:
         if (!string.IsNullOrEmpty(Model.LayoutPageFile))

@@ -275,7 +275,7 @@ public class UsersController : BaseController<UsersController>
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GetUsers(RoverCore.Datatables.DTOs.DtRequest request)
+    public async Task<IActionResult> GetUsers(DtRequest request)
     {
 	    try
         {

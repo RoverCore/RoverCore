@@ -8,18 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoverCore.BreadCrumbs.Services;
+using RoverCore.Datatables.DTOs;
 using RoverCore.Datatables.Extensions;
-using RoverCore.Datatables.Models;
-using RoverCore.Boilerplate.Domain.Entities.Identity;
-using RoverCore.Boilerplate.Infrastructure.Services;
-using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
+using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using RoverCore.Boilerplate.Web.Extensions;
-using RoverCore.Boilerplate.Infrastructure.Extensions;
 @{
     foreach (var namespaceName in Model.RequiredNamespaces)
     {
@@ -79,13 +75,14 @@ namespace @(Model.ControllerNamespace);
 
     if (!string.IsNullOrEmpty(Model.AreaName))
     {
-    @:@string.Format("[Area(\"{0}\")]", Model.AreaName)
+@:@string.Format("[Area(\"{0}\")]", Model.AreaName)
     }
 }
-    [Authorize(Roles = "Admin")]
-    public class @Model.ControllerName : BaseController<@Model.ControllerName>
+[Authorize(Roles = "Admin")]
+public class @Model.ControllerName : BaseController<@Model.ControllerName>
+{
+	public class @(entitySetName)IndexViewModel 
 	{
-		public class @(entitySetName)IndexViewModel {
 @{
 foreach (var property in Model.ModelMetadata.Properties)
 {
@@ -93,275 +90,278 @@ foreach (var property in Model.ModelMetadata.Properties)
     {
         if (property.IsPrimaryKey)
         {
-			@:[Key]            
+		@:[Key]            
         }
-	        @:public @property.ShortTypeName @property.PropertyName { get; set; }
+	    @:public @property.ShortTypeName @property.PropertyName { get; set; }
 	}
 }
 }
-		}
+	}
 
-		private const string createBindingFields = "@bindString";
-        private const string editBindingFields = "@bindString";
-        private const string areaTitle = "@areaTitle";
+	private const string createBindingFields = "@bindString";
+    private const string editBindingFields = "@bindString";
+    private const string areaTitle = "@areaTitle";
 
-        private readonly @Model.ContextTypeName _context;
+    private readonly @Model.ContextTypeName _context;
 
-        public @(Model.ControllerName)(@Model.ContextTypeName context)
-        {
-            _context = context;
-        }
+    public @(Model.ControllerName)(@Model.ContextTypeName context)
+    {
+        _context = context;
+    }
 
-        // GET: @routePrefix
+    // GET: @routePrefix
 @{
-        @:public IActionResult Index()
-        @:{
-            @:_breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            @:.Then("Manage @entitySetName");            
-            @:
-            @:return View();
-}        }
+    @:public IActionResult Index()
+    @:{
+        @:_breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+			@:.Then("Manage @entitySetName");       
+		@:
+		@:// Fetch descriptive data from the index dto to build the datatables index
+		@:var metadata = DatatableExtensions.GetDtMetadata<@(entitySetName)IndexViewModel>();
+		@:
+		@:return View(metadata);
+}   }
 
-        // GET: @routePrefix/Details/5
-        public async Task<IActionResult> Details(@primaryKeyNullableTypeName id)
+    // GET: @routePrefix/Details/5
+    public async Task<IActionResult> Details(@primaryKeyNullableTypeName id)
+    {
+        ViewData["AreaTitle"] = areaTitle;
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
+            .Then("@Model.ModelTypeName Details");            
+
+        if (id == null)
         {
-            ViewData["AreaTitle"] = areaTitle;
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
-                .Then("@Model.ModelTypeName Details");            
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var @Model.ModelVariable = await _context.@(entitySetName)@inlineIncludes
-                .FirstOrDefaultAsync(m => m.@primaryKeyName == id);
-            if (@Model.ModelVariable == null)
-            {
-                return NotFound();
-            }
-
-            return View(@Model.ModelVariable);
+            return NotFound();
         }
 
-        // GET: @routePrefix/Create
-        public IActionResult Create()
+        var @Model.ModelVariable = await _context.@(entitySetName)@inlineIncludes
+            .FirstOrDefaultAsync(m => m.@primaryKeyName == id);
+        if (@Model.ModelVariable == null)
         {
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-                .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
-                .Then("Create @Model.ModelTypeName");     
+            return NotFound();
+        }
+
+        return View(@Model.ModelVariable);
+    }
+
+    // GET: @routePrefix/Create
+    public IActionResult Create()
+    {
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
+            .Then("Create @Model.ModelTypeName");     
 
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+        @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
     }
-}            return View();
-        }
+}       return View();
+	}
 
-        // POST: @routePrefix/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(createBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
+    // POST: @routePrefix/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind(createBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
+    {
+        ViewData["AreaTitle"] = areaTitle;
+
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+        .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
+        .Then("Create @Model.ModelTypeName");     
+        
+        // Remove validation errors from fields that aren't in the binding field list
+        ModelState.Scrub(createBindingFields);           
+
+        if (ModelState.IsValid)
         {
-            ViewData["AreaTitle"] = areaTitle;
-
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerName", new { Area = "@Model.AreaName" })
-            .Then("Create @Model.ModelTypeName");     
-            
-            // Remove validation errors from fields that aren't in the binding field list
-            ModelState.Scrub(createBindingFields);           
-
-            if (ModelState.IsValid)
-            {
 @{
     if (!string.IsNullOrEmpty(primaryKeyType) && IsGuid(primaryKeyType))
     {
-                @:@(Model.ModelVariable).@primaryKeyName = Guid.NewGuid();
+            @:@(Model.ModelVariable).@primaryKeyName = Guid.NewGuid();
     }
-                @:_context.Add(@Model.ModelVariable);
-                @:await _context.SaveChangesAsync();
-                @:
-                @:_toast.Success("Created successfully.");
-                @:
+            @:_context.Add(@Model.ModelVariable);
+            @:await _context.SaveChangesAsync();
+            @:
+            @:_toast.Success("Created successfully.");
+            @:
 }                return RedirectToAction(nameof(Index));
             }
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+        @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
     }
 }
-            return View(@Model.ModelVariable);
+        return View(@Model.ModelVariable);
+    }
+
+    // GET: @routePrefix/Edit/5
+    public async Task<IActionResult> Edit(@primaryKeyNullableTypeName id)
+    {
+        ViewData["AreaTitle"] = areaTitle;
+
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+        .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
+        .Then("Edit @Model.ModelTypeName");     
+
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        // GET: @routePrefix/Edit/5
-        public async Task<IActionResult> Edit(@primaryKeyNullableTypeName id)
+        var @Model.ModelVariable = await _context.@(entitySetName).FindAsync(id);
+        if (@Model.ModelVariable == null)
         {
-            ViewData["AreaTitle"] = areaTitle;
-
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
-            .Then("Edit @Model.ModelTypeName");     
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var @Model.ModelVariable = await _context.@(entitySetName).FindAsync(id);
-            if (@Model.ModelVariable == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
 @{
-            @:
+        @:
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+        @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
     }
 }
 
-            return View(@Model.ModelVariable);
-        }
+        return View(@Model.ModelVariable);
+    }
 
-        // POST: @routePrefix/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(@primaryKeyShortTypeName id, [Bind(editBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
+    // POST: @routePrefix/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(@primaryKeyShortTypeName id, [Bind(editBindingFields)] @Model.ModelTypeName @Model.ModelVariable)
+    {
+        ViewData["AreaTitle"] = areaTitle;
+
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+        .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
+        .Then("Edit @Model.ModelTypeName");  
+    
+        if (id != @Model.ModelVariable.@primaryKeyName)
         {
-            ViewData["AreaTitle"] = areaTitle;
-
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
-            .Then("Edit @Model.ModelTypeName");  
+            return NotFound();
+        }
         
-            if (id != @Model.ModelVariable.@primaryKeyName)
-            {
-                return NotFound();
-            }
-            
-            @Model.ModelTypeName model = await _context.@(entitySetName).FindAsync(id);
+        @Model.ModelTypeName model = await _context.@(entitySetName).FindAsync(id);
 
 @{
     foreach (var property in modelProperties)
     {
             if (property == primaryKeyName) continue;
 
-            @:model.@(property) = @(Model.ModelVariable).@(property);
+        @:model.@(property) = @(Model.ModelVariable).@(property);
     }
 }
-            // Remove validation errors from fields that aren't in the binding field list
-            ModelState.Scrub(editBindingFields);           
+        // Remove validation errors from fields that aren't in the binding field list
+        ModelState.Scrub(editBindingFields);           
 
-            if (ModelState.IsValid)
+        if (ModelState.IsValid)
+        {
+            try
             {
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    _toast.Success("Updated successfully.");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!@(Model.ModelTypeName)Exists(@Model.ModelVariable.@primaryKeyName))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
+                _toast.Success("Updated successfully.");
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!@(Model.ModelTypeName)Exists(@Model.ModelVariable.@primaryKeyName))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
 @{
     foreach (var property in relatedProperties.Values)
     {
-            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
+        @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName", @(Model.ModelVariable).@property.ForeignKeyPropertyNames[0]);
     }
 }
-            return View(@Model.ModelVariable);
+        return View(@Model.ModelVariable);
+    }
+
+    // GET: @routePrefix/Delete/5
+    public async Task<IActionResult> Delete(@primaryKeyNullableTypeName id)
+    {
+        ViewData["AreaTitle"] = areaTitle;
+
+        _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
+        .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
+        .Then("Delete @Model.ModelTypeName");  
+
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        // GET: @routePrefix/Delete/5
-        public async Task<IActionResult> Delete(@primaryKeyNullableTypeName id)
+        var @Model.ModelVariable = await _context.@(entitySetName)@inlineIncludes
+            .FirstOrDefaultAsync(m => m.@primaryKeyName == id);
+        if (@Model.ModelVariable == null)
         {
-            ViewData["AreaTitle"] = areaTitle;
-
-            _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .ThenAction("Manage @entitySetName", "Index", "@Model.ControllerRootName", new { Area = "@Model.AreaName" })
-            .Then("Delete @Model.ModelTypeName");  
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var @Model.ModelVariable = await _context.@(entitySetName)@inlineIncludes
-                .FirstOrDefaultAsync(m => m.@primaryKeyName == id);
-            if (@Model.ModelVariable == null)
-            {
-                return NotFound();
-            }
-
-            return View(@Model.ModelVariable);
+            return NotFound();
         }
 
-        // POST: @routePrefix/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(@primaryKeyShortTypeName id)
-        {
-            var @Model.ModelVariable = await _context.@(entitySetName).FindAsync(id);
-            _context.@(entitySetName).Remove(@Model.ModelVariable);
-            await _context.SaveChangesAsync();
-            
-            _toast.Success("@Model.ModelTypeName deleted successfully");
+        return View(@Model.ModelVariable);
+    }
 
-            return RedirectToAction(nameof(Index));
-        }
+    // POST: @routePrefix/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(@primaryKeyShortTypeName id)
+    {
+        var @Model.ModelVariable = await _context.@(entitySetName).FindAsync(id);
+        _context.@(entitySetName).Remove(@Model.ModelVariable);
+        await _context.SaveChangesAsync();
+        
+        _toast.Success("@Model.ModelTypeName deleted successfully");
 
-        private bool @(Model.ModelTypeName)Exists(@primaryKeyShortTypeName id)
-        {
-            return _context.@(entitySetName).Any(e => e.@primaryKeyName == id);
-        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool @(Model.ModelTypeName)Exists(@primaryKeyShortTypeName id)
+    {
+        return _context.@(entitySetName).Any(e => e.@primaryKeyName == id);
+    }
 
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Get@(entitySetName)(DtRequest request)
-        {
-            try
-			{
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+    public async Task<IActionResult> Get@(entitySetName)(DtRequest request)
+    {
+        try
+		{
 @{
 	if (!String.IsNullOrEmpty(includeExpressions))
 	{
-				@:var query = _context.@(entitySetName)@(includeExpressions);
+			@:var query = _context.@(entitySetName)@(includeExpressions);
 	}
 	else
 	{
-				@:var query = _context.@(entitySetName);
+			@:var query = _context.@(entitySetName);
 	}
-				@:var jsonData = await query.GetDatatableResponseAsync<@(entitySetName), @(entitySetName)IndexViewModel>(request);
+			@:var jsonData = await query.GetDatatableResponseAsync<@(entitySetName), @(entitySetName)IndexViewModel>(request);
 }
 
-                return Ok(jsonData);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error generating @entitySetName index json");
-            }
-            
-            return StatusCode(500);
+            return Ok(jsonData);
         }
-
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating @entitySetName index json");
+        }
+        
+        return StatusCode(500);
     }
+
+}
 
 @functions
 {
