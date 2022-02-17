@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Controllers;
@@ -12,6 +11,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
+using RoverCore.Datatables.DTOs;
+using RoverCore.Datatables.Extensions;
+using RoverCore.Datatables.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
@@ -19,6 +22,13 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
     [Authorize(Roles = "Admin")]
     public class RolesController : BaseController<RolesController>
     {
+	    public class ApplicationRoleIndexViewModel
+	    {
+		    [Key]
+		    public string Id { get; set; }
+		    public string Name { get; set; }
+	    }
+
         private const string createBindingFields = "Name";
         private const string editBindingFields = "Id,Name,NormalizedName,ConcurrencyStamp";
         private const string areaTitle = "Identity";
@@ -36,7 +46,10 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .Then("Manage Roles");
 
-            return View();
+            // Fetch descriptive data from the index dto to build the datatables index
+            var metadata = DatatableExtensions.GetDtMetadata<ApplicationRoleIndexViewModel>();
+
+            return View(metadata);
         }
 
         // GET: Identity/Roles/Details/5
@@ -220,56 +233,13 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             return _context.Roles.Any(e => e.Id == id);
         }
 
-        private IQueryable<ApplicationRole> GetRolesQueryable()
-        {
-            return _context.Roles.AsQueryable();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetRoles(DtRequest request)
         {
             try
             {
-                var sortColumn = request.Columns[request.Order[0].Column].Name;
-                var sortColumnDirection = request.Order[0].Dir;
-                var searchValue = request.Search.Value;
-
-                int recordsTotal = 0;
-                var records = GetRolesQueryable();
-
-                sortColumn = string.IsNullOrEmpty(sortColumn) ? "Id" : sortColumn.Replace(" ", "");
-                sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    records = records.Where(m => m.Name.Contains(searchValue)
-                                || m.NormalizedName.Contains(searchValue)
-                                || m.ConcurrencyStamp.Contains(searchValue));
-                }
-
-                records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
-
-                var recordsList = await records.ToListAsync();
-
-                recordsTotal = recordsList.Count();
-                var data = recordsList.Skip(request.Start).Take(request.Length)
-                    .Select(x => new
-                    {
-                        Options = "",
-                        id = x.Id,
-                        name = x.Name,
-                        normalizedName = x.NormalizedName,
-                        concurrencyStamp = x.ConcurrencyStamp
-                    }).ToList();
-
-                var jsonData = new
-                {
-                    draw = request.Draw,
-                    recordsFiltered = recordsTotal,
-                    recordsTotal = recordsTotal,
-                    data = data
-                };
+                var jsonData = await _context.Roles.GetDatatableResponseAsync<ApplicationRole, ApplicationRoleIndexViewModel>(request);
 
                 return Ok(jsonData);
             }

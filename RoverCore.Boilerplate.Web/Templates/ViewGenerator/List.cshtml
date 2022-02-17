@@ -2,9 +2,12 @@
 @using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
 @using System.Collections.Generic
 @using System.Linq
-@@model @GetEnumerableTypeExpression(Model.ViewDataTypeName)
+@@model RoverCore.Datatables.Models.DtMetadata
 
 @{
+	Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
+	Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
+
     var container = @Model.ViewName + "_container";
     var recordsAction = $"Get{Model.ModelMetadata.EntitySetName}";
     string pkName = GetPrimaryKeyName();
@@ -20,7 +23,7 @@
         @:var routeData = ViewContext.RouteData.Values;
         @:var viewController = routeData["controller"].ToString();
         @:var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
-        @:                                                                                              
+        @:
         @:var recordsUrl = Url.Action("@recordsAction");
         @:
         if (!string.IsNullOrEmpty(Model.LayoutPageFile))
@@ -75,34 +78,14 @@
         @:<table class="table" id="@Model.ViewName" style="width: 100%">
         @:<thead>
             @:<tr>
-            Dictionary<string, IPropertyMetadata> propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
-            Dictionary<string, INavigationMetadata> navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
 
                 @:<th>Actions</th>
-
-            if (pkName != null)
-            {
-                <th>
-                    @@Html.DisplayNameFor(model => model.@pkName)
-                </th>
-            }
-
-            foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
-            {
-                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
-                    && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
-                {
-                <th>
-                    @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
-                </th>
-                }
-                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation) && property.Scaffold)
-                {
-                <th>
-                    @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
-                </th>
-                }
-            }
+				@:@@foreach (var col in Model.Columns)
+				@:{
+				@:	<th>
+				@:		@@col.DisplayName
+				@:	</th>
+				@:}
             @:</tr>
         @:</thead>
 
@@ -174,7 +157,7 @@
                                 @:"defaultContent": "-", "targets": "_all"
                             @:},
                             @:{
-                            @:"targets": [1],
+                            @:"targets": [@@(Model.KeyIndex + 1)],
                             @:"visible": false,
                             @:"searchable": false
                         @:}],
@@ -184,9 +167,9 @@
                                 @:var controls = "<div class=\"btn-group\">" + 
                                     @:"<button class=\"btn btn-info dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"icon las la-cog me-1\"></i> Action</button>" +
                                     @:"<ul class=\"dropdown-menu\">" +
-                                    @:"<li><a href='@@(Url.Action("Edit"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
-                                    @:"<li><a href='@@(Url.Action("Details"))/" + row.@pkNameRevised + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
-                                    @:"<li><button data-href='@@(Url.Action("Delete"))/" + row.@pkNameRevised + "' class='dropdown-item delete-button'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
+                                    @:"<li><a href='@@(Url.Action("Edit"))/" + row.@@Model.Columns[Model.KeyIndex].Data + "' class='dropdown-item'><i class='icon las la-wrench me-1'></i> Edit</a></li>" +
+                                    @:"<li><a href='@@(Url.Action("Details"))/" + row.@@Model.Columns[Model.KeyIndex].Data + "' class='dropdown-item'><i class='icon las la-info-circle me-1'></i> Details</a></li>" +
+                                    @:"<li><button data-href='@@(Url.Action("Delete"))/" + row.@@Model.Columns[Model.KeyIndex].Data + "' class='dropdown-item delete-button'><i class='icon las la-trash me-1'></i> Delete</a></li>" +
                                     @:"</ul>";
 
                                 @:return controls;
@@ -195,31 +178,7 @@
                             @:"orderable": false,
                             @:"searchable": false
                         @:},
-					if (pkName != null)
-					{						
-					    @:{ "data": "@pkName", "name": "@pkName", "autoWidth": true },
-					}
-                    var modelProps = Model.ModelMetadata.ModelType.GetProperties();
-                    var last = modelProps.Length > 0 ? modelProps[modelProps.Length-1] : null;
-					foreach (var item in modelProps)
-					{
-					    var terminator = "";
-					    if (item != last)
-					        terminator = ",";
-
-						if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
-							&& property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
-						{
-						    var dataName = FirstLower(GetValueExpression(property));
-						@:{ "data": "@dataName", "name": "@GetValueExpression(property)", "autoWidth": true }@terminator
-						}
-						else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation) && property.Scaffold)
-						{
-						    var dataName = FirstLower(GetValueExpression(navigation));
-						@:{ "data": "@dataName", "name": "@GetValueExpression(navigation)", "autoWidth": true }@terminator
-
-						}								
-					}
+						@:@@Html.Raw(Model.DatatableColumns)
 					@:],
 					@:pageLength: 10,
 					@:responsive: true,

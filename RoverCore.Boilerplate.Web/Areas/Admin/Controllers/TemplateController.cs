@@ -10,8 +10,8 @@ using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Web.Extensions;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
@@ -19,6 +19,10 @@ using RoverCore.Boilerplate.Infrastructure.Common.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates.Services;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
+using RoverCore.Datatables.Converters;
+using RoverCore.Datatables.DTOs;
+using RoverCore.Datatables.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 {
@@ -26,6 +30,15 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class TemplateController : BaseController<TemplateController>
     {
+	    public class TemplateIndexViewModel
+	    {
+            [Key]
+		    public int Id { get; set; }
+		    public string Slug { get; set; }
+		    public string Name { get; set; }
+		    public DateTime Updated { get; set; }
+	    }
+
         private const string createBindingFields = "Id,Slug,Name,Description,Body";
         private const string editBindingFields = "Id,Slug,Name,Description,Body";
         private const string areaTitle = "Admin";
@@ -41,9 +54,12 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
-            .Then("Manage Email Templates");            
-            
-            return View();
+            .Then("Manage Email Templates");
+
+            // Fetch descriptive data from the index dto to build the datatables index
+            var metadata = DatatableExtensions.GetDtMetadata<TemplateIndexViewModel>();
+
+            return View(metadata);
         }
 
         // GET: Admin/Template/Details/5
@@ -217,45 +233,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         {
             try
             {
-                var sortColumn = request.Columns[request.Order[0].Column].Name;
-                var sortColumnDirection = request.Order[0].Dir;
-                var searchValue = request.Search.Value;
-
-                int recordsTotal = 0;
-                var records = _templateService.GetTemplateQueryable();
-
-                sortColumn = string.IsNullOrEmpty(sortColumn) ? "Id" : sortColumn.Replace(" ", "");
-                sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    records = records.Where(m => m.Slug.Contains(searchValue)
-                                || m.Name.Contains(searchValue)
-                                || m.Description.Contains(searchValue)
-                                || m.Body.Contains(searchValue));
-                }
-                
-                records = sortColumnDirection == "asc" ? records.OrderBy(sortColumn) : records.OrderByDescending(sortColumn);
-
-                var recordsList = await records.ToListAsync();
-
-                recordsTotal = recordsList.Count();
-                var data = recordsList.Skip(request.Start).Take(request.Length)
-	                .Select(x => new
-                    {
-                        Options = "",
-                        id = x.Id,
-                        slug = x.Slug,
-                        name = x.Name,
-                        updated = x.Updated.ToString("yyyy-MM-dd HH:mm")
-	                }).ToList();
-
-                var jsonData = new { 
-                    draw = request.Draw, 
-                    recordsFiltered = recordsTotal, 
-                    recordsTotal = recordsTotal, 
-                    data = data 
-                };
+                var jsonData = await _templateService.GetTemplateQueryable().GetDatatableResponseAsync<Template, TemplateIndexViewModel>(request);
 
                 return Ok(jsonData);
             }

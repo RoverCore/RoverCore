@@ -4,18 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoverCore.Boilerplate.Domain.DTOs.Datatables;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.Boilerplate.Web.Extensions;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.BreadCrumbs.Services;
+using RoverCore.Datatables.DTOs;
+using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -24,6 +26,16 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 [Authorize(Roles = "Admin")]
 public class UsersController : BaseController<UsersController>
 {
+	public class UsersIndexViewModel
+	{
+		[Key]
+		public string Id { get; set; }
+		public string Email { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string Roles { get; set; }
+	}
+
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
@@ -42,7 +54,10 @@ public class UsersController : BaseController<UsersController>
 	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
 		    .Then("Manage Users");
 
-        return View(new UserViewModel());
+	    // Fetch descriptive data from the index dto to build the datatables index
+	    var metadata = DatatableExtensions.GetDtMetadata<UsersIndexViewModel>();
+
+	    return View(metadata);
     }
 
     public async Task<IActionResult> Create()
@@ -236,88 +251,47 @@ public class UsersController : BaseController<UsersController>
         return _context.Users.Any(x => x.Id == id);
     }
 
-    private IQueryable<UserViewModel> GetUsersAsync()
+    /// <summary>
+    /// Return a list of all users and the roles that they have (as a comma-separated string)
+    /// </summary>
+    /// <returns></returns>
+    private async Task<IQueryable<UsersIndexViewModel>> GetUsersAsync()
     {
-        return _context.Users
+        var users = await _context.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
             .Select(
-            x => new UserViewModel()
+            x => new UsersIndexViewModel()
             {
                 Id = x.Id,
                 Email = x.Email,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList()
-            }).AsQueryable();
-
+                Roles = String.Join(", ", x.UserRoles.Select(ur => ur.Role.Name).ToList())
+            }).ToListAsync();
+            
+            return users.AsQueryable();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> GetUsers(DtRequest request)
     {
-        try
+	    try
         {
-            var sortColumn = request.Columns[request.Order[0].Column].Name;
-            var sortColumnDirection = request.Order[0].Dir;
-            var searchValue = request.Search.Value;
+            // Query the database for all of the users and their roles
+            var users = await GetUsersAsync();
 
-            int recordsTotal = 0;
-            var users = GetUsersAsync();
+            // Filter the users list based on the datatables request
+            var jsonData = users.GetDatatableResponse<UsersIndexViewModel, UsersIndexViewModel>(request);
 
-            sortColumn = string.IsNullOrEmpty(sortColumn) ? "LastName" : sortColumn.Replace(" ", "");
-            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
+		    return Ok(jsonData);
+	    }
+	    catch (Exception ex)
+	    {
+		    _logger.LogError(ex, "Error generating Users index json");
+	    }
 
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                users = users.Where(m => m.FirstName.Contains(searchValue)
-                                            || m.LastName.Contains(searchValue)
-                                            || m.Email.Contains(searchValue)
-                                            || m.Roles.Contains(searchValue));
-            }
-
-            switch (sortColumn)
-            {
-                case "Roles":
-
-                    users = sortColumnDirection == "asc" ? users.OrderBy(x => string.Join(", ", x.Roles)) :
-                        users.OrderByDescending(x => string.Join(", ", x.Roles));
-
-                    break;
-
-                default:
-
-                    users = sortColumnDirection == "asc" ?
-                        users.OrderBy(sortColumn) :
-                        users.OrderByDescending(sortColumn);
-
-                    break;
-
-            }
-
-            var usersList = await users.ToListAsync();
-
-            recordsTotal = usersList.Count();
-            var data = usersList.Skip(request.Start).Take(request.Length)
-                .Select(x => new
-                {
-                    Options = "",
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Roles = String.Join(", ", x.Roles),
-                    Email = x.Email
-                }).ToList();
-
-            var jsonData = new { draw = request.Draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-            return Ok(jsonData);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error generating user index json");
-        }
-
-        return StatusCode(500);
+	    return StatusCode(500);
     }
 }
