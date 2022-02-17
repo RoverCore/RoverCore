@@ -21,21 +21,21 @@ using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
-public class UsersIndexDto 
-{
-    [Key]
-    public string Id { get; set; }
-	public string Email { get; set; }
-	public string FirstName { get; set; }
-	public string LastName { get; set; }
-	public string Roles { get; set; }
-}
-
 [ApiExplorerSettings(IgnoreApi = true)]
 [Area("Identity")]
 [Authorize(Roles = "Admin")]
 public class UsersController : BaseController<UsersController>
 {
+	public class UsersIndexViewModel
+	{
+		[Key]
+		public string Id { get; set; }
+		public string Email { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string Roles { get; set; }
+	}
+
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
@@ -54,7 +54,10 @@ public class UsersController : BaseController<UsersController>
 	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
 		    .Then("Manage Users");
 
-        return View(new UserViewModel());
+	    // Fetch descriptive data from the index dto to build the datatables index
+	    var metadata = DatatableExtensions.GetDtMetadata<UsersIndexViewModel>();
+
+	    return View(metadata);
     }
 
     public async Task<IActionResult> Create()
@@ -252,13 +255,13 @@ public class UsersController : BaseController<UsersController>
     /// Return a list of all users and the roles that they have (as a comma-separated string)
     /// </summary>
     /// <returns></returns>
-    private async Task<IQueryable<UsersIndexDto>> GetUsersAsync()
+    private async Task<IQueryable<UsersIndexViewModel>> GetUsersAsync()
     {
         var users = await _context.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
             .Select(
-            x => new UsersIndexDto()
+            x => new UsersIndexViewModel()
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -280,7 +283,7 @@ public class UsersController : BaseController<UsersController>
             var users = await GetUsersAsync();
 
             // Filter the users list based on the datatables request
-            var jsonData = users.GetDatatableResponse<UsersIndexDto, UsersIndexDto>(request);
+            var jsonData = users.GetDatatableResponse<UsersIndexViewModel, UsersIndexViewModel>(request);
 
 		    return Ok(jsonData);
 	    }

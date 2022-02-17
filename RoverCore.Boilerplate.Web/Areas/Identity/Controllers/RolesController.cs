@@ -18,17 +18,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
-	public class ApplicationRoleIndexDto
-	{
-        [Key]
-        public string Id { get; set; }
-        public string Name { get; set; }
-	}
-
     [Area("Identity")]
     [Authorize(Roles = "Admin")]
     public class RolesController : BaseController<RolesController>
     {
+	    public class ApplicationRoleIndexViewModel
+	    {
+		    [Key]
+		    public string Id { get; set; }
+		    public string Name { get; set; }
+	    }
+
         private const string createBindingFields = "Name";
         private const string editBindingFields = "Id,Name,NormalizedName,ConcurrencyStamp";
         private const string areaTitle = "Identity";
@@ -47,7 +47,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             .Then("Manage Roles");
 
             // Fetch descriptive data from the index dto to build the datatables index
-            var metadata = DatatableExtensions.GetDtMetadata<ApplicationRoleIndexDto>();
+            var metadata = DatatableExtensions.GetDtMetadata<ApplicationRoleIndexViewModel>();
 
             return View(metadata);
         }
@@ -239,7 +239,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
         {
             try
             {
-                var jsonData = await _context.Roles.GetDatatableResponseAsync<ApplicationRole, ApplicationRoleIndexDto>(request);
+                var jsonData = await _context.Roles.GetDatatableResponseAsync<ApplicationRole, ApplicationRoleIndexViewModel>(request);
 
                 return Ok(jsonData);
             }

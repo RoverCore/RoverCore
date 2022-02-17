@@ -1,4 +1,4 @@
-﻿@model UserViewModel
+﻿@model RoverCore.Datatables.Models.DtMetadata
 
 @{
     ViewData["Title"] = "Admin";
@@ -34,22 +34,13 @@
         <table class="table table-bordered" id="index" style="width: 100%">
             <thead>
             <tr>
-                <th></th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    Roles
-                </th>
+	            <th>Actions</th>
+	            @foreach (var col in Model.Columns)
+	            {
+		            <th>
+			            @col.DisplayName
+		            </th>
+	            }
             </tr>
             </thead>
         </table>
@@ -97,7 +88,7 @@
                                     "defaultContent": "-", "targets": "_all"
                                 },
                                 {
-                                "targets": [1],
+                                "targets": [@(Model.KeyIndex + 1)],
                                 "visible": false,
                                 "searchable": false
                             }],
@@ -119,11 +110,7 @@
                                 "orderable": false,
                                 "searchable": false
                             },
-                            { "data": "id", "name": "Id", "autoWidth": true },
-                            { "data": "firstName", "name": "First Name", "autoWidth": true },
-                            { "data": "lastName", "name": "Last Name", "autoWidth": true },
-                            { "data": "email", "name": "Email", "autoWidth": true },
-                            { "data": "roles", "name": "Roles", "autoWidth": true }
+	                        @Html.Raw(Model.DatatableColumns)
                     ],
                     pageLength: 10,
                     responsive: true,
