@@ -21,6 +21,11 @@ namespace RoverCore.Datatables.Extensions
 {
     public static class DatatableExtensions
     {
+        /// <summary>
+        /// Creates a viewmodel that can be used to render an index page that uses datatables
+        /// </summary>
+        /// <typeparam name="TEntityDTO"></typeparam>
+        /// <returns></returns>
         public static DtMetadata GetDtMetadata<TEntityDTO>()
         {
             Type dtoType = typeof(TEntityDTO);
@@ -68,22 +73,9 @@ namespace RoverCore.Datatables.Extensions
 		    where TEntity : class
 	    {
             var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
-		    var sortColumn = request.Columns[request.Order[0].Column].Name;
-		    var sortColumnDirection = request.Order[0].Dir;
+            int recordsTotal = 0;
 
-		    int recordsTotal = 0;
-		    var records = entity;
-
-		    sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-		    if (!String.IsNullOrEmpty(sortColumn))
-		    {
-			    sortColumn = sortColumn.Replace(" ", "");
-
-                records = sortColumnDirection == "asc"
-				    ? records.OrderBy(sortColumn)
-				    : records.OrderByDescending(sortColumn);
-		    }
+            var records = ApplySorting<TEntity>(entity, request);
 
             recordsTotal = await records.CountAsync();
             var recordsDto = records.ProjectTo<TEntityDTO>(mapperConfiguration);
@@ -95,7 +87,10 @@ namespace RoverCore.Datatables.Extensions
             }
 
             var recordsFiltered = await recordsDto.CountAsync();
-			var data = await recordsDto.Skip(request.Start).Take(request.Length).ToListAsync();
+			var data = await recordsDto
+                .Skip(request.Start)
+                .Take(request.Length)
+                .ToListAsync();
             
             var dataTransformed = TransformRecords<TEntityDTO>(data);
 
@@ -124,22 +119,9 @@ namespace RoverCore.Datatables.Extensions
             where TEntity : class
         {
             var mapperConfiguration = config ?? new MapperConfiguration(cfg => cfg.CreateProjection<TEntity, TEntityDTO>());
-            var sortColumn = request.Columns[request.Order[0].Column].Name;
-            var sortColumnDirection = request.Order[0].Dir;
-
             int recordsTotal = 0;
-            var records = entity;
 
-            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
-
-            if (!String.IsNullOrEmpty(sortColumn))
-            {
-                sortColumn = sortColumn.Replace(" ", "");
-
-                records = sortColumnDirection == "asc"
-                    ? records.OrderBy(sortColumn)
-                    : records.OrderByDescending(sortColumn);
-            }
+            var records = ApplySorting<TEntity>(entity, request);
 
             recordsTotal = records.Count();
             var recordsDto = records.ProjectTo<TEntityDTO>(mapperConfiguration);
@@ -151,7 +133,9 @@ namespace RoverCore.Datatables.Extensions
             }
 
             var recordsFiltered = recordsDto.Count();
-            var data = recordsDto.Skip(request.Start).Take(request.Length).ToList();
+            var data = recordsDto.Skip(request.Start)
+                .Take(request.Length)
+                .ToList();
 
             var dataTransformed = TransformRecords<TEntityDTO>(data);
 
@@ -166,6 +150,38 @@ namespace RoverCore.Datatables.Extensions
             return jsonData;
         }
 
+        /// <summary>
+        /// Adds sorting method to an existing IQueryable based on the datatables request parameters
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private static IQueryable<TEntity> ApplySorting<TEntity>(IQueryable<TEntity> entity, DtRequest request)
+        {
+            var sortColumn = request.Columns[request.Order[0].Column].Name;
+            var sortColumnDirection = request.Order[0].Dir;
+
+            sortColumnDirection = string.IsNullOrEmpty(sortColumnDirection) ? "asc" : sortColumnDirection;
+
+            if (!String.IsNullOrEmpty(sortColumn))
+            {
+                sortColumn = sortColumn.Replace(" ", "");
+
+                entity = sortColumnDirection == "asc"
+                    ? entity.OrderBy(sortColumn)
+                    : entity.OrderByDescending(sortColumn);
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Transforms fields into a format that can be read by Datatables
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private static ICollection TransformRecords<T>(List<T> data)
         {
             PropertyInfo[] properties = typeof(T).GetProperties();
@@ -192,57 +208,5 @@ namespace RoverCore.Datatables.Extensions
 
             return dataTransformed;
         }
-
-		/// <summary>
-		/// Credit to Ivan Stoev - https://stackoverflow.com/questions/59754832/ef-core-expression-tree-equivalent-for-iqueryable-search
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="source"></param>
-		/// <param name="search"></param>
-		/// <returns></returns>
-		/// <exception cref="ArgumentNullException"></exception>
-		public static IQueryable<T> ApplySearch<T>(this IQueryable<T> source, string search)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (string.IsNullOrWhiteSpace(search)) return source;
-
-            var parameter = Expression.Parameter(typeof(T), "e");
-            // The following simulates closure to let EF Core create parameter rather than constant value (in case you use `Expresssion.Constant(search)`)
-            var value = Expression.Property(Expression.Constant(new { search }), nameof(search));
-            var body = SearchStrings(parameter, value);
-            if (body == null) return source;
-
-            var predicate = Expression.Lambda<Func<T, bool>>(body, parameter);
-            return source.Where(predicate);
-        }
-
-        static Expression? SearchStrings(Expression target, Expression search)
-        {
-            Expression? result = null;
-
-            var properties = target.Type
-                .GetProperties()
-                .Where(x => x.CanRead);
-
-            foreach (var prop in properties)
-            {
-                Expression? condition = null;
-                var propValue = Expression.MakeMemberAccess(target, prop);
-                if (prop.PropertyType == typeof(string))
-                {
-                    var comparand = Expression.Call(propValue, nameof(string.ToLower), Type.EmptyTypes);
-                    condition = Expression.Call(comparand, nameof(string.Contains), Type.EmptyTypes, search);
-                }
-                else if (!(prop!.PropertyType!.Namespace!.StartsWith("System.")))
-                {
-                    condition = SearchStrings(propValue, search);
-                }
-                if (condition != null)
-                    result = result == null ? condition : Expression.OrElse(result, condition);
-            }
-
-            return result;
-        }
-
 	}
 }
