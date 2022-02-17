@@ -13,12 +13,16 @@ using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.Datatables.DTOs;
 using RoverCore.Datatables.Extensions;
+using RoverCore.Datatables.Models;
 using DtRequest = RoverCore.Boilerplate.Domain.DTOs.Datatables.DtRequest;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
 {
-	public class ApplicationRoleIndexDto : DtBaseResponse
+	public class ApplicationRoleIndexDto
 	{
+        [Key]
+        public string Id { get; set; }
         public string Name { get; set; }
 	}
 
@@ -43,7 +47,10 @@ namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers
             _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
             .Then("Manage Roles");
 
-            return View();
+            // Fetch descriptive data from the index dto to build the datatables index
+            var metadata = DatatableExtensions.GetDtMetadata<ApplicationRoleIndexDto>();
+
+            return View(metadata);
         }
 
         // GET: Identity/Roles/Details/5

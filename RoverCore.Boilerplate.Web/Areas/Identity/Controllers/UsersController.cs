@@ -10,6 +10,7 @@ using RoverCore.Boilerplate.Web.Areas.Identity.Models.AccountViewModels;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.Boilerplate.Web.Extensions;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
@@ -21,8 +22,10 @@ using RoverCore.Datatables.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
-public class UsersIndexDto : DtBaseResponse
+public class UsersIndexDto 
 {
+    [Key]
+    public string Id { get; set; }
 	public string Email { get; set; }
 	public string FirstName { get; set; }
 	public string LastName { get; set; }

@@ -30,7 +30,6 @@ public class DtColumn
     public bool Searchable { get; set; }
     [JsonPropertyName("orderable")]
     public bool Orderable { get; set; }
-
     [JsonPropertyName("search")]
     public DtSearch Search { get; set; } = new();
 }

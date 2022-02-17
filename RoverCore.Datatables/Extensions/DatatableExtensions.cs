@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,11 +13,45 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Datatables.DTOs;
 using RoverCore.Datatables.Extensions;
+using RoverCore.Datatables.Models;
 
 namespace RoverCore.Datatables.Extensions
 {
     public static class DatatableExtensions
     {
+        public static DtMetadata GetDtMetadata<TEntityDTO>()
+        {
+            Type dtoType = typeof(TEntityDTO);
+            DtMetadata metadata = new DtMetadata();
+
+            PropertyInfo[] properties = dtoType.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                DtMetaColumn column = new DtMetaColumn();
+
+                var keyAttribute = Attribute.GetCustomAttribute(property, typeof(KeyAttribute)) as KeyAttribute;
+                var nameAttribute = Attribute.GetCustomAttribute(property, typeof(DisplayNameAttribute)) as DisplayNameAttribute;
+                
+                column.IsDate = property.PropertyType == typeof(DateTime);
+                column.IsPrimaryKey = keyAttribute != null;
+                column.Visible = !column.IsPrimaryKey;
+                column.Searchable = property.PropertyType == typeof(string);
+                column.Orderable = true;
+                column.Data = Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+                column.Name = property.Name;
+                column.DisplayName = nameAttribute?.DisplayName ?? property.Name;
+
+                metadata.Columns.Add(column);
+
+                if (column.IsPrimaryKey)
+                {
+                    metadata.KeyIndex = metadata.Columns.Count - 1;
+                }
+            }
+
+            return metadata;
+        }
+
         /// <summary>
         /// Uses the datatables request parameters to query entity and retrieve the appropriate records.  The TEntityDTO should be completely flattened and not include other objects as fields.
         /// </summary>
@@ -25,7 +62,7 @@ namespace RoverCore.Datatables.Extensions
         /// <param name="config">Optional Automapper configuration that maps TEntity to TEntityDTO</param>
         /// <returns></returns>
         public static async Task<DtResponseData> GetDatatableResponse<TEntity, TEntityDTO>(this IQueryable<TEntity> entity, DtRequest request, MapperConfiguration? config = null)
-		    where TEntityDTO : DtBaseResponse
+		    where TEntityDTO : class
 		    where TEntity : class
 	    {
 		    var sortColumn = request.Columns[request.Order[0].Column].Name;
