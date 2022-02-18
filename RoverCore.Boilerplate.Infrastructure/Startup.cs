@@ -14,11 +14,19 @@ namespace RoverCore.Boilerplate.Infrastructure;
 
 public static class Startup
 {
-	// Auto-register services implementing IScoped, ITransient, ISingleton (thanks to Georgi Stoyanov)
+	// 
+	/// <summary>
+	/// Auto-register services implementing IScoped, ITransient, ISingleton (thanks to Georgi Stoyanov)
+	/// Also add automapper and auto-register mapping profiles
+	/// </summary>
+	/// <param name="services"></param>
+	/// <param name="assemblies"></param>
 	public static void ConfigureServicesDiscovery(IServiceCollection services, params Assembly[] assemblies)
 	{
 		services.AddServiced(assemblies);
-	}
+        services.AddAutoMapper(assemblies);
+    }
+
 	public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 	{
 		// Add settings and configuration services
