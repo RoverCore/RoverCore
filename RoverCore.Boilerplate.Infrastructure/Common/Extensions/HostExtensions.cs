@@ -33,6 +33,9 @@ public static class HostExtensions
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
 
+            // Ensure that database exists
+            context?.Database.EnsureCreated();
+
             settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 
             var settings = settingsService.GetSettings();
