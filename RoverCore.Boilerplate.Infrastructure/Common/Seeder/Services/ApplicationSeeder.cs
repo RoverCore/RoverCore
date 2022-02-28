@@ -36,7 +36,6 @@ public class ApplicationSeederService : ISeeder
         List<Type> seederTypes = _servicedRegistry.FilterServiceTypes<ISeeder>()
             .Where(t => t.Name != GetType().Name)
             .ToList();
-        var test = _serviceProvider.GetServices<ISeeder>().ToList();
 
         _logger.LogInformation("ApplicationSeeder beginning execution");
 
