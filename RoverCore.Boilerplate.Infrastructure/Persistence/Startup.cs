@@ -19,6 +19,12 @@ public static class Startup
 				x => x.MigrationsAssembly("RoverCore.Boilerplate.Infrastructure"));
 		}, optionsLifetime: ServiceLifetime.Singleton, contextLifetime: ServiceLifetime.Scoped);
 
+		services.AddDbContext<MultiTenantStoreDbContext>(options =>
+		{
+			options.UseSqlServer(configuration.GetConnectionString("AppContext"),
+				x => x.MigrationsAssembly("RoverCore.Boilerplate.Infrastructure"));
+		}, optionsLifetime: ServiceLifetime.Singleton, contextLifetime: ServiceLifetime.Scoped);
+
 		services.AddDbContextFactory<ApplicationDbContext>(options =>
 		{
 			options.UseSqlServer(configuration.GetConnectionString("AppContext"),

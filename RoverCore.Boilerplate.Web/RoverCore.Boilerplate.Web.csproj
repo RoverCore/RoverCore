@@ -24,6 +24,9 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Finbuckle.MultiTenant" Version="6.6.1" />
+		<PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.6.1" />
+		<PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.6.1" />
 		<PackageReference Include="Hangfire" Version="1.7.28" />
 		<PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.2" />

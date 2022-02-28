@@ -4,11 +4,11 @@ using RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;
 
 namespace RoverCore.Boilerplate.Infrastructure.Identity.Seeding;
 
-public class ApplicationRoleSeed : ISeeder
+public class DefaultTenantSeed : ISeeder
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
 
-    public ApplicationRoleSeed(RoleManager<ApplicationRole> roleManager)
+    public DefaultTenantSeed(RoleManager<ApplicationRole> roleManager)
     {
         _roleManager = roleManager;
     }

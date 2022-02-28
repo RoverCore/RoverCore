@@ -15,6 +15,7 @@ using Serviced;
 using System;
 using System.IO;
 using System.Reflection;
+using Finbuckle.MultiTenant;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -47,6 +48,11 @@ public class Startup
 
         // Configure infrastructure services (see Startup.cs of the Infrastructure project)
         Infrastructure.Startup.ConfigureServices(services, _configuration);
+
+        services.AddMultiTenant<TenantInfo>()
+	        .WithEFCoreStore<MultiTenantStoreDbContext, TenantInfo>()
+            .WithStaticStrategy("default-tenant")
+	        .WithConfigurationStore();
 
         services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration
             .AddCors() // Adds cross-origin sharing services
@@ -113,6 +119,7 @@ public class Startup
         app.UseStaticFiles();
         app.UseCookiePolicy();
         app.UseRouting();
+        app.UseMultiTenant();
 
         // global cors policy
         app.UseCors(x => x

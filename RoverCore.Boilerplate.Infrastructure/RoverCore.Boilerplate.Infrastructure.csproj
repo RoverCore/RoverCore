@@ -9,6 +9,9 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Finbuckle.MultiTenant" Version="6.6.1" />
+		<PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.6.1" />
+		<PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.6.1" />
 		<PackageReference Include="FluentEmail.Core" Version="3.0.0" />
 		<PackageReference Include="FluentEmail.Liquid" Version="3.0.0" />
 		<PackageReference Include="FluentEmail.MailKit" Version="3.0.0" />
