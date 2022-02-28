@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;
@@ -9,7 +10,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 
 public static class HostExtensions
 {
-    public static IWebHost RunSeeders(this IWebHost host, bool overrideSettings = false)
+    public static WebApplication RunSeeders(this WebApplication host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
@@ -26,7 +27,7 @@ public static class HostExtensions
         return host;
     }
 
-    public static IWebHost RunMigrations(this IWebHost host, bool overrideSettings = false)
+    public static WebApplication RunMigrations(this WebApplication host, bool overrideSettings = false)
     {
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {

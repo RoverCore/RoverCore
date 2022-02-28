@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using System.Linq;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 
 namespace RoverCore.Boilerplate.Web;
 
@@ -36,7 +38,7 @@ public class Program
         if (overrideSeed || overrideMigration)
         {
             Log.Information("Starting seeding/migration process");
-            BuildWebHost(args)
+            BuildWebApplication(args)
                 .RunMigrations(overrideMigration) // Apply any new EF migrations
                 .RunSeeders(overrideSeed); // Run any auto-registered seeders
 
@@ -46,7 +48,7 @@ public class Program
         try
         {
             Log.Information("Starting web host");
-            BuildWebHost(args)
+            BuildWebApplication(args)
                 .RunMigrations()  // Apply any new EF migrations (requires appsetting)
                 .RunSeeders()     // Run any auto-registered seeders (classes that implement ISeeder) (requires appsetting)
                 .Run();           // Start the web host
@@ -62,17 +64,30 @@ public class Program
 
     }
 
-    public static IWebHost BuildWebHost(string[] args)
+    public static WebApplication BuildWebApplication(string[] args)
     {
         var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables()
             .Build();
 
-        return WebHost.CreateDefaultBuilder(args)
-            .UseConfiguration(configuration)
-            .UseSerilog()
-            .UseStartup<Startup>()
-            .Build();
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+        {
+	        ApplicationName = typeof(Program).Assembly.FullName,
+	        ContentRootPath = Directory.GetCurrentDirectory(),
+	        EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+	        WebRootPath = "wwwroot"
+        });
+
+        builder.Configuration.AddEnvironmentVariables();
+        builder.Host.UseSerilog(Log.Logger);
+
+        var startup = new Startup(builder.Configuration);
+        startup.ConfigureServices(builder.Services);
+
+        var app = builder.Build();
+        startup.Configure(app);
+
+        return app;
     }
 
 }
