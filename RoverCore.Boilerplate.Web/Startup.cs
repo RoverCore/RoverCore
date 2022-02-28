@@ -51,7 +51,7 @@ public class Startup
 
         services.AddMultiTenant<TenantInfo>()
 	        .WithEFCoreStore<MultiTenantStoreDbContext, TenantInfo>()
-            .WithStaticStrategy("default-tenant")
+//            .WithStaticStrategy("default-tenant")
 	        .WithConfigurationStore();
 
         services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration

@@ -18,8 +18,10 @@ public class DefaultTenantSeed : ISeeder
 
     public void CreateTenants()
     {
+	    var tenants = _tenantStore.GetAllAsync().GetAwaiter().GetResult();
+
 	    _tenantStore.TryAddAsync(new TenantInfo
-		    { Id = "a5883f2-38ee-4993-8abc-e63fe3f9daf2", Identifier = "default-tenant", Name = "Default Tenant", ConnectionString = _configuration.GetConnectionString("AppContext") });
+		    { Id = "a5883f2-38ee-4993-8abc-e63fe3f9daf2", Identifier = "default-tenant", Name = "Default Tenant", ConnectionString = _configuration.GetConnectionString("AppContext") }).GetAwaiter().GetResult();
     }
 
     public Task SeedAsync()

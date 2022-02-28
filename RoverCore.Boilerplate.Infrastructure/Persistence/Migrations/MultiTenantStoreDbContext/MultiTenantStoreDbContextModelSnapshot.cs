@@ -42,7 +42,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[Identifier] IS NOT NULL");
 
-                    b.ToTable("TenantInfo");
+                    b.ToTable("TenantInfo", (string)null);
                 });
 #pragma warning restore 612, 618
         }
