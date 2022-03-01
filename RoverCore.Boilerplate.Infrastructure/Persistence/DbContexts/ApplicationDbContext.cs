@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Finbuckle.MultiTenant;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
@@ -7,10 +8,10 @@ using RoverCore.Boilerplate.Domain.Entities.Templates;
 namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim,
-    ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
+public class ApplicationDbContext : MultiTenantIdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim,
+	ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public ApplicationDbContext(ITenantInfo tenantInfo, DbContextOptions<ApplicationDbContext> options) : base(tenantInfo, options)
     {
     }
 

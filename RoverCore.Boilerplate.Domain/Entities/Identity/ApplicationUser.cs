@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
+using Finbuckle.MultiTenant;
 
 namespace RoverCore.Boilerplate.Domain.Entities.Identity;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
+[MultiTenant]
 public class ApplicationUser : IdentityUser<string>
 {
     [Required]
