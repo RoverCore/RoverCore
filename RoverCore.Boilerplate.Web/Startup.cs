@@ -51,8 +51,8 @@ public class Startup
 
         services.AddMultiTenant<TenantInfo>()
 	        .WithEFCoreStore<MultiTenantStoreDbContext, TenantInfo>()
-//            .WithStaticStrategy("default-tenant")
-	        .WithConfigurationStore();
+	        //.WithConfigurationStore()
+            .WithStaticStrategy("default-tenant");
 
         services.AddRouting(options => options.LowercaseUrls = true) // Add routing with lowercase url configuration
             .AddCors() // Adds cross-origin sharing services
