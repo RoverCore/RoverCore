@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RoverCore.Abstractions.Seeder;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;
 

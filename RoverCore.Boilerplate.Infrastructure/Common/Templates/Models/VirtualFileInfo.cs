@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.FileProviders;
+using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Models

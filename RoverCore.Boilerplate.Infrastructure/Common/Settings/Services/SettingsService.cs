@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RoverCore.Abstractions.Settings;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
@@ -10,15 +11,15 @@ using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
 
-public class SettingsService : IScoped
+public class SettingsService<T> : ISettingsService<T>
 {
     private const string SettingsKey = "ApplicationSettings";
     private readonly ApplicationDbContext _context;
-    private readonly ApplicationSettings _settings;
+    private readonly T _settings;
     private readonly ILogger _logger;
     private readonly IMemoryCache _cache;
 
-    public SettingsService(ApplicationDbContext context, ApplicationSettings settings, ILogger<SettingsService> logger, IMemoryCache cache)
+    public SettingsService(ApplicationDbContext context, T settings, ILogger<SettingsService<T>> logger, IMemoryCache cache)
     {
         _context = context;
         _settings = settings;
@@ -41,7 +42,7 @@ public class SettingsService : IScoped
             try
             {
                 var savedSettingsJson = svConfig.Value ?? string.Empty;
-                var savedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(savedSettingsJson);
+                var savedSettings = JsonConvert.DeserializeObject<T>(savedSettingsJson);
 
                 // Copy saved settings to existing singleton service
                 CopySettings(savedSettings!, _settings);
@@ -58,10 +59,8 @@ public class SettingsService : IScoped
     /// Returns the settings service singleton reference
     /// </summary>
     /// <returns></returns>
-    public ApplicationSettings GetSettings()
+    public T GetSettings()
     {
-	    _settings.Email ??= new EmailSettings();
-
         return _settings;
     }
 
@@ -79,7 +78,7 @@ public class SettingsService : IScoped
     /// </summary>
     /// <param name="newSettings"></param>
     /// <returns></returns>
-    public async Task PatchSettings(ApplicationSettings newSettings)
+    public async Task PatchSettings(T newSettings)
     {
         // Copy new settings to existing singleton service
         CopySettings(newSettings, _settings);
@@ -87,12 +86,12 @@ public class SettingsService : IScoped
         await Commit(SettingsKey, JsonConvert.SerializeObject(_settings));
     }
 
-    private void CopySettings(ApplicationSettings? source, ApplicationSettings target)
+    private void CopySettings(T? source, T target)
     {
         if (source == null) return;
 
         // Copy new settings to existing singleton service
-        foreach (PropertyInfo property in typeof(ApplicationSettings).GetProperties().Where(p => p.CanWrite))
+        foreach (PropertyInfo property in typeof(T).GetProperties().Where(p => p.CanWrite))
         {
             var value = property.GetValue(source, null);
 

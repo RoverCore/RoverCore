@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RoverCore.Abstractions.Settings;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
 
@@ -15,7 +16,11 @@ public static class Startup
 	{
 		// Add ApplicationsSettings service
 		var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();
+        settings.Email ??= new EmailSettings();
+
 		services.AddSingleton(settings);
+
+        services.AddScoped<ISettingsService<ApplicationSettings>, SettingsService<ApplicationSettings>>();
 
 		// Adds IOptions capabilities
 		services.AddOptions();
@@ -25,7 +30,7 @@ public static class Startup
 	{
 		using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 		{
-			var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+			var settingsService = serviceScope.ServiceProvider.GetRequiredService<ISettingsService<ApplicationSettings>>();
 
 			// Load persisted settings
 			settingsService.LoadPersistedSettings().GetAwaiter().GetResult();

@@ -12,12 +12,16 @@
 
 	<ItemGroup>
 	  <Compile Remove="Areas\Admin\Data\**" />
+	  <Compile Remove="Areas\Api\Data\**" />
 	  <Compile Remove="Services\**" />
 	  <Content Remove="Areas\Admin\Data\**" />
+	  <Content Remove="Areas\Api\Data\**" />
 	  <Content Remove="Services\**" />
 	  <EmbeddedResource Remove="Areas\Admin\Data\**" />
+	  <EmbeddedResource Remove="Areas\Api\Data\**" />
 	  <EmbeddedResource Remove="Services\**" />
 	  <None Remove="Areas\Admin\Data\**" />
+	  <None Remove="Areas\Api\Data\**" />
 	  <None Remove="Services\**" />
 	</ItemGroup>
 
@@ -44,6 +48,7 @@
 		<PackageReference Include="RoverCore.Navigation" Version="1.0.4" />
 		<PackageReference Include="RoverCore.Serviced" Version="1.0.9" />
 		<PackageReference Include="RoverCore.ToastNotification" Version="1.2.3" />
+		<PackageReference Include="RoverCore.Abstractions" Version="1.0.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -54,7 +59,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Areas\Api\Data\" />
 		<Folder Include="Areas\Dashboard\Data\" />
 	</ItemGroup>
 

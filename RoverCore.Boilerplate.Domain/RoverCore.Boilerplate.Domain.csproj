@@ -12,6 +12,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.2" />
+		<PackageReference Include="RoverCore.Abstractions" Version="1.0.0" />
 	</ItemGroup>
 
 </Project>

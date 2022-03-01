@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Domain.Entities.Templates;

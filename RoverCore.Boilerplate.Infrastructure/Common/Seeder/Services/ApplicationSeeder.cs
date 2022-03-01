@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RoverCore.Abstractions.Seeder;
 using RoverCore.Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;

@@ -5,6 +5,7 @@ using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 using RoverCore.Boilerplate.Web.Controllers;
 using RoverCore.BreadCrumbs.Services;
 using System.Threading.Tasks;
+using RoverCore.Abstractions.Settings;
 using RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
@@ -14,10 +15,10 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers;
 public class ConfigurationController : BaseController<ConfigurationController>
 {
     private readonly ApplicationDbContext _context;
-    private readonly SettingsService _settingsService;
+    private readonly ISettingsService<ApplicationSettings> _settingsService;
 
     public ConfigurationController(ApplicationDbContext context,
-        SettingsService settingsService)
+        ISettingsService<ApplicationSettings> settingsService)
     {
         _context = context;
         _settingsService = settingsService;

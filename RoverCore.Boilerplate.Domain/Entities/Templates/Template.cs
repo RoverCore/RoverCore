@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using RoverCore.Abstractions.Templates;
 
 namespace RoverCore.Boilerplate.Domain.Entities.Templates;
 
 [Index(nameof(Slug), IsUnique = true)]
-public class Template
+public class Template : ITemplate
 {
     [Key]
     public int Id { get; set; }

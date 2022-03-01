@@ -11,12 +11,6 @@ using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Authentication.Services;
 
-public interface IUserService
-{
-    Task<AuthenticateResponse?> Authenticate(AuthenticateRequest model);
-    Task<ApplicationUser?> GetById(string id);
-}
-
 public class UserService : IUserService, IScoped<IUserService>
 {
     private readonly JWTSettings _appSettings;

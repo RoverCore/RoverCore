@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RoverCore.Abstractions.Settings;
+using RoverCore.Boilerplate.Domain.Entities.Settings;
 using RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;
 using RoverCore.Boilerplate.Infrastructure.Common.Settings.Services;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
@@ -15,7 +17,7 @@ public static class HostExtensions
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var seeder = serviceScope.ServiceProvider.GetService<ApplicationSeederService>();
-            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<ISettingsService<ApplicationSettings>>();
 
             settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 
@@ -32,7 +34,7 @@ public static class HostExtensions
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
+            var settingsService = serviceScope.ServiceProvider.GetRequiredService<ISettingsService<ApplicationSettings>>();
 
             settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 

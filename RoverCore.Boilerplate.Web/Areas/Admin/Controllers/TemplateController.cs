@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Web.Extensions;
-using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates.Services;
@@ -23,6 +22,8 @@ using RoverCore.Datatables.Converters;
 using RoverCore.Datatables.DTOs;
 using RoverCore.Datatables.Extensions;
 using System.ComponentModel.DataAnnotations;
+using RoverCore.Abstractions.Templates;
+using RoverCore.Boilerplate.Domain.Entities.Templates;
 
 namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 {
@@ -233,7 +234,7 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         {
             try
             {
-                var jsonData = await _templateService.GetTemplateQueryable().GetDatatableResponseAsync<Template, TemplateIndexViewModel>(request);
+                var jsonData = await _templateService.GetTemplateQueryable().GetDatatableResponseAsync<ITemplate, TemplateIndexViewModel>(request);
 
                 return Ok(jsonData);
             }

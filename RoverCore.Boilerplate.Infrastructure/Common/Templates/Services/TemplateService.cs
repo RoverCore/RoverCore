@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates.Models;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
@@ -6,7 +7,7 @@ using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 {
-    public class TemplateService 
+    public class TemplateService : ITemplateService
     {
         private readonly VirtualFileProvider _virtualFileProvider;
         private readonly ApplicationDbContext _context;
@@ -22,22 +23,22 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 	        }
         }
 
-        public IQueryable<Template> GetTemplateQueryable()
+        public IQueryable<ITemplate> GetTemplateQueryable()
         {
 	        return _context.Template; 
         }
 
-        public async Task<Template?> FindTemplateById(int id)
+        public async Task<ITemplate?> FindTemplateById(int id)
         {
 	        return await _context.Template.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<Template?> FindTemplateBySlug(string slug)
+        public async Task<ITemplate?> FindTemplateBySlug(string slug)
         {
 	        return await _context.Template.FirstOrDefaultAsync(m => m.Slug == slug);
         }
 
-        public async Task<Template?> CreateTemplate(Template template)
+        public async Task<ITemplate?> CreateTemplate(ITemplate template)
         {
 	        template.Created = DateTime.UtcNow;
 	        template.Updated = DateTime.UtcNow;
@@ -45,12 +46,12 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 	        _context.Add(template);
 	        await _context.SaveChangesAsync();
 
-            _virtualFileProvider.Templates.Add(template);
+            _virtualFileProvider.Templates.Add((Template)template);
 
 	        return template;
         }
 
-        public async Task<Template?> UpdateTemplate(Template template)
+        public async Task<ITemplate?> UpdateTemplate(ITemplate template)
         {
 	        var model = await FindTemplateById(template.Id);
 
@@ -78,7 +79,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 	        }
 	        else
 	        {
-		        _virtualFileProvider.Templates.Add(template);
+		        _virtualFileProvider.Templates.Add((Template)template);
             }
 
             return model;
@@ -89,7 +90,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
             var template = await FindTemplateById(id);
             if (template != null)
             {
-	            _context.Template.Remove(template);
+	            _context.Template.Remove((Template)template);
                 await _context.SaveChangesAsync();
             }
         }

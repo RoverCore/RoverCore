@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
+using RoverCore.Abstractions.Templates;
+using RoverCore.Boilerplate.Domain.Entities.Templates;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Models;
 
@@ -8,11 +10,11 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Models;
 /// </summary>
 public class VirtualFileProvider : IFileProvider
 {
-    public List<Domain.Entities.Templates.Template> Templates { get; set; }
+    public List<Template> Templates { get; set; }
 
     public VirtualFileProvider()
     {
-	    Templates = new List<Domain.Entities.Templates.Template>();
+	    Templates = new List<Template>();
     }
 
     public IDirectoryContents GetDirectoryContents(string subpath)

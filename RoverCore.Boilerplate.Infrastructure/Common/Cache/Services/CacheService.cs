@@ -4,7 +4,7 @@ using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Cache.Services;
 
-public class CacheService : ITransient
+public class CacheService : ITransient, ICacheService
 {
     private readonly IMemoryCache _cache;
 
