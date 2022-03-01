@@ -32,13 +32,19 @@ public static class HostExtensions
         using (var serviceScope = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            var tenantStorageContext = serviceScope.ServiceProvider.GetService<MultiTenantStoreDbContext>();
+
             var settingsService = serviceScope.ServiceProvider.GetRequiredService<SettingsService>();
 
             settingsService.LoadPersistedSettings().GetAwaiter().GetResult();
 
             var settings = settingsService.GetSettings();
 
-            if (overrideSettings || settings is { ApplyMigrationsOnStartup: true }) context?.Database.Migrate();
+            if (overrideSettings || settings is { ApplyMigrationsOnStartup: true }) 
+            {
+	            context?.Database.Migrate();
+                tenantStorageContext?.Database.Migrate();
+            }
         }
 
         return host;
