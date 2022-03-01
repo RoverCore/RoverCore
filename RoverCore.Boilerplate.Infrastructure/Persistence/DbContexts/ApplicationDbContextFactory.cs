@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Finbuckle.MultiTenant;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -31,7 +32,15 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts
 
             builder.UseSqlServer(connectionString);
 
-            return new ApplicationDbContext(builder.Options);
+            var tenant = new TenantInfo
+            {
+	            Id = "a5883f2-38ee-4993-8abc-e63fe3f9daf2",
+	            Identifier = "default-tenant",
+	            Name = "Default Tenant",
+	            ConnectionString = connectionString
+            };
+
+            return new ApplicationDbContext(tenant, builder.Options);
         }
     }
 }
