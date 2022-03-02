@@ -48,7 +48,7 @@
 		<PackageReference Include="RoverCore.Navigation" Version="1.0.4" />
 		<PackageReference Include="RoverCore.Serviced" Version="1.0.9" />
 		<PackageReference Include="RoverCore.ToastNotification" Version="1.2.3" />
-		<PackageReference Include="RoverCore.Abstractions" Version="1.0.0" />
+		<PackageReference Include="RoverCore.Abstractions" Version="1.0.1" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />

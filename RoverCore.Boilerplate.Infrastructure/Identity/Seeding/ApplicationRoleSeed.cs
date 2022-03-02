@@ -9,6 +9,8 @@ public class ApplicationRoleSeed : ISeeder
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
 
+    public int Priority { get; } = 1001;
+
     public ApplicationRoleSeed(RoleManager<ApplicationRole> roleManager)
     {
         _roleManager = roleManager;

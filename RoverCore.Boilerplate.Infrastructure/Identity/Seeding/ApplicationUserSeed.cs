@@ -8,6 +8,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Identity.Seeding;
 public class ApplicationUserSeed : ISeeder
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    public int Priority { get; } = 1000;
 
     public ApplicationUserSeed(UserManager<ApplicationUser> userManager)
     {
@@ -52,4 +53,5 @@ public class ApplicationUserSeed : ISeeder
 
         return Task.CompletedTask;
     }
+
 }

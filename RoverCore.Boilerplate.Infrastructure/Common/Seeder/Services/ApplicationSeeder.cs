@@ -16,6 +16,8 @@ public class ApplicationSeederService : ISeeder
     private readonly ServicedRegistryService _servicedRegistry;
     private readonly IServiceProvider _serviceProvider;
 
+    public int Priority { get; } = Int32.MaxValue;
+
     public ApplicationSeederService(IServiceProvider serviceProvider, ILogger<ApplicationSeederService> logger,
         ServicedRegistryService servicedRegistry)
     {
@@ -30,6 +32,8 @@ public class ApplicationSeederService : ISeeder
     /// <returns></returns>
     public async Task SeedAsync()
     {
+	    var seeders = new List<ISeeder>();
+
         // The service registry contains a list of all the automatically-registered
         // services using the Serviced service.  This code creates a list of all of
         // the other registered ISeeders in the assemblies specified in Startup.
@@ -40,21 +44,29 @@ public class ApplicationSeederService : ISeeder
 
         _logger.LogInformation("ApplicationSeeder beginning execution");
 
-        // Iterate through each of the seeders and call their seeding method
+        // Iterate through each of the seeders and build a seeder list
         foreach (var stype in seederTypes)
         {
             var seederService = _serviceProvider.GetService(stype);
 
             if (seederService != null)
             {
-                var serviceName = seederService.GetType().Name;
-
-                _logger.LogInformation($"Seeder {serviceName} started at {DateTime.UtcNow}.");
-
-                await ((ISeeder)seederService).SeedAsync();
-
-                _logger.LogInformation($"Seeder {serviceName} completed at {DateTime.UtcNow}.");
+                seeders.Add(((ISeeder)seederService));
             }
+        }
+
+        seeders = seeders.OrderByDescending(sd => sd.Priority).ToList();
+
+        foreach (var seeder in seeders)
+        {
+	        var serviceName = seeder.GetType().Name;
+
+	        _logger.LogInformation($"Seeder {serviceName} started at {DateTime.UtcNow}.");
+
+	        await seeder.SeedAsync();
+
+	        _logger.LogInformation($"Seeder {serviceName} completed at {DateTime.UtcNow}.");
+
         }
 
         _logger.LogInformation("ApplicationSeeder completed");
