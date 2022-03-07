@@ -11,21 +11,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Areas\Admin\Data\**" />
-	  <Compile Remove="Areas\Api\Data\**" />
-	  <Compile Remove="Services\**" />
-	  <Content Remove="Areas\Admin\Data\**" />
-	  <Content Remove="Areas\Api\Data\**" />
-	  <Content Remove="Services\**" />
-	  <EmbeddedResource Remove="Areas\Admin\Data\**" />
-	  <EmbeddedResource Remove="Areas\Api\Data\**" />
-	  <EmbeddedResource Remove="Services\**" />
-	  <None Remove="Areas\Admin\Data\**" />
-	  <None Remove="Areas\Api\Data\**" />
-	  <None Remove="Services\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Hangfire" Version="1.7.28" />
@@ -56,10 +41,6 @@
 
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Areas\Dashboard\Data\" />
 	</ItemGroup>
 
 	<ItemGroup>

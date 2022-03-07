@@ -2,18 +2,33 @@
     Layout = "~/Views/Shared/Layouts/Back/_Layout.cshtml";
 }
 
-<div class="ibox">
-    <div class="ibox-title">
-        <h2>Manage your account</h2>
-        <h4>Change your account settings</h4>
-    </div>
-    <div class="ibox-content">
-        <div class="row">
-            <div class="col-md-3">
-                @await Html.PartialAsync("_ManageNav")
+<div class="page-header d-print-none mb-2">
+    <div class="row align-items-center">
+        <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+                Manage Account
             </div>
-            <div class="col-md-9">
-                @RenderBody()
+            <h2 class="page-title">
+                Change Account Settings
+            </h2>
+        </div>
+		
+		
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <partial name="_ManageNav" />
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active">
+                <div class="panel" style="border: solid 0px; box-shadow: none">
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
