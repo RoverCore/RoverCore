@@ -106,5 +106,5 @@
 }
 
 .nav-tabs {
-    border-bottom: var(--tblr-border-color);
+    border-bottom: solid 1px var(--tblr-border-color);
 }

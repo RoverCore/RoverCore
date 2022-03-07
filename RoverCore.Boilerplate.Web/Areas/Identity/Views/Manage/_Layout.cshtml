@@ -19,16 +19,10 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <partial name="_ManageNav" />
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active">
-                <div class="panel" style="border: solid 0px; box-shadow: none">
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            @RenderBody()
-                        </div>
-                    </div>
-                </div>
+        <div class="card">
+            <partial name="_ManageNav"/>
+            <div class="card-body">
+                @RenderBody()
             </div>
         </div>
     </div>
