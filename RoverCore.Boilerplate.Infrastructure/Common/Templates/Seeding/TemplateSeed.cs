@@ -35,6 +35,46 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                     Description = "Default layout template"
                 });
 
+                _context.Template.Add(new Template
+                {
+                    Name = "Change Password",
+                    Slug = "changepassword",
+                    Body = LoadTemplate("changepassword.liquid"),
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "The email will be sent each time a user requests a password change. "
+                });
+
+                _context.Template.Add(new Template
+                {
+                    Name = "Locked Account",
+                    Slug = "lockedaccountemail",
+                    Body = LoadTemplate("lockedaccount.liquid"),
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "A user will receive this email when their account is blocked due to suspicious login attempts."
+                });
+
+                _context.Template.Add(new Template
+                {
+                    Name = "Verification Email",
+                    Slug = "verificationemail",
+                    Body = LoadTemplate("verificationemail.liquid"),
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "A new user will receive this email when they sign up or log in for the first time."
+                });
+
+                _context.Template.Add(new Template
+                {
+                    Name = "Welcome",
+                    Slug = "welcome",
+                    Body = LoadTemplate("welcome.liquid"),
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "A new user will receive this email when they sign up or log in for the first time."
+                });
+
                 await _context.SaveChangesAsync();
             }
         }
