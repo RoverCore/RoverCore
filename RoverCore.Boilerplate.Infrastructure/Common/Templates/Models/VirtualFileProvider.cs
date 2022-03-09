@@ -24,6 +24,12 @@ public class VirtualFileProvider : IFileProvider
 
     public IFileInfo GetFileInfo(string subpath)
     {
+        const string liquidExtension = ".liquid";
+        if (subpath.EndsWith(liquidExtension))
+        {
+            subpath = Path.GetFileNameWithoutExtension(subpath);
+        }
+
 	    var template = Templates.Find(t => t.Slug == subpath);
 
 	    return new VirtualFileInfo(template);

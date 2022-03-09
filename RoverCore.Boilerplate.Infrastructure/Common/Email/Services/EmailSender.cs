@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Models.EmailViewModels;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 // This class is used by the application to send email for account confirmation and password reset.
@@ -20,6 +21,25 @@ public class EmailSender : IEmailSender
         _email = fluentEmail;
         _templateService = templateService;
         _logger = logger;
+    }
+
+    public async Task SendEmailConfirmationAsync(EmailVerificationViewModel viewModel)
+    {
+        await SendFluidEmailAsync(viewModel);
+    }
+
+    public async Task SendFluidEmailAsync(EmailBaseViewModel viewModel)
+    {
+        var template = @"
+        {% layout '_layout' %}
+        Click this link: {{ Link }}.";
+
+        var email = _email
+            .SetFrom("bob@hotmail.com")
+            .To("somedude@gmail.com")
+            .Subject("woo nuget")
+            .UsingTemplate(template, viewModel)
+            .SendAsync();
     }
 
     /// <summary>

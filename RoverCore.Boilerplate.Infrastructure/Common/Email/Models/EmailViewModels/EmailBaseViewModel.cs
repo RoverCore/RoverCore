@@ -2,9 +2,10 @@
 {
     public class EmailBaseViewModel
     {
+        public string Subject { get; set; } = string.Empty;
         public string SenderName { get; set; } = string.Empty;
         public string SenderEmailAddress { get; set; } = string.Empty;
         public string ReceiverName { get; set; } = string.Empty;
-
+        public string ReceiverEmail { get; set; } = string.Empty;
     }
 }
