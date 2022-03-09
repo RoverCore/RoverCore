@@ -70,13 +70,7 @@ public class Program
             .AddEnvironmentVariables()
             .Build();
 
-        var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-        {
-	        ApplicationName = typeof(Program).Assembly.FullName,
-	        ContentRootPath = Directory.GetCurrentDirectory(),
-	        EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
-	        WebRootPath = "wwwroot"
-        });
+        var builder = WebApplication.CreateBuilder();
 
         builder.Configuration.AddEnvironmentVariables();
         builder.Host.UseSerilog(Log.Logger);
