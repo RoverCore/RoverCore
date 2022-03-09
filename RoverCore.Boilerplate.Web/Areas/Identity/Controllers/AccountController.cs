@@ -11,6 +11,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 

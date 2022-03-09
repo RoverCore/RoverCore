@@ -1,4 +1,4 @@
-﻿namespace RoverCore.Boilerplate.Infrastructure.Common;
+﻿namespace RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 
 public interface IEmailSender
 {

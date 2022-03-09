@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 
 namespace RoverCore.Boilerplate.Web.Extensions;
 

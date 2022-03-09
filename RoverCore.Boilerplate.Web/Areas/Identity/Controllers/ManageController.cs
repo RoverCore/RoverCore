@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -110,7 +111,7 @@ public class ManageController : BaseController<ManageController>
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View("Index", model);
         }
 
         var user = await _userManager.GetUserAsync(User);
@@ -121,7 +122,7 @@ public class ManageController : BaseController<ManageController>
 
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-        var email = user.Email;
+        var email = String.IsNullOrEmpty(model.Email) ? user.Email : model.Email;
         await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
         StatusMessage = "Verification email sent. Please check your email.";

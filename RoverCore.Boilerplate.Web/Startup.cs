@@ -19,6 +19,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Common.Hangfire.Filters;
 using RoverCore.Boilerplate.Infrastructure.Common.Seeder.Services;
@@ -71,6 +72,8 @@ public class Startup
         services.AddMvc()
                 .AddRazorRuntimeCompilation();
 
+        services.AddRazorPages();
+
         // Add Swagger documentation
         services.AddSwaggerGen(c =>
         {
@@ -81,9 +84,6 @@ public class Startup
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
         });
-
-        // Configure email service - OBSOLETE - WILL BE REPLACED
-        services.AddTransient<IEmailSender, EmailSender>();
 
         // Add third-party presentation layer services
         services.AddScoped<IBreadCrumbService, BreadCrumbService>();

@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 using RoverCore.Boilerplate.Infrastructure.Persistence.Extensions;
 using RoverCore.BreadCrumbs.Services;
 using RoverCore.Datatables.DTOs;

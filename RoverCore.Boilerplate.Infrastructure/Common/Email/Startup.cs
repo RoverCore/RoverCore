@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 using RoverCore.Boilerplate.Infrastructure.Common.Templates.Models;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Email;
@@ -36,6 +37,8 @@ public static class Startup
 				UsePickupDirectory = settings.Email.UsePickupDirectory,
 				MailPickupDirectory = settings.Email.MailPickupDirectory
 			});
+
+        services.AddTransient<IEmailSender, EmailSender>();
 	}
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)

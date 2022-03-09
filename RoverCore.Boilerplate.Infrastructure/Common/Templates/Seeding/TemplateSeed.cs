@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using FluentEmail.Core.Models;
 using RoverCore.Abstractions.Seeder;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;

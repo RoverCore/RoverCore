@@ -44,9 +44,9 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
         private const string editBindingFields = "Id,Slug,Name,Description,Body";
         private const string areaTitle = "Admin";
 
-        private readonly TemplateService _templateService;
+        private readonly ITemplateService _templateService;
 
-        public TemplateController(TemplateService templateService)
+        public TemplateController(ITemplateService templateService)
         {
             _templateService = templateService;
         }
