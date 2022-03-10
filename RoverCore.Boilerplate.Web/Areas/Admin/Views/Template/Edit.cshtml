@@ -23,20 +23,29 @@
             <div class="col-md-8">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
-                    <div class="form-group">
-                        <label asp-for="Slug" class="control-label"></label>
-                        <input asp-for="Slug" class="form-control" />
-                        <span asp-validation-for="Slug" class="text-danger"></span>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label asp-for="Slug" class="control-label"></label>
+                            <a tabindex="0" class="form-help" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content="<p>Slugs are small identifiers that can be used to easily identify this template.  Changing an existing slug may break portions of this web application that depend on it.</p>">?</a>
+                            <input asp-for="Slug" class="form-control mt-1" />
+                            <span asp-validation-for="Slug" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control mt-1" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-	                    <label asp-for="Description" class="control-label"></label>
-	                    <input asp-for="Description" class="form-control" />
-	                    <span asp-validation-for="Description" class="text-danger"></span>
+                        <label asp-for="PreHeader" class="control-label"></label>
+                        <a tabindex="0" class="form-help" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content="<p>This small snippet of text will appear next to the subject line for this template and gives the user a sneak peak at the email.  It is very important for click-through-rate to make a strong introduction.</p>">?</a>
+                        <input asp-for="PreHeader" class="form-control" />
+                        <span asp-validation-for="PreHeader" class="text-danger"></span>
                     </div>
             </div>
         </div>

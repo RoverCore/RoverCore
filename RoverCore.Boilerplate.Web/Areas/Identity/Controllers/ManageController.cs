@@ -101,7 +101,8 @@ public class ManageController : BaseController<ManageController>
             }
         }
 
-        StatusMessage = "Your profile has been updated";
+        _toast.Success("Your profile has been updated");
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -125,7 +126,8 @@ public class ManageController : BaseController<ManageController>
         var email = String.IsNullOrEmpty(model.Email) ? user.Email : model.Email;
         await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
-        StatusMessage = "Verification email sent. Please check your email.";
+        _toast.Success("Verification email sent. Please check your email.");
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -171,8 +173,9 @@ public class ManageController : BaseController<ManageController>
         }
 
         await _signInManager.SignInAsync(user, isPersistent: false);
+
         _logger.LogInformation("User changed their password successfully.");
-        StatusMessage = "Your password has been changed.";
+        _toast.Success("Your password has been changed.");
 
         return RedirectToAction(nameof(ChangePassword));
     }
@@ -220,7 +223,7 @@ public class ManageController : BaseController<ManageController>
         }
 
         await _signInManager.SignInAsync(user, isPersistent: false);
-        StatusMessage = "Your password has been set.";
+        _toast.Success("Your password has been set.");
 
         return RedirectToAction(nameof(SetPassword));
     }
@@ -281,7 +284,8 @@ public class ManageController : BaseController<ManageController>
         // Clear the existing external cookie to ensure a clean login process
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-        StatusMessage = "The external login was added.";
+        _toast.Success("The external login was added.");
+
         return RedirectToAction(nameof(ExternalLogins));
     }
 
@@ -302,7 +306,9 @@ public class ManageController : BaseController<ManageController>
         }
 
         await _signInManager.SignInAsync(user, isPersistent: false);
-        StatusMessage = "The external login was removed.";
+
+        _toast.Success("The external login was removed.");
+
         return RedirectToAction(nameof(ExternalLogins));
     }
 

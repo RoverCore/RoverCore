@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Abstractions.Templates;
 
@@ -14,6 +15,8 @@ public class Template : ITemplate
     public string Slug { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    [DisplayName("Header Summary Text")]
+    public string PreHeader { get; set; }
     public string Body { get; set; }
     public DateTime Created { get; set; }
     public DateTime Updated { get; set; }

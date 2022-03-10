@@ -40,8 +40,8 @@ namespace RoverCore.Boilerplate.Web.Areas.Admin.Controllers
 		    public DateTime Updated { get; set; }
 	    }
 
-        private const string createBindingFields = "Id,Slug,Name,Description,Body";
-        private const string editBindingFields = "Id,Slug,Name,Description,Body";
+        private const string createBindingFields = "Id,Slug,Name,Description,Body,PreHeader";
+        private const string editBindingFields = "Id,Slug,Name,Description,Body,PreHeader";
         private const string areaTitle = "Admin";
 
         private readonly ITemplateService _templateService;

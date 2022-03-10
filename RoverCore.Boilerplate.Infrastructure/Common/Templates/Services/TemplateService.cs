@@ -64,6 +64,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 	        model.Name = template.Name;
 	        model.Description = template.Description;
 	        model.Body = template.Body;
+            model.PreHeader = template.PreHeader;
 	        model.Updated = DateTime.UtcNow;
 
 	        await _context.SaveChangesAsync();
@@ -75,6 +76,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Services
 		        tpl.Name = model.Name;
 		        tpl.Description = model.Description;
 		        tpl.Body = model.Body;
+                tpl.PreHeader = model.PreHeader;
 		        tpl.Updated = model.Updated;
 	        }
 	        else

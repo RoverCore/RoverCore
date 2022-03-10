@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentEmail.Core.Models;
 using RoverCore.Abstractions.Seeder;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
+using RoverCore.Boilerplate.Infrastructure.Common.Templates.Models;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
@@ -29,7 +30,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 _context.Template.Add(new Template
                 {
                     Name = "Default Layout", 
-                    Slug = "_layout", 
+                    Slug = TemplateSlugs.Layout, 
                     Body = LoadTemplate("_layout.liquid"), 
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow, 
@@ -39,7 +40,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 _context.Template.Add(new Template
                 {
                     Name = "Change Password",
-                    Slug = "changepassword",
+                    Slug = TemplateSlugs.ChangePassword,
                     Body = LoadTemplate("changepassword.liquid"),
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
@@ -49,7 +50,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 _context.Template.Add(new Template
                 {
                     Name = "Locked Account",
-                    Slug = "lockedaccountemail",
+                    Slug = TemplateSlugs.LockedAccount,
                     Body = LoadTemplate("lockedaccount.liquid"),
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
@@ -59,7 +60,8 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 _context.Template.Add(new Template
                 {
                     Name = "Verification Email",
-                    Slug = "verificationemail",
+                    Slug = TemplateSlugs.VerificationEmail,
+                    PreHeader = "Confirm your email address for the site.",
                     Body = LoadTemplate("verificationemail.liquid"),
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
@@ -69,7 +71,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 _context.Template.Add(new Template
                 {
                     Name = "Welcome",
-                    Slug = "welcome",
+                    Slug = TemplateSlugs.Welcome,
                     Body = LoadTemplate("welcome.liquid"),
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,

@@ -13,7 +13,8 @@ public static class EmailSenderExtensions
         //ndEmailConfirmationAsync(EmailVerificationViewModel viewModel)
         var vm = new EmailVerificationViewModel
         {
-            
+            ReceiverAddress = email,
+            Subject = "Confirm your email",
             Link = link
         };
         //return emailSender.SendEmailAsync(email, "Confirm your email", $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>");

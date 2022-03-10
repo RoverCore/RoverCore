@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoverCore.Boilerplate.Domain.Entities.Settings
 {
@@ -14,7 +15,6 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
         [Required(ErrorMessage = "You must supply a name for this site")]
         public string SiteName { get; set; } = string.Empty;
         public string Company { get; set; } = string.Empty;
-
         [DisplayName("Small Logo Url")]
         public string LogoImageUrlSmall { get; set; } = string.Empty;
 		public EmailSettings Email { get; set; }

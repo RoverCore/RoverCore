@@ -2,6 +2,6 @@
 {
     public class EmailVerificationViewModel : EmailBaseViewModel
     {
-        public string Link { get; set; }
+        public string Link { get; set; } = string.Empty;
     }
 }
