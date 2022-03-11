@@ -39,9 +39,21 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
 
                 _context.Template.Add(new Template
                 {
+                    Name = "Generic Message",
+                    Slug = TemplateSlugs.GenericMessage,
+                    Body = LoadTemplate("generic.liquid"),
+                    PreHeader = "",
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "Generic message template"
+                });
+
+                _context.Template.Add(new Template
+                {
                     Name = "Change Password",
                     Slug = TemplateSlugs.ChangePassword,
                     Body = LoadTemplate("changepassword.liquid"),
+                    PreHeader = "You have requested a password change.",
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
                     Description = "The email will be sent each time a user requests a password change. "
@@ -52,6 +64,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                     Name = "Locked Account",
                     Slug = TemplateSlugs.LockedAccount,
                     Body = LoadTemplate("lockedaccount.liquid"),
+                    PreHeader = "For your safety and security your account has been blocked due to suspicious login activity.",
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
                     Description = "A user will receive this email when their account is blocked due to suspicious login attempts."
@@ -61,7 +74,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                 {
                     Name = "Verification Email",
                     Slug = TemplateSlugs.VerificationEmail,
-                    PreHeader = "Confirm your email address for the site.",
+                    PreHeader = "Just one click is all we need to verify your working email address.",
                     Body = LoadTemplate("verificationemail.liquid"),
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
@@ -73,6 +86,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
                     Name = "Welcome",
                     Slug = TemplateSlugs.Welcome,
                     Body = LoadTemplate("welcome.liquid"),
+                    PreHeader = "Thank you so much for joining our site.",
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
                     Description = "A new user will receive this email when they sign up or log in for the first time."

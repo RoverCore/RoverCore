@@ -20,7 +20,7 @@
         /// </summary>
         public string ActionType { get; set; } = string.Empty;
         public string SiteName { get; set; } = string.Empty;
-        public string SiteUrl { get; set; } = string.Empty;
+        public string BaseUrl { get; set; } = string.Empty;
         public string Company { get; set; } = string.Empty;
         public string LogoImageUrlSmall { get; set; } = string.Empty;
         public string UnsubscribeUrl { get; set; } = string.Empty;

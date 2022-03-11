@@ -40,13 +40,14 @@ public class ConfigurationController : BaseController<ConfigurationController>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
-        [Bind("SiteName,Company,ApplyMigrationsOnStartup,SeedDataOnStartup,Email,LogoImageUrlSmall")] ApplicationSettings newSettings)
+        [Bind("SiteName,BaseUrl,Company,ApplyMigrationsOnStartup,SeedDataOnStartup,Email,LogoImageUrlSmall")] ApplicationSettings newSettings)
     {
         var settings = _settingsService.GetSettings();
 
         if (ModelState.IsValid)
         {
             settings.SiteName = newSettings.SiteName;
+            settings.BaseUrl = newSettings.BaseUrl;
             settings.Company = newSettings.Company;
             settings.LogoImageUrlSmall = newSettings.LogoImageUrlSmall;
 

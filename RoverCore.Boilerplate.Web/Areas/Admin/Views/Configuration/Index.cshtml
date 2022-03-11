@@ -55,15 +55,25 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-10">
-							<div class="form-group">
-								<label asp-for="Company" class="control-label"></label>
-								<input asp-for="Company" class="form-control"/>
-								<span asp-validation-for="Company" class="text-danger"></span>
-							</div>
-						</div>
-					</div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label asp-for="Company" class="control-label"></label>
+                                <input asp-for="Company" class="form-control"/>
+                                <span asp-validation-for="Company" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="control-label">Base URL (Include trailing slash)</label>
+                                <a tabindex="0" class="form-help" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="top" data-bs-html="true" data-bs-content="<p>The Base URL for the site.  If left empty the base url will be automatically resolved based off of the default named route.</p>">?</a>
+                                <input asp-for="BaseUrl" class="form-control"/>
+                                <span asp-validation-for="BaseUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
 					<div class="row">
 						<div class="col-md-10">
 							<div class="form-group">

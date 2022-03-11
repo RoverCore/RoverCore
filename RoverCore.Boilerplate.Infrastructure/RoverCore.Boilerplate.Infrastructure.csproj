@@ -51,6 +51,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Common\Templates\Email\changepassword.liquid" />
+	  <None Remove="Common\Templates\Email\generic.liquid" />
 	  <None Remove="Common\Templates\Email\lockedaccount.liquid" />
 	  <None Remove="Common\Templates\Email\verificationemail.liquid" />
 	  <None Remove="Common\Templates\Email\welcome.liquid" />

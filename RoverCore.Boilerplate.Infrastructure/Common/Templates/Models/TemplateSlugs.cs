@@ -13,5 +13,6 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Models
         public const string LockedAccount = "lockedaccount";
         public const string VerificationEmail = "verificationemail";
         public const string Welcome = "welcome";
+        public const string GenericMessage = "genericmessage";
     }
 }

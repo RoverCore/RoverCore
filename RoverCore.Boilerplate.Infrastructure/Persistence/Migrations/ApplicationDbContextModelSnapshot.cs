@@ -32,7 +32,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Key");
 
-                    b.ToTable("ConfigurationItem");
+                    b.ToTable("ConfigurationItem", (string)null);
                 });
 
             modelBuilder.Entity("RoverCore.Boilerplate.Domain.Entities.Identity.ApplicationRole", b =>
@@ -272,7 +272,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.Migrations
 
                     b.HasKey("MemberId");
 
-                    b.ToTable("Member");
+                    b.ToTable("Member", (string)null);
                 });
 
             modelBuilder.Entity("RoverCore.Boilerplate.Domain.Entities.Templates.Template", b =>
@@ -310,7 +310,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.Migrations
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.ToTable("Template");
+                    b.ToTable("Template", (string)null);
                 });
 
             modelBuilder.Entity("RoverCore.Boilerplate.Domain.Entities.Identity.ApplicationRoleClaim", b =>

@@ -1,6 +1,8 @@
 ﻿using FluentEmail.Core;
 using FluentEmail.Core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
@@ -17,15 +19,17 @@ public class EmailSender : IEmailSender
     private readonly ApplicationSettings _settings;
     private readonly ITemplateService _templateService;
     private readonly ILogger _logger;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly LinkGenerator _link;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmailSender(ApplicationSettings settings, IFluentEmail fluentEmail, ITemplateService templateService, ILogger<EmailSender> logger, LinkGenerator linkGenerator)
+    public EmailSender(ApplicationSettings settings, IFluentEmail fluentEmail, ITemplateService templateService, ILogger<EmailSender> logger, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)
     {
         _settings = settings;
         _email = fluentEmail;
         _templateService = templateService;
         _logger = logger;
-        _linkGenerator = linkGenerator;
+        _link = linkGenerator;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task SendEmailConfirmationAsync(EmailVerificationViewModel viewModel)
@@ -53,11 +57,26 @@ public class EmailSender : IEmailSender
         if (string.IsNullOrWhiteSpace(viewModel.Company))
             viewModel.Company = _settings.Company;
 
+        if (string.IsNullOrWhiteSpace(_settings.BaseUrl))
+        {
+            var ctx = _httpContextAccessor.HttpContext;
+
+            if (ctx != null)
+            {
+                viewModel.BaseUrl = _settings.BaseUrl = _link.GetUriByAction(ctx!, "Index", "Home", new { Area = "" });
+            }
+
+        }
+        else 
+        {
+            viewModel.BaseUrl = _settings.BaseUrl;
+        }
+
+        viewModel.LogoImageUrlSmall = _settings.LogoImageUrlSmall.StartsWith("http") ? _settings.LogoImageUrlSmall : JoinUriSegments(_settings.BaseUrl, _settings.LogoImageUrlSmall);
+
         /*
-    public string SiteUrl { get; set; } = string.Empty;
-    public string Company { get; set; } = string.Empty;
-    public string LogoImageUrlSmall { get; set; } = string.Empty;
-    public string UnsubscribeUrl { get; set; } = string.Empty;*/
+            public string UnsubscribeUrl { get; set; } = string.Empty;
+        */
     }
 
     public async Task<SendResponse?> SendFluidEmailAsync(string templateSlug, EmailBaseViewModel viewModel)
@@ -78,9 +97,6 @@ public class EmailSender : IEmailSender
         {
             return new SendResponse { ErrorMessages = errors };
         }
-        //var template = @"
-        //{% layout '_layout' %}
-        //Click this link: {{ Link }}.";
 
         var template = await _templateService.FindTemplateBySlug(templateSlug);
 
@@ -120,23 +136,42 @@ public class EmailSender : IEmailSender
     /// <returns></returns>
     public async Task SendEmailAsync(string email, string subject, string message)
     {
+        string templateSlug = TemplateSlugs.GenericMessage;
+
         if (string.IsNullOrWhiteSpace(email)) return;
 
-        var template = @"
-        {% layout '_layout' %}
-        {{ Message }}";
+        var template = await _templateService.FindTemplateBySlug(templateSlug);
+
+        if (template == null)
+        {
+            _logger.LogError("Email template slug {templateSlug} is missing from the database.", templateSlug);
+            return;
+        }
+
+        template.Body ??= message;
 
         try
         {
             await _email.SetFrom(_settings.Email.DefaultSenderAddress, _settings.Email.DefaultSenderName)
                 .To(email)
                 .Subject(subject)
-                .UsingTemplate(template, new { Message = message })
+                .UsingTemplate(template.Body, new { Message = message })
                 .SendAsync();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unable to send email to {email}", email);
         }
+    }
+
+    private string JoinUriSegments(string uri, params string[] segments)
+    {
+        if (string.IsNullOrWhiteSpace(uri))
+            return null;
+
+        if (segments == null || segments.Length == 0)
+            return uri;
+
+        return segments.Aggregate(uri, (current, segment) => $"{current.TrimEnd('/')}/{segment.TrimStart('/')}");
     }
 }

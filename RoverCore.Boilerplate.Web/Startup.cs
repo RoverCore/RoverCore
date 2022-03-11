@@ -123,6 +123,9 @@ public class Startup
         // Configure infrastructure middleware
         Infrastructure.Startup.Configure(app, _configuration);
 
+        // Note that at least one controller route has to be named "default"
+        // This route will be used to determine the base url for the site by the EmailSender
+        // service
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
