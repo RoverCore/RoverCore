@@ -28,4 +28,14 @@ public class UserViewModel
     [Display(Name = "Confirm Password")]
     [Compare("Password", ErrorMessage = "Passwords don't match")]
     public string ConfirmPassword { get; set; }
+    [Display(Name = "Email Confirmed")]
+    public bool EmailConfirmed { get; set; }
+    [Display(Name = "Lockout Enabled")]
+    public bool LockoutEnabled { get; set; }
+    [Display(Name = "Phone Number")]
+    [DataType(DataType.PhoneNumber)]
+    public string PhoneNumber { get; set; }
+    [Display(Name = "Phone Number Confirmed")]
+    public bool PhoneNumberConfirmed { get; set; }
+
 }

@@ -131,15 +131,19 @@ public class UsersController : BaseController<UsersController>
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Roles = roles.ToList()
+            Roles = roles.ToList(),
+            PhoneNumber = user.PhoneNumber,
+            PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            EmailConfirmed = user.EmailConfirmed,
+            LockoutEnabled = user.LockoutEnabled
         };
-
+        
         return View(viewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, [Bind("Id,Email,FirstName,LastName,Roles,Password,ConfirmPassword")] UserViewModel viewModel)
+    public async Task<IActionResult> Edit(string id, [Bind("Id,Email,FirstName,LastName,Roles,Password,ConfirmPassword,PhoneNumber,PhoneNumberConfirmed,EmailConfirmed,LockoutEnabled")] UserViewModel viewModel)
     {
 	    _breadcrumbs.StartAtAction("Dashboard", "Index", "Home", new { Area = "Dashboard" })
 		    .ThenAction("Manage Users", "Index", "Users", new { Area = "Identity" })
@@ -152,15 +156,22 @@ public class UsersController : BaseController<UsersController>
 
         if (ModelState.IsValid)
         {
+	        var user = await _context.Users.FindAsync(id);
+
+	        if (user == null)
+		        return NotFound();
+
             try
             {
-                var user = await _context.Users.FindAsync(id);
-
                 user.Email = viewModel.Email;
                 user.FirstName = viewModel.FirstName;
                 user.LastName = viewModel.LastName;
+                user.PhoneNumber = viewModel.PhoneNumber;
+                user.PhoneNumberConfirmed = viewModel.PhoneNumberConfirmed;
+                user.EmailConfirmed = viewModel.EmailConfirmed;
+                user.LockoutEnabled = viewModel.LockoutEnabled;
 
-                if (!string.IsNullOrEmpty(viewModel.Password))
+                if (!string.IsNullOrEmpty(viewModel.Password) && viewModel.Password == viewModel.ConfirmPassword)
                 {
                     // change the password
                     user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, viewModel.Password);
