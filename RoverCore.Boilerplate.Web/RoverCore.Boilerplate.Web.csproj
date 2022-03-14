@@ -48,4 +48,8 @@
 		<ProjectReference Include="..\RoverCore.Boilerplate.Infrastructure\RoverCore.Boilerplate.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\img\email\" />
+	</ItemGroup>
+
 </Project>

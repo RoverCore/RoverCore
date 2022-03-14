@@ -11,6 +11,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Email.Models.EmailViewModels;
 using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
@@ -71,6 +72,13 @@ public class AccountController : BaseController<AccountController>
             }
             if (result.IsLockedOut)
             {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                if (user is { EmailConfirmed: true })
+                {
+                    await _emailSender.SendLockedAccountAsync(user.Email);
+                }
+
                 _logger.LogWarning("User account locked out.");
                 return RedirectToAction(nameof(Lockout));
             }
@@ -341,6 +349,12 @@ public class AccountController : BaseController<AccountController>
             throw new ApplicationException($"Unable to load user with ID '{userId}'.");
         }
         var result = await _userManager.ConfirmEmailAsync(user, code);
+
+        if (result.Succeeded)
+        {
+            await _emailSender.SendWelcomeAsync(user.Email);
+        }
+
         return View(result.Succeeded ? "ConfirmEmail" : "Error");
     }
 
@@ -369,7 +383,9 @@ public class AccountController : BaseController<AccountController>
             // visit https://go.microsoft.com/fwlink/?LinkID=532713
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-            await _emailSender.SendEmailAsync(model.Email, "Reset Password", $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+
+            await _emailSender.SendChangePasswordRequestAsync(model.Email, callbackUrl);
+
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
         }
 
@@ -414,6 +430,8 @@ public class AccountController : BaseController<AccountController>
         var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
         if (result.Succeeded)
         {
+            await _emailSender.SendChangePasswordConfirmationAsync(model.Email);
+
             return RedirectToAction(nameof(ResetPasswordConfirmation));
         }
         AddErrors(result);

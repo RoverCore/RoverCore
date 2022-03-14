@@ -61,6 +61,17 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Templates.Seeding
 
                 _context.Template.Add(new Template
                 {
+                    Name = "Change Password Confirmation",
+                    Slug = TemplateSlugs.ChangePasswordConfirmation,
+                    Body = LoadTemplate("changepasswordconfirmation.liquid"),
+                    PreHeader = "Your password has been updated.",
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    Description = "The email will be sent each time a user's password is updated."
+                });
+
+                _context.Template.Add(new Template
+                {
                     Name = "Locked Account",
                     Slug = TemplateSlugs.LockedAccount,
                     Body = LoadTemplate("lockedaccount.liquid"),

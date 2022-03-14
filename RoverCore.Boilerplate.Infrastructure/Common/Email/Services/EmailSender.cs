@@ -32,11 +32,64 @@ public class EmailSender : IEmailSender
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task SendEmailConfirmationAsync(EmailVerificationViewModel viewModel)
+    public async Task SendEmailConfirmationAsync(string receiverAddress, string link)
     {
+        var viewModel = new EmailVerificationViewModel();
         ConfigureEmailDefaults(viewModel);
 
+        viewModel.ReceiverAddress = receiverAddress;
+        viewModel.Subject = "Confirm your email address";
+        viewModel.ActionType = "email confirmation";
+        viewModel.Link = link;
+
         await SendFluidEmailAsync(TemplateSlugs.VerificationEmail, viewModel);
+    }
+
+    public async Task SendChangePasswordRequestAsync(string receiverAddress, string link)
+    {
+        var viewModel = new EmailVerificationViewModel();
+        ConfigureEmailDefaults(viewModel);
+
+        viewModel.ReceiverAddress = receiverAddress;
+        viewModel.Subject = $"Reset your {_settings.SiteName} password";
+        viewModel.ActionType = "a password change";
+        viewModel.Link = link;
+
+        await SendFluidEmailAsync(TemplateSlugs.ChangePassword, viewModel);
+    }
+
+    public async Task SendChangePasswordConfirmationAsync(string receiverAddress)
+    {
+        var viewModel = new EmailBaseViewModel();
+        ConfigureEmailDefaults(viewModel);
+        
+        viewModel.Subject = $"Your {_settings.SiteName} password has been changed";
+        viewModel.ActionType = "a password change confirmation";
+
+        await SendFluidEmailAsync(TemplateSlugs.ChangePasswordConfirmation, viewModel);
+    }
+
+    public async Task SendWelcomeAsync(string receiverAddress)
+    {
+        var viewModel = new WelcomeEmailViewModel();
+        ConfigureEmailDefaults(viewModel);
+
+        viewModel.Subject = $"Welcome to {_settings.SiteName}";
+        viewModel.ActionType = "a welcome notice";
+
+        await SendFluidEmailAsync(TemplateSlugs.Welcome, viewModel);
+    }
+
+    public async Task SendLockedAccountAsync(string receiverAddress)
+    {
+        var viewModel = new LockedAccountEmailViewModel();
+        ConfigureEmailDefaults(viewModel);
+
+        viewModel.Subject = $"Your {_settings.SiteName} account has been locked";
+        viewModel.ActionType = "a locked account";
+
+        await SendFluidEmailAsync(TemplateSlugs.LockedAccount, viewModel);
+
     }
 
     /// <summary>
@@ -63,7 +116,7 @@ public class EmailSender : IEmailSender
 
             if (ctx != null)
             {
-                viewModel.BaseUrl = _settings.BaseUrl = _link.GetUriByAction(ctx!, "Index", "Home", new { Area = "" });
+                viewModel.BaseUrl = _settings.BaseUrl = _link.GetUriByAction(ctx!, "Index", "Home", new { Area = "" }) ?? "/";
             }
 
         }
