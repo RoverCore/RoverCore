@@ -1,0 +1,138 @@
+﻿@model RoverCore.Datatables.Models.DtMetadata
+
+@{
+        ViewData["Title"] = "Index";
+        var routeData = ViewContext.RouteData.Values;
+        var viewController = routeData["controller"].ToString();
+        var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
+        
+        var recordsUrl = Url.Action("GetServiceLog");
+        
+}
+
+<div class="page-header d-print-none mb-2">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="page-pretitle">
+				@ViewData["AreaTitle"]
+			</div>
+			<h2 class="page-title">
+				Service Logs
+			</h2>
+		</div>
+    </div>
+</div>
+<div class="card shadow">	
+    <div class="card-body crud table-responsive" id="Index_container">	
+        <table class="table" id="Index" style="width: 100%">
+            <thead>
+            <tr>
+                <th>Actions</th>
+                @foreach (var col in Model.Columns)
+                {
+                    <th>
+                        @col.DisplayName
+                    </th>
+                }
+            </tr>
+            </thead>
+        </table>
+    </div>	
+</div>
+
+<div class="modal modal-blur fade show" id="modal-dialog" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log Entry</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-dialog-content"></div>			
+            <div class="modal-footer">
+                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Go Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+	@Html.AntiForgeryToken();
+}
+@section Styles {	
+    <link rel="stylesheet" type="text/css" href="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
+}	
+
+@section Scripts {	
+	
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+	<script type="text/javascript" src="~/vendor/pdfmake/pdfmake.min.js"></script>
+    <script type="text/javascript" src="~/vendor/pdfmake/vfs_fonts.min.js"></script>
+    <script type="text/javascript" src="~/vendor/datatables.net/jquery.dataTables.min.js"></script>
+	<script src="~/vendor/datatables.net-bs5/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">	
+	
+	$(document).ready(function () {	
+			
+			$('[data-toggle="tooltip"]').tooltip();	
+			
+			var form = $('#__AjaxAntiForgeryForm');
+			var token = $('input[name="__RequestVerificationToken"]', form).val();
+			
+            var table = $('#Index').DataTable(
+                {
+                    "processing": true,
+                    "serverSide": true,
+                    "filter": true,
+                    "ajax": {
+                        "url": "@Url.Action("GetServiceLog")",
+                        "type": "POST",
+						"data": {"__RequestVerificationToken" : token},
+						"datatype": "json"
+                    },
+                    "columnDefs": [
+                            {
+                                "defaultContent": "-", "targets": "_all"
+                            },
+                            {
+                            "targets": [@(Model.KeyIndex + 1)],
+                            "visible": false,
+                            "searchable": false
+                        }],
+                    "columns": [
+                        {
+                            "render": function(data, type, row) {
+                                var controls = "<button data-href='@(Url.Action("Details"))/" + row.@Model.Columns[Model.KeyIndex].Data + "' class='btn btn-info details-button'><i class='icon las la-info me-1'></i> Details</a>";
+                                return controls;
+                            },
+                            "width": "5%",
+                            "orderable": false,
+                            "searchable": false
+                        },
+						@Html.Raw(Model.DatatableColumns)
+					],
+					pageLength: 10,
+					responsive: true,
+					order: [[4, "desc"]],
+					"language": {
+						"emptyTable": "No records found."
+                }
+			});
+
+			table.columns.adjust().draw();	
+			
+            $(document).on('click', '.details-button', function(){ 
+                var $btn = $(this);
+                var url = $btn.data("href");
+                $('#modal-dialog-content').load(url, function() {
+                    var codeElem = $('pre code');   
+                    codeElem.each(function(i, block) { hljs.highlightElement(block); }); 
+                    $('#modal-dialog').modal('show');
+                });
+            });
+        });	
+    </script>	
+
+}
