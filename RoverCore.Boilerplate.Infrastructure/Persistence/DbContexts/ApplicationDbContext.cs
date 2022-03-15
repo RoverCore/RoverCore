@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
+using RoverCore.Boilerplate.Domain.Entities.Serilog;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
 
 namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
@@ -18,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<ConfigurationItem> ConfigurationItem { get; set; }
     public DbSet<Member> Member { get; set; }
     public DbSet<Template> Template { get; set; }
+    public DbSet<Log> ServiceLog { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

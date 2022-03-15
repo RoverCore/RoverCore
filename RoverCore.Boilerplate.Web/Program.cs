@@ -9,6 +9,7 @@ using System.Linq;
 using RoverCore.Boilerplate.Infrastructure.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Serilog.Sinks.MSSqlServer;
 
 namespace RoverCore.Boilerplate.Web;
 
@@ -16,18 +17,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        string logPath = "Logs" + Path.DirectorySeparatorChar;
-        Directory.CreateDirectory(logPath);
-
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Debug()
-            .WriteTo.File(logPath, rollingInterval: RollingInterval.Day,
-                flushToDiskInterval: TimeSpan.FromSeconds(1),
-                shared: true)
-            .CreateLogger();
+        ConfigureLogger();
 
         bool overrideMigration = false, overrideSeed = false;
 
@@ -64,12 +54,47 @@ public class Program
 
     }
 
-    public static WebApplication BuildWebApplication(string[] args)
+    /// <summary>
+    /// Set up Serilog static logger
+    /// </summary>
+    public static void ConfigureLogger()
     {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+        if (String.IsNullOrEmpty(environment))
+        {
+#if DEBUG
+            environment = "Development";
+#else
+                environment = "Production";
+#endif
+        }
+
         var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables()
+            .AddJsonFile($"appsettings.{environment}.json", optional: false)
             .Build();
 
+        var sinkOpts = new MSSqlServerSinkOptions { TableName = "ServiceLog", AutoCreateSqlTable = false };
+        var columnOpts = new ColumnOptions();
+
+        var connSection = configuration.GetSection("ConnectionStrings");
+        var connString = configuration.GetConnectionString("AppContext");
+
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Debug()
+            .WriteTo.MSSqlServer(
+                connString,
+                sinkOpts,
+                columnOptions: columnOpts)
+            .CreateLogger();
+    }
+
+    public static WebApplication BuildWebApplication(string[] args)
+    {
         var builder = WebApplication.CreateBuilder();
 
         builder.Configuration.AddEnvironmentVariables();
