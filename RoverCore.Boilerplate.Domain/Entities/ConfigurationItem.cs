@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Audit.EntityFramework;
 
 namespace RoverCore.Boilerplate.Domain.Entities;
 
+[AuditInclude]
 public class ConfigurationItem
 {
     [Key]

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Audit.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities;
+using RoverCore.Boilerplate.Domain.Entities.Audit;
 using RoverCore.Boilerplate.Domain.Entities.Identity;
 using RoverCore.Boilerplate.Domain.Entities.Serilog;
 using RoverCore.Boilerplate.Domain.Entities.Templates;
@@ -12,14 +14,20 @@ namespace RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim,
     ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
 {
+	private readonly DbContextHelper _helper = new DbContextHelper();
+	private readonly IAuditDbContext _auditContext;
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+	    _auditContext = new DefaultAuditContext(this);
+	    _helper.SetConfig(_auditContext);
     }
 
     public DbSet<ConfigurationItem> ConfigurationItem { get; set; }
     public DbSet<Member> Member { get; set; }
     public DbSet<Template> Template { get; set; }
     public DbSet<Log> ServiceLog { get; set; }
+    public DbSet<AuditLog> AuditLog { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -71,6 +79,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                 .HasForeignKey(rc => rc.RoleId)
                 .IsRequired();
         });
+    }
+
+    public override int SaveChanges()
+    {
+	    return _helper.SaveChanges(_auditContext, () => base.SaveChanges());
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    {
+	    return await _helper.SaveChangesAsync(_auditContext, () => base.SaveChangesAsync(cancellationToken));
     }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

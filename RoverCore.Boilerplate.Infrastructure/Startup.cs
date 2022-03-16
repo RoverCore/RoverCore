@@ -78,6 +78,9 @@ public static class Startup
 
 		// Configure Templates
 		Common.Templates.Startup.Configure(app, configuration);
+
+		// Configure Persistence services (entity framework)
+		Persistence.Startup.Configure(app, configuration);
 	}
 }
 
