@@ -1,7 +1,7 @@
 ﻿@model RoverCore.Datatables.Models.DtMetadata
 
 @{
-        ViewData["Title"] = "Index";
+        ViewData["Title"] = "Service Logs";
         var routeData = ViewContext.RouteData.Values;
         var viewController = routeData["controller"].ToString();
         var viewArea = routeData.ContainsKey("area") ? routeData["area"].ToString() : "";
@@ -104,7 +104,7 @@
                     "columns": [
                         {
                             "render": function(data, type, row) {
-                                var controls = "<button data-href='@(Url.Action("Details"))/" + row.@Model.Columns[Model.KeyIndex].Data + "' class='btn btn-info details-button'><i class='icon las la-info me-1'></i> Details</a>";
+                                var controls = "<button data-href='@(Url.Action("Details"))/" + row.@Model.Columns[Model.KeyIndex].Data + "' class='btn btn-info details-button'><i class=\"icon las la-search-plus me-1\"></i></a>";
                                 return controls;
                             },
                             "width": "5%",
