@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using RoverCore.Abstractions.Templates;
 
 namespace RoverCore.Boilerplate.Domain.Entities.Templates;
 
+[AuditInclude]
 [Index(nameof(Slug), IsUnique = true)]
 public class Template : ITemplate
 {
