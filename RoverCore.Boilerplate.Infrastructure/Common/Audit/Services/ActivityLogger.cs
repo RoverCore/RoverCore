@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Routing;
 using RoverCore.Boilerplate.Domain.Entities.Audit;
 using RoverCore.Boilerplate.Infrastructure.Identity.Extensions;
 using RoverCore.Boilerplate.Infrastructure.Persistence.DbContexts;
+using Serviced;
 
 namespace RoverCore.Boilerplate.Infrastructure.Common.Audit.Services
 {
-    public class ActivityLogger
+    public class ActivityLogger : IScoped
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,7 +26,26 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Audit.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task AddAction(string state = "success")
+        public async Task AddLog(string service, string action, string userId, string state = "success", object metadata = null)
+        {
+            _context!.ActivityLog.Add(new ActivityLog
+            {
+                Service = service,
+                Action = action,
+                UserId = userId,
+                State = state,
+                Metadata = JsonSerializer.Serialize(metadata)
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Adds a log entry based on the MVC action that was utilized and the currently logged in user
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="action">Custom action name, if null then uses the name of the current action method</param>
+        /// <returns></returns>
+        public async Task AddAction(string state = "success", string? action = null )
         {
             var httpContext = _httpContextAccessor.HttpContext;
 
@@ -36,32 +56,25 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Audit.Services
                     .Metadata
                     .GetMetadata<ControllerActionDescriptor>();
 
-                var controllerName = controllerActionDescriptor.ControllerName;
-
-                var actionName = controllerActionDescriptor.ActionName;
-                var userId = httpContext.User.Identity.IsAuthenticated ? httpContext.User.GetUserId() : string.Empty;
-
-                var rd = httpContext.GetRouteData();
-
-                try
+                if (controllerActionDescriptor != null)
                 {
-                    _context!.ActivityLog.Add(new ActivityLog
+                    var controllerName = controllerActionDescriptor.ControllerName;
+
+                    var actionName = action ?? controllerActionDescriptor.ActionName;
+                    var userId = string.Empty;
+
+                    var identity = httpContext.User.Identity;
+                    if (identity is { IsAuthenticated: true })
                     {
-                        Service = controllerName,
-                        Action = actionName,
-                        UserId = userId,
-                        State = state,
-                        Metadata = JsonSerializer.Serialize(new
-                        {
-                            RouteData = rd
-                        })
-                    });
-                    await _context.SaveChangesAsync();
+                        userId = httpContext.User.GetUserId();
+                    }
 
-                }
-                catch (Exception)
-                {
-                    // Ignore
+                    var rd = httpContext.GetRouteData();
+
+                    await AddLog(controllerName, actionName, userId, state, new
+                    {
+                        RouteData = rd
+                    });
                 }
             }
         }

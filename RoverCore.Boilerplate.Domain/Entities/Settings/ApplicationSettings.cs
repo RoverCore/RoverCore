@@ -22,5 +22,8 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
         [DataType(DataType.ImageUrl)] 
         public string LogoImageUrlSmall { get; set; } = string.Empty;
 		public EmailSettings Email { get; set; }
+
+        [DisplayName("Inactivity Timeout (seconds)")]
+        public int InactivityTimeout { get; set; } = -1;
     }
 }
