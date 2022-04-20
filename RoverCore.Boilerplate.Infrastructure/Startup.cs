@@ -47,14 +47,15 @@ public static class Startup
 		// Add Persistence services (entity framework)
 		Persistence.Startup.ConfigureServices(services, configuration);
 
+        // Add Identity
+        Identity.Startup.ConfigureServices(services, configuration);
+
 		// Add Authentication
 		Authentication.Startup.ConfigureServices(services, configuration);
 
 		// Add Authorization
 		Authorization.Startup.ConfigureServices(services, configuration);
 
-		// Add Identity
-		Identity.Startup.ConfigureServices(services, configuration);
 	}
 
 	/// <summary>

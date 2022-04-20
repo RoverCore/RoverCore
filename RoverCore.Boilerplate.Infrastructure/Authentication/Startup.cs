@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RoverCore.Boilerplate.Domain.DTOs.Authentication;
+using RoverCore.Boilerplate.Domain.Entities.Settings;
 
 namespace RoverCore.Boilerplate.Infrastructure.Authentication;
 
@@ -18,6 +19,9 @@ public static class Startup
 		// configure strongly typed settings objects
 		var appSettingsSection = configuration.GetSection("JWTSettings");
 		services.Configure<JWTSettings>(appSettingsSection);
+
+        var settingsSection = configuration.GetSection("Settings");
+        var settings = settingsSection.Get<ApplicationSettings>();
 
 		// configure jwt authentication
 		var appSettings = appSettingsSection.Get<JWTSettings>();
@@ -36,10 +40,25 @@ public static class Startup
 					ValidateAudience = false
 				};
 			});
-	}
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.SlidingExpiration = true;
+            options.LoginPath = $"/Identity/Account/Login";
+            options.LogoutPath = $"/Identity/Account/Logout";
+            options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+
+			//options.DataProtectionProvider = ???
+			if (settings.InactivityTimeout != 0)
+            {
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(settings.InactivityTimeout);
+                options.Cookie.MaxAge = options.ExpireTimeSpan;
+            }
+        });
+    }
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
 	{
-		app.UseAuthentication();
+        app.UseAuthentication();
 	}
 }

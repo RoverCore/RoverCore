@@ -11,8 +11,10 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using RoverCore.Boilerplate.Infrastructure.Common;
+using RoverCore.Boilerplate.Infrastructure.Common.Audit.Services;
 using RoverCore.Boilerplate.Infrastructure.Common.Email.Models.EmailViewModels;
 using RoverCore.Boilerplate.Infrastructure.Common.Email.Services;
+using RoverCore.Boilerplate.Infrastructure.Identity.Extensions;
 
 namespace RoverCore.Boilerplate.Web.Areas.Identity.Controllers;
 
@@ -24,12 +26,14 @@ public class AccountController : BaseController<AccountController>
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IEmailSender _emailSender;
+    private readonly ActivityLogger _activityLogger;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ActivityLogger activityLogger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
+        _activityLogger = activityLogger;
     }
 
     [TempData]
@@ -63,6 +67,9 @@ public class AccountController : BaseController<AccountController>
             var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                await _activityLogger.AddLog("identity", "login", user.Id);
                 _logger.LogInformation("User logged in.");
                 return RedirectToLocal(returnUrl);
             }
@@ -79,11 +86,20 @@ public class AccountController : BaseController<AccountController>
                     await _emailSender.SendLockedAccountAsync(user.Email);
                 }
 
+                await _activityLogger.AddLog("identity", "login", user.Id, "locked");
+
                 _logger.LogWarning("User account locked out.");
                 return RedirectToAction(nameof(Lockout));
             }
             else
             {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                if (user != null)
+                {
+                    await _activityLogger.AddLog("identity", "login", user.Id, "failed");
+                }
+
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
@@ -237,7 +253,10 @@ public class AccountController : BaseController<AccountController>
                 await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
+
+                await _activityLogger.AddLog("identity", "login", user.Id);
                 _logger.LogInformation("User created a new account with password.");
+
                 return RedirectToLocal(returnUrl);
             }
             AddErrors(result);
@@ -251,6 +270,9 @@ public class AccountController : BaseController<AccountController>
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
+        if (User.Identity != null)
+            await _activityLogger.AddLog("identity", "logout", User.GetUserId());
+        
         await _signInManager.SignOutAsync();
         _logger.LogInformation("User logged out.");
         return RedirectToAction("Index", "Home", new { Area = "" });
