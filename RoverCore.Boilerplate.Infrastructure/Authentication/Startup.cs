@@ -27,16 +27,7 @@ public static class Startup
 		var appSettings = appSettingsSection.Get<JWTSettings>();
 		var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-			{
-                options.SlidingExpiration = true;
-				//options.DataProtectionProvider = ???
-                if (settings.InactivityTimeout != -1)
-                {
-                    options.ExpireTimeSpan = new TimeSpan(0, 0, 0, settings.InactivityTimeout);
-                    options.Cookie.MaxAge = options.ExpireTimeSpan;
-                }
-            })
+			.AddCookie()
 			.AddJwtBearer(x =>
 			{
 				x.RequireHttpsMetadata = false;
@@ -49,10 +40,25 @@ public static class Startup
 					ValidateAudience = false
 				};
 			});
-	}
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.SlidingExpiration = true;
+            options.LoginPath = $"/Identity/Account/Login";
+            options.LogoutPath = $"/Identity/Account/Logout";
+            options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+
+			//options.DataProtectionProvider = ???
+			if (settings.InactivityTimeout != -1)
+            {
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(settings.InactivityTimeout);
+                options.Cookie.MaxAge = options.ExpireTimeSpan;
+            }
+        });
+    }
 
 	public static void Configure(IApplicationBuilder app, IConfiguration configuration)
 	{
-		app.UseAuthentication();
+        app.UseAuthentication();
 	}
 }
