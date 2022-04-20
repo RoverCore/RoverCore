@@ -49,7 +49,7 @@ public static class Startup
             options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 
 			//options.DataProtectionProvider = ???
-			if (settings.InactivityTimeout != -1)
+			if (settings.InactivityTimeout != 0)
             {
                 options.ExpireTimeSpan = TimeSpan.FromSeconds(settings.InactivityTimeout);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;
