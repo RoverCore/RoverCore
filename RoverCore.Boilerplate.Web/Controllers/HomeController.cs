@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RoverCore.Boilerplate.Web.Controllers;
 
 [AllowAnonymous]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class HomeController : BaseController<HomeController>
 {
     public IActionResult Index()

@@ -6,6 +6,7 @@ using RoverCore.ToastNotification.Abstractions;
 
 namespace RoverCore.Boilerplate.Web.Controllers;
 
+[ApiExplorerSettings(IgnoreApi = true)]
 public class BaseController<T> : Controller where T : Controller
 {
     private IBreadCrumbService _breadCrumbInstance;

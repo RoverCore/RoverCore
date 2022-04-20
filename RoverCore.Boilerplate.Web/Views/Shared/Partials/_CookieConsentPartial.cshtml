@@ -20,7 +20,8 @@
 			var button = document.querySelector("#cookieConsentdiv button[data-cookie-string]");
 			button.addEventListener("click", function (event) {
 				document.cookie = button.dataset.cookieString;
-                $("#cookieConsentdiv").removeClass("show");
+                var banner = document.getElementById('cookieConsentdiv');
+                banner.classList.remove('show');
             }, false);
 		})();
 	</script>

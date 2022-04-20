@@ -5,6 +5,7 @@ using System.Linq;
 namespace RoverCore.Boilerplate.Web.Controllers;
 
 [AllowAnonymous]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorController : Controller
 {
     [Route("error/{code}")]

@@ -24,6 +24,6 @@ namespace RoverCore.Boilerplate.Domain.Entities.Settings
 		public EmailSettings Email { get; set; }
 
         [DisplayName("Inactivity Timeout (seconds)")]
-        public int InactivityTimeout { get; set; } = -1;
+        public int InactivityTimeout { get; set; } = 0;
     }
 }
