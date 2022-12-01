@@ -348,7 +348,7 @@ foreach (var property in Model.ModelMetadata.Properties)
 	{
 			@:var query = _context.@(entitySetName);
 	}
-			@:var jsonData = await query.GetDatatableResponseAsync<@(entitySetName), @(entitySetName)IndexViewModel>(request);
+			@:var jsonData = await query.GetDatatableResponseAsync@(Model.ModelTypeName), @(entitySetName)IndexViewModel>(request);
 }
 
             return Ok(jsonData);
