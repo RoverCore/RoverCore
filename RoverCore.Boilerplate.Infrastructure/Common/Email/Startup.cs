@@ -20,7 +20,7 @@ public static class Startup
 		var provider = new VirtualFileProvider();
 
 		services.AddSingleton<VirtualFileProvider>(provider);
-		services.AddFluentEmail(settings.Email.DefaultSenderAddress, settings.Email.DefaultSenderName)
+		services.AddFluentEmail(settings!.Email.DefaultSenderAddress, settings.Email.DefaultSenderName)
 			.AddLiquidRenderer(config =>
 			{
 				config.FileProvider = provider;

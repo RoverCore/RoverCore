@@ -16,6 +16,12 @@ public static class Startup
 	{
 		// Add ApplicationsSettings service
 		var settings = configuration.GetSection("Settings").Get<ApplicationSettings>();
+
+        if (settings == null)
+        {
+            throw new Exception("Missing Application Settings in configuration file");
+        }
+
         settings.Email ??= new EmailSettings();
 
 		services.AddSingleton(settings);

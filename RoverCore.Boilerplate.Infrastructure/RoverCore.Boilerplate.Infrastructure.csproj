@@ -1,61 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Audit.EntityFramework.Core" Version="19.0.7" />
-		<PackageReference Include="AutoMapper" Version="11.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Audit.EntityFramework.Core" Version="25.0.3" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="RoverCore.FluentEmail.Core" Version="3.0.3" />
 		<PackageReference Include="RoverCore.FluentEmail.Liquid" Version="3.0.3" />
 		<PackageReference Include="RoverCore.FluentEmail.MailKit" Version="3.0.3" />
-		<PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
-		<PackageReference Include="MailKit" Version="3.1.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.2" Condition="'$(Configuration)' == 'Debug'" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.11" />
+		<PackageReference Include="MailKit" Version="4.4.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.3" Condition="'$(Configuration)' == 'Debug'" />
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.2" />
-		<PackageReference Include="HangFire" Version="1.7.28" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.3" />
+		<PackageReference Include="HangFire" Version="1.8.11" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" PrivateAssets="All" />
 		<PackageReference Include="RoverCore.Serviced" Version="1.0.9" />
 		<PackageReference Include="RoverCore.Abstractions" Version="1.0.2" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
+		<ProjectReference Include="..\RoverCore.Boilerplate.Domain\RoverCore.Boilerplate.Domain.csproj" />
 	</ItemGroup>
 
 	<!-- appsettings* inclusion is used by the ApplicationDbContextFactory - Note that they reference files from the Web project -->
 	<ItemGroup>
 		<Content Include="..\RoverCore.Boilerplate.Web\appsettings.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="..\RoverCore.Boilerplate.Web\appsettings.*.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<DependentUpon>appsettings.json</DependentUpon>
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-	  <EmbeddedResource Include="Common\Templates\Email\*.liquid" />
+		<EmbeddedResource Include="Common\Templates\Email\*.liquid" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="Common\Templates\Email\changepassword.liquid" />
-	  <None Remove="Common\Templates\Email\generic.liquid" />
-	  <None Remove="Common\Templates\Email\lockedaccount.liquid" />
-	  <None Remove="Common\Templates\Email\verificationemail.liquid" />
-	  <None Remove="Common\Templates\Email\welcome.liquid" />
+		<None Remove="Common\Templates\Email\changepassword.liquid" />
+		<None Remove="Common\Templates\Email\generic.liquid" />
+		<None Remove="Common\Templates\Email\lockedaccount.liquid" />
+		<None Remove="Common\Templates\Email\verificationemail.liquid" />
+		<None Remove="Common\Templates\Email\welcome.liquid" />
 	</ItemGroup>
 
 </Project>
+

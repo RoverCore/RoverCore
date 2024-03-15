@@ -26,7 +26,7 @@ namespace RoverCore.Boilerplate.Infrastructure.Common.Audit.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task AddLog(string service, string action, string userId, string state = "success", object metadata = null)
+        public async Task AddLog(string service, string action, string userId, string state = "success", object? metadata = null)
         {
             _context!.ActivityLog.Add(new ActivityLog
             {

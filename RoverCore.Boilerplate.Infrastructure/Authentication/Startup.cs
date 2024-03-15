@@ -25,7 +25,7 @@ public static class Startup
 
 		// configure jwt authentication
 		var appSettings = appSettingsSection.Get<JWTSettings>();
-		var key = Encoding.ASCII.GetBytes(appSettings.TokenSecret);
+		var key = Encoding.ASCII.GetBytes(appSettings!.TokenSecret);
 		services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 			.AddCookie()
 			.AddJwtBearer(x =>
@@ -49,7 +49,7 @@ public static class Startup
             options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 
 			//options.DataProtectionProvider = ???
-			if (settings.InactivityTimeout != 0)
+			if (settings!.InactivityTimeout != 0)
             {
                 options.ExpireTimeSpan = TimeSpan.FromSeconds(settings.InactivityTimeout);
                 options.Cookie.MaxAge = options.ExpireTimeSpan;

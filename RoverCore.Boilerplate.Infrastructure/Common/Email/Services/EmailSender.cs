@@ -2,7 +2,6 @@
 using FluentEmail.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 using RoverCore.Abstractions.Templates;
 using RoverCore.Boilerplate.Domain.Entities.Settings;
@@ -217,12 +216,12 @@ public class EmailSender : IEmailSender
         }
     }
 
-    private string JoinUriSegments(string uri, params string[] segments)
+    private string? JoinUriSegments(string uri, params string[] segments)
     {
         if (string.IsNullOrWhiteSpace(uri))
             return null;
 
-        if (segments == null || segments.Length == 0)
+        if (segments.Length == 0)
             return uri;
 
         return segments.Aggregate(uri, (current, segment) => $"{current.TrimEnd('/')}/{segment.TrimStart('/')}");
